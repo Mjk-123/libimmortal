@@ -1,9 +1,9 @@
-version: "1.0"
+# version: "1.0"
 
 services:
   libimmortal:
-    image: libimmortal:1.0
-    container_name: libimortal_1.0
+    image: libimmortal:1.0.1
+    container_name: libimortal_1.0.1_mjk123
     environment:
       - DISPLAY=:99
       # - XVFB_RES=1600x900x24     # 필요시 해상도 지정 (start_xvfb.sh에서 읽음)

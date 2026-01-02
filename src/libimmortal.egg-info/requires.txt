@@ -1,0 +1,16 @@
+numpy<2.0,>=1.23
+pillow>=9
+typing_extensions
+
+[mlagents]
+mlagents==1.1.0
+mlagents-envs==1.1.0
+
+[ray]
+ray<3.0,>=2.7
+
+[viz]
+matplotlib>=3.8
+seaborn>=0.13
+tqdm>=4.66
+wandb>=0.17
