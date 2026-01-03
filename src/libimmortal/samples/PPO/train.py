@@ -12,20 +12,21 @@ from reward import RewardShaper, RewardConfig
 from libimmortal.utils import parse_observation, colormap_to_ids_and_onehot
 
 def _make_state_and_vector(obs):
+    """
+    Returns:
+      id_map: (H, W) int64  (for nn.Embedding / CNN pipeline)
+      v:      (V,)  float32
+    """
     graphic_obs, vector_obs = parse_observation(obs)
 
     # id_map: (H,W) uint8, onehot: (K,H,W) uint8
-    id_map, onehot = colormap_to_ids_and_onehot(graphic_obs)
+    id_map, _onehot = colormap_to_ids_and_onehot(graphic_obs)
 
-    # Flatten id_map and (optionally) normalize to [0,1]
-    g = np.asarray(id_map, dtype=np.float32).reshape(-1)
-    K = int(onehot.shape[0])
-    if K > 1:
-        g = g / float(K - 1)
+    # Keep id_map as 2D map; cast to int64 for PyTorch embedding
+    id_map = np.asarray(id_map, dtype=np.int64)          # (H,W)
+    v = np.asarray(vector_obs, dtype=np.float32).reshape(-1)  # (V,)
 
-    v = np.asarray(vector_obs, dtype=np.float32).reshape(-1)
-    state = np.concatenate([g, v], axis=0)
-    return state, v
+    return id_map, v
 
 # Optional: robust terminal detection if your env stuffs ML-Agents steps into info
 try:
@@ -78,27 +79,23 @@ def _get_action_space(env):
 def train(args):
     print("============================================================================================")
 
-    # Import here so PYTHONPATH / module mode works cleanly
     from libimmortal.env import ImmortalSufferingEnv
+    from libimmortal.utils import colormap_to_ids_and_onehot, parse_observation  # for K inference (optional)
 
     env = ImmortalSufferingEnv(
         game_path=args.game_path,
         port=args.port,
-        time_scale=args.time_scale,  # NOTE: assessment uses 1.0
-        seed=args.seed,              # NOTE: assessment uses random seed
+        time_scale=args.time_scale,
+        seed=args.seed,
         width=args.width,
         height=args.height,
         verbose=args.verbose,
     )
 
-    env_tag = "ImmortalSufferingEnv"  # only for filenames/logging
+    env_tag = "ImmortalSufferingEnv"
 
-    # -------------------- hyperparameters --------------------
-    # Total interaction steps (runner-style)
     MAX_STEPS = args.max_steps
-
-    # PPO defaults (keep your previous values)
-    max_ep_len = args.max_ep_len               # safety cap per episode
+    max_ep_len = args.max_ep_len
     update_timestep = args.update_timestep
     K_epochs = args.k_epochs
     eps_clip = args.eps_clip
@@ -111,7 +108,6 @@ def train(args):
     action_std_decay_rate = args.action_std_decay_rate
     min_action_std = args.min_action_std
     action_std_decay_freq = args.action_std_decay_freq
-    # ----------------------------------------------------------
 
     random_seed = int(args.seed) if args.seed is not None else 0
     if random_seed:
@@ -122,7 +118,7 @@ def train(args):
         except Exception:
             pass
 
-    # -------------------- infer state_dim from first reset --------------------
+    # -------------------- reward shaper --------------------
     cfg = RewardConfig(
         w_progress=1.0,
         w_time=0.001,
@@ -130,42 +126,59 @@ def train(args):
         w_not_actionable=0.01,
         terminal_failure_penalty=1.0,
         clip=1.0,
-        time_limit=300.0,              # TIME_ELAPSED 단위가 "초"라면 300.0, "스텝"이면 18000
+        time_limit=300.0,
         success_speed_bonus=1.0,
     )
     shaper = RewardShaper(cfg)
 
+    # -------------------- first reset: infer shapes --------------------
     obs = env.reset()
-    state, vector_obs = _make_state_and_vector(obs)
-    shaper.reset(vector_obs)
-    state_dim = int(state.shape[0])
+    id_map, vec_obs = _make_state_and_vector(obs)
+    shaper.reset(vec_obs)
+
+    map_shape = tuple(id_map.shape)         # (H, W)
+    vec_dim = int(vec_obs.shape[0])
 
     action_space = _get_action_space(env)
     has_continuous_action_space = hasattr(action_space, "shape") and action_space.shape is not None
-
     if has_continuous_action_space:
         action_dim = int(np.prod(action_space.shape))
     else:
         action_dim = int(action_space.n)
 
-    print(f"[Env] state_dim={state_dim}, action_dim={action_dim}, continuous={has_continuous_action_space}")
+    # (optional) infer num_ids K once (safer than id_map.max()+1)
+    # We re-run on the first obs to get onehot K.
+    graphic_obs, _vector_obs_dbg = parse_observation(obs)
+    _id_map_dbg, onehot_dbg = colormap_to_ids_and_onehot(graphic_obs)
+    num_ids = int(onehot_dbg.shape[0])
+
+    print(f"[Env] map_shape={map_shape}, vec_dim={vec_dim}, num_ids={num_ids}, action_dim={action_dim}, continuous={has_continuous_action_space}")
 
     # -------------------- checkpoints --------------------
     ckpt_dir = _checkpoint_dir()
     os.makedirs(ckpt_dir, exist_ok=True)
 
     ckpt_prefix = f"PPO_{env_tag}_{random_seed}_"
-    default_ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}0.pth")  # same naming style as before
+    default_ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}0.pth")
 
     print("checkpoint dir:", ckpt_dir)
     print("default checkpoint path:", default_ckpt_path)
 
     # -------------------- PPO agent --------------------
+    # IMPORTANT: 이 PPO ctor는 "id_map+vec_obs"를 받는 모델에 맞춰져 있어야 함.
+    # 예: PPO(map_shape, vec_dim, num_ids, action_dim, ...)
     ppo_agent = PPO(
-        state_dim, action_dim,
-        lr_actor, lr_critic,
-        gamma, K_epochs, eps_clip,
-        has_continuous_action_space, action_std
+        map_shape=map_shape,
+        vec_dim=vec_dim,
+        num_ids=num_ids,
+        action_dim=action_dim,
+        lr_actor=lr_actor,
+        lr_critic=lr_critic,
+        gamma=gamma,
+        K_epochs=K_epochs,
+        eps_clip=eps_clip,
+        has_continuous_action_space=has_continuous_action_space,
+        action_std_init=action_std,
     )
 
     # -------------------- resume --------------------
@@ -173,29 +186,16 @@ def train(args):
         ckpt_to_load = args.checkpoint
         if ckpt_to_load is None:
             ckpt_to_load = _latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
-
         if ckpt_to_load is None:
-            raise FileNotFoundError(
-                f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}"
-            )
-
-        if not hasattr(ppo_agent, "load"):
-            raise AttributeError("PPO class has no .load(path). Implement it or adjust the call.")
-
+            raise FileNotFoundError(f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}")
         print(f"Resuming from: {ckpt_to_load}")
         ppo_agent.load(ckpt_to_load)
 
     # -------------------- wandb (optional) --------------------
     wandb = None
     if args.wandb:
-        try:
-            import wandb as _wandb
-            wandb = _wandb
-        except Exception as e:
-            raise RuntimeError(
-                "You passed --wandb but wandb is not available. Install wandb or run without --wandb."
-            ) from e
-
+        import wandb as _wandb
+        wandb = _wandb
         wandb.init(
             project=args.wandb_project,
             name=args.wandb_name or f"{env_tag}-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
@@ -217,6 +217,10 @@ def train(args):
                 seed=random_seed,
                 resume=args.resume,
                 checkpoint=args.checkpoint,
+                map_shape=map_shape,
+                vec_dim=vec_dim,
+                num_ids=num_ids,
+                action_dim=action_dim,
             ),
         )
 
@@ -225,31 +229,31 @@ def train(args):
     print("Started training at (GMT):", start_time)
     print("============================================================================================")
 
-    # episode bookkeeping (runner resets on done)
     episode_reward = 0.0
     episode_raw_reward = 0.0
     episode_len = 0
     episode_idx = 0
 
-    # Optional: prevent runaway episodes if env fails to set done
-    # (Still compatible with runner, just a safety cap)
-    MAX_EP_LEN = max_ep_len
+    MAX_EP_LEN = max_ep_len  # safety cap
 
     for step in range(1, MAX_STEPS + 1):
 
-        # action from PPO
-        action = ppo_agent.select_action(state)
+        # action from PPO (IMPORTANT: id_map + vec_obs)
+        action = ppo_agent.select_action(id_map, vec_obs)
+
         if has_continuous_action_space:
             action = np.asarray(action, dtype=np.float32).reshape(action_space.shape)
 
         obs, raw_reward, done, info = env.step(action)
         done = _infer_done(done, info)
 
-        # preprocess next observation (+ vector_obs for reward shaping)
-        next_state, next_vector_obs = _make_state_and_vector(obs)
-        reward = shaper(raw_reward, next_vector_obs, done, info)
+        # next obs -> (next_id_map, next_vec_obs)
+        next_id_map, next_vec_obs = _make_state_and_vector(obs)
 
-        # store reward/terminal for PPO update
+        # reward shaping uses next_vec_obs (and optionally info/done)
+        reward = shaper(raw_reward, next_vec_obs, done, info)
+
+        # store reward/terminal only (states already stored in select_action)
         ppo_agent.buffer.rewards.append(float(reward))
         ppo_agent.buffer.is_terminals.append(bool(done))
 
@@ -257,17 +261,24 @@ def train(args):
         episode_raw_reward += float(raw_reward)
         episode_len += 1
 
-        # PPO update
+        # PPO update (주의: 여기서 오래 걸릴 수 있음 / OOM 포인트)
         if step % update_timestep == 0:
+            t0 = time.time()
             ppo_agent.update()
             if wandb is not None:
-                wandb.log({"train/updated": 1}, step=step)
+                wandb.log(
+                    {
+                        "train/updated": 1,
+                        "train/update_sec": float(time.time() - t0),
+                    },
+                    step=step,
+                )
 
         # std decay
         if has_continuous_action_space and (step % action_std_decay_freq == 0):
             ppo_agent.decay_action_std(action_std_decay_rate, min_action_std)
             if wandb is not None:
-                wandb.log({"train/action_std": getattr(ppo_agent, "action_std", np.nan)}, step=step)
+                wandb.log({"train/action_std": float(getattr(ppo_agent, "action_std", np.nan))}, step=step)
 
         # checkpoint save
         if step % save_model_freq == 0:
@@ -279,16 +290,19 @@ def train(args):
             print("--------------------------------------------------------------------------------------------")
             if wandb is not None:
                 wandb.log({"train/checkpoint_saved": 1}, step=step)
-                wandb.save(default_ckpt_path)
+                try:
+                    wandb.save(default_ckpt_path)
+                except Exception:
+                    pass
 
-        # wandb step logging (lightweight)
+        # lightweight logging
         if wandb is not None and (step % args.wandb_log_freq == 0):
             wandb.log(
                 {
                     "train/reward": float(reward),
                     "train/done": int(done),
                     "train/episode_reward_running": float(episode_reward),
-                    "train/episode_reward_raw": float(episode_raw_reward),
+                    "train/episode_reward_raw_running": float(episode_raw_reward),
                     "train/episode_len_running": int(episode_len),
                 },
                 step=step,
@@ -296,31 +310,28 @@ def train(args):
 
         # episode termination (runner behavior)
         if done or (episode_len >= MAX_EP_LEN):
-            if done and args.verbose:
-                print("[DONE] reward=", reward, "info=", info)
 
             if wandb is not None:
                 wandb.log(
                     {
                         "episode/reward": float(episode_reward),
-                        "episode/reward_raw":float(episode_raw_reward),
+                        "episode/reward_raw": float(episode_raw_reward),
                         "episode/len": int(episode_len),
                         "episode/index": int(episode_idx),
                     },
                     step=step,
                 )
 
-            # reset episode
             obs = env.reset()
-            state, vector_obs = _make_state_and_vector(obs)
-            shaper.reset(vector_obs)
+            id_map, vec_obs = _make_state_and_vector(obs)
+            shaper.reset(vec_obs)
 
             episode_reward = 0.0
             episode_raw_reward = 0.0
             episode_len = 0
             episode_idx += 1
         else:
-            state = next_state
+            id_map, vec_obs = next_id_map, next_vec_obs
 
     # final save
     print("--------------------------------------------------------------------------------------------")
@@ -359,7 +370,7 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", action="store_true")
 
     # runner-style step budget (assessment uses 18000)
-    parser.add_argument("--max_steps", type=int, default=18000)
+    parser.add_argument("--max_steps", type=int, default=100000)
 
     # safety cap per episode (doesn't change runner semantics unless done never triggers)
     parser.add_argument("--max_ep_len", type=int, default=1000)
@@ -377,7 +388,7 @@ if __name__ == "__main__":
     parser.add_argument("--min_action_std", type=float, default=0.1)
     parser.add_argument("--action_std_decay_freq", type=int, default=int(2.5e5))
 
-    parser.add_argument("--save_model_freq", type=int, default=int(1e5))
+    parser.add_argument("--save_model_freq", type=int, default=20000)
 
     # resume
     parser.add_argument("--resume", action="store_true")
