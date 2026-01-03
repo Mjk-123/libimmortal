@@ -114,7 +114,7 @@ def main():
         "--game_path",
         type=str,
         required=False,
-        default=r"D:\build\Immortal Suffering.exe",
+        default=r"/root/immortal_suffering/immortal_suffering_linux_build.x86_64",
         help="Path to the Unity executable",
     )
     parser.add_argument(

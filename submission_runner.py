@@ -21,7 +21,7 @@ def main():
         "--game_path",
         type=str,
         required=False,
-        default=r"D:\build\Immortal Suffering.exe",
+        default=r"/root/immortal_suffering/immortal_suffering_linux_build.x86_64",
         help="Path to the Unity executable",
     )
     parser.add_argument(
@@ -97,6 +97,12 @@ def main():
     """
     Import your AI agent here and replace the random action below with your agent's action.
     """
+
+    from src.libimmortal.samples.randomAgent import RandomAgent
+
+    agent = RandomAgent(env.env.action_space)
+    # agent = 
+
     ###################################
 
     for _ in tqdm.tqdm(range(MAX_STEPS), desc="Stepping through environment"):
@@ -108,12 +114,20 @@ def main():
         """
         ###################################
         
-        action = env.env.action_space.sample()  # REPLACE this with your AI agent's action
+        action = agent.act((graphic_obs, vector_obs))  # REPLACE this with your AI agent's action
         obs, reward, done, info = env.step(action)
         graphic_obs, vector_obs = parse_observation(obs)
         id_map, graphic_obs = colormap_to_ids_and_onehot(
             graphic_obs
         )  # one-hot encoded graphic observation
+
+        if done:
+            print("[DONE] reward=", reward, "info=", info)
+            obs = env.reset()
+            graphic_obs, vector_obs = parse_observation(obs)
+            id_map, graphic_obs = colormap_to_ids_and_onehot(graphic_obs)
+    
+    print(f"[Finished] done = {done}, reward={reward}, info={info}")
 
     env.close()
 
