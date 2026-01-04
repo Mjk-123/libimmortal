@@ -20,6 +20,9 @@ class RolloutBuffer:
         self.rewards = []
         self.state_values = []
         self.is_terminals = []
+
+        # NEW: bootstrap value for the state after the last transition in the rollout
+        self.last_value = 0.0
     
     def clear(self):
         del self.actions[:]
@@ -329,13 +332,24 @@ class ActorCritic(nn.Module):
             dist_entropy = dist.entropy()
             return action_logprobs, state_values, dist_entropy
 
-        # MultiDiscrete: action should be (B,num_branches) or (num_branches,)
+        # MultiDiscrete: action must be (B, num_branches) or (num_branches,)
         action = action.long()
+
         if action.dim() == 1:
             if action.numel() == self.num_branches:
                 action = action.unsqueeze(0)  # (1,num_branches)
             else:
-                action = action.view(-1, self.num_branches)
+                raise ValueError(
+                    f"[ActorCritic.evaluate] Expected action shape (B,{self.num_branches}) "
+                    f"but got 1D tensor of length {action.numel()}. "
+                    f"This usually means actions were flattened in PPO.update()."
+                )
+
+        # Now action must be (B, num_branches)
+        if action.dim() != 2 or action.size(1) != self.num_branches:
+            raise ValueError(
+                f"[ActorCritic.evaluate] Bad action shape: {tuple(action.shape)} expected (B,{self.num_branches})"
+            )
 
         logits_list = self._split_branch_logits(logits)
         logps, ents = [], []
@@ -349,6 +363,24 @@ class ActorCritic(nn.Module):
         dist_entropy = torch.stack(ents, dim=-1).sum(-1)      # (B,)
         return action_logprobs, state_values, dist_entropy
 
+'''
+PPO implementation
+'''
+
+def calculate_gae(self, rewards, values, is_terminals, gamma, lam=0.95):
+    advantages = []
+    gae = 0
+    # values는 Critic이 예측한 상태 가치 (마지막 상태 포함 필요)
+    # 편의상 여기서는 buffer의 값들을 사용한다고 가정
+    values = values + [0] # 마지막 다음 상태 가치 패딩
+
+    for i in reversed(range(len(rewards))):
+        # delta = r + gamma * V(s') - V(s)
+        delta = rewards[i] + gamma * values[i+1] * (1 - int(is_terminals[i])) - values[i]
+        gae = delta + gamma * lam * (1 - int(is_terminals[i])) * gae
+        advantages.insert(0, gae)
+    
+    return torch.tensor(advantages, dtype=torch.float32)
 
 class PPO:
     def __init__(self, 
@@ -409,107 +441,119 @@ class PPO:
 
         self.MseLoss = nn.MSELoss()
 
-    def update(self):
-        # 1) Compute discounted returns (CPU)
-        rewards = []
-        discounted_reward = 0.0
-        for r, is_terminal in zip(reversed(self.buffer.rewards), reversed(self.buffer.is_terminals)):
-            if is_terminal:
-                discounted_reward = 0.0
-            discounted_reward = float(r) + self.gamma * discounted_reward
-            rewards.insert(0, discounted_reward)
+    def update(self, gae_lambda: float = 0.95):
+        # 1) Build tensors on CPU
+        rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32)          # (T,)
+        dones = torch.tensor(self.buffer.is_terminals, dtype=torch.float32)       # (T,) 1 if terminal else 0
 
-        rewards = torch.tensor(rewards, dtype=torch.float32)  # CPU
-        rewards = (rewards - rewards.mean()) / (rewards.std() + 1e-7)
+        # Values predicted for states s_t (stored during rollout)
+        values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
 
-        # 2) Rollout tensors (keep big map on CPU)
-        old_map = torch.from_numpy(np.stack(self.buffer.map_states, axis=0)).long()    # (T,H,W) CPU
-        old_vec = torch.from_numpy(np.stack(self.buffer.vec_states, axis=0)).float()  # (T,103) CPU
+        # Bootstrap value for s_{T} (the state after last transition)
+        last_value = torch.tensor([float(getattr(self.buffer, "last_value", 0.0))], dtype=torch.float32)  # (1,)
+
+        # values_{t+1} needs length T; we build next_values = [V(s_1),...,V(s_T)]
+        next_values = torch.cat([values[1:], last_value], dim=0)  # (T,)
+
+        # 2) GAE advantages
+        advantages = torch.zeros_like(rewards)  # (T,)
+        gae = 0.0
+
+        for t in reversed(range(rewards.size(0))):
+            mask = 1.0 - dones[t]  # 0 if terminal else 1
+            delta = rewards[t] + self.gamma * next_values[t] * mask - values[t]
+            gae = delta + self.gamma * gae_lambda * mask * gae
+            advantages[t] = gae
+
+        # 3) Returns for value function target
+        returns = advantages + values  # (T,)
+
+        # 4) Normalize advantages (recommended for PPO stability)
+        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-7)
+
+        # 5) Rollout tensors for states/actions/logprobs
+        old_map = torch.from_numpy(np.stack(self.buffer.map_states, axis=0)).long()     # (T,H,W) CPU
+        old_vec = torch.from_numpy(np.stack(self.buffer.vec_states, axis=0)).float()   # (T,103) CPU
 
         old_actions = torch.stack(self.buffer.actions, dim=0).detach().cpu()
-        old_logprobs = torch.stack(self.buffer.logprobs, dim=0).detach().cpu().view(-1)       # (T,)
-        old_state_values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
+        old_logprobs = torch.stack(self.buffer.logprobs, dim=0).detach().cpu().view(-1)  # (T,)
 
-        # ---- FIX: handle Single Discrete vs MultiDiscrete correctly ----
-        action_nvec = getattr(self, "action_nvec", None)
-        is_multidiscrete = (not self.has_continuous_action_space) and (action_nvec is not None)
-        num_branches = len(action_nvec) if is_multidiscrete else None
-
+        # Keep MultiDiscrete shape if applicable (your previous fix)
         if self.has_continuous_action_space:
-            # (T, action_dim)
             old_actions = old_actions.view(old_actions.size(0), -1).float()
         else:
-            if not is_multidiscrete:
-                # Single Discrete: (T,)
-                old_actions = old_actions.view(-1).long()
-            else:
-                # MultiDiscrete: keep (T, num_branches)
-                old_actions = old_actions.long()
+            action_nvec = getattr(self, "action_nvec", None)
+            if action_nvec is None:
+                action_nvec = getattr(self.policy, "action_nvec", None)
 
-                # Common shapes:
-                # (T,1,B) -> (T,B)
+            if action_nvec is None:
+                old_actions = old_actions.view(-1).long()  # Single Discrete
+            else:
+                num_branches = len(action_nvec)
+                old_actions = old_actions.long()
                 if old_actions.dim() == 3 and old_actions.size(1) == 1:
                     old_actions = old_actions.squeeze(1)
-
-                # (T*B,) -> (T,B) (safety for legacy buffer formats)
                 if old_actions.dim() == 1:
-                    assert old_actions.numel() % num_branches == 0, \
-                        f"Cannot reshape old_actions of size {old_actions.numel()} into (-1,{num_branches})"
+                    assert old_actions.numel() % num_branches == 0
                     old_actions = old_actions.view(-1, num_branches)
-
-                # Sanity check
-                assert old_actions.dim() == 2 and old_actions.size(1) == num_branches, \
-                    f"old_actions shape wrong for MultiDiscrete: {old_actions.shape}, expected (T,{num_branches})"
-
-        # 3) Advantages (CPU)
-        advantages = rewards - old_state_values
+                assert old_actions.dim() == 2 and old_actions.size(1) == num_branches
 
         T = rewards.shape[0]
         mb = int(self.mini_batch_size)
 
-        # Optional sanity checks
-        assert old_logprobs.shape[0] == T and old_state_values.shape[0] == T, \
-            f"Rollout length mismatch: T={T}, logp={old_logprobs.shape}, v={old_state_values.shape}"
-        if is_multidiscrete:
-            assert old_actions.shape[0] == T, f"Actions length mismatch: {old_actions.shape} vs T={T}"
+        # values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
+        old_values = values  # (T,) old V(s) from rollout (policy_old)
+
+        vf_clip = self.eps_clip   # you can also set a separate clip, e.g. self.vf_clip
+        vf_coef = 0.5
+        ent_coef = 0.01
 
         for _ in range(self.K_epochs):
-            idxs = torch.randperm(T)  # CPU indices
+            idxs = torch.randperm(T)
 
-            for start in range(0, T, mb):
-                mb_idx = idxs[start:start + mb]
+            for _ in range(self.K_epochs):
+                idxs = torch.randperm(T)
 
-                # Move minibatch to GPU
-                mb_map = old_map[mb_idx].to(device, non_blocking=True)
-                mb_vec = old_vec[mb_idx].to(device, non_blocking=True)
-                mb_actions = old_actions[mb_idx].to(device, non_blocking=True)
-                mb_old_logp = old_logprobs[mb_idx].to(device, non_blocking=True)
-                mb_rewards = rewards[mb_idx].to(device, non_blocking=True)
-                mb_adv = advantages[mb_idx].to(device, non_blocking=True)
+                for start in range(0, T, mb):
+                    mb_idx = idxs[start:start + mb]
 
-                # Ensure correct dtype for discrete actions
-                if not self.has_continuous_action_space:
-                    mb_actions = mb_actions.long()
+                    mb_map = old_map[mb_idx].to(device, non_blocking=True)
+                    mb_vec = old_vec[mb_idx].to(device, non_blocking=True)
+                    mb_actions = old_actions[mb_idx].to(device, non_blocking=True)
+                    mb_old_logp = old_logprobs[mb_idx].to(device, non_blocking=True)
 
-                logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
-                state_values = state_values.view(-1)
+                    mb_returns = returns[mb_idx].to(device, non_blocking=True)
+                    mb_adv = advantages[mb_idx].to(device, non_blocking=True)
 
-                ratios = torch.exp(logprobs - mb_old_logp.detach())
+                    # NEW: old value predictions for this minibatch
+                    mb_old_values = old_values[mb_idx].to(device, non_blocking=True)  # (B,)
 
-                surr1 = ratios * mb_adv
-                surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
+                    logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
+                    state_values = state_values.view(-1)  # (B,)
 
-                # NOTE: For MultiDiscrete, dist_entropy is sum over branches -> can be larger.
-                # You may consider scaling entropy coef by 1/num_branches if exploration is too strong.
-                loss = -torch.min(surr1, surr2) \
-                    + 0.5 * self.MseLoss(state_values, mb_rewards) \
-                    - 0.01 * dist_entropy
+                    ratios = torch.exp(logprobs - mb_old_logp.detach())
+                    surr1 = ratios * mb_adv
+                    surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
 
-                self.optimizer.zero_grad(set_to_none=True)
-                loss.mean().backward()
-                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
-                self.optimizer.step()
+                    # --- Clipped value function loss (PPO-style) ---
+                    v_pred = state_values
+                    v_pred_clipped = mb_old_values + torch.clamp(
+                        v_pred - mb_old_values,
+                        -vf_clip,
+                        vf_clip
+                    )
+
+                    loss_v1 = (v_pred - mb_returns).pow(2)
+                    loss_v2 = (v_pred_clipped - mb_returns).pow(2)
+                    loss_critic = torch.max(loss_v1, loss_v2)  # (B,)
+
+                    # --- Final loss ---
+                    loss = -torch.min(surr1, surr2) + vf_coef * loss_critic - ent_coef * dist_entropy
+
+                    self.optimizer.zero_grad(set_to_none=True)
+                    loss.mean().backward()
+                    torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+                    self.optimizer.step()
 
         self.policy_old.load_state_dict(self.policy.state_dict())
         self.buffer.clear()
-

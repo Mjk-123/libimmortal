@@ -104,3 +104,66 @@ class RewardShaper:
             info["delta_progress"] = float(d_progress)
 
         return shaped
+    
+import numpy as np
+
+class RunningMeanStd:
+    """Track running mean/variance with Welford-style parallel update."""
+    def __init__(self, epsilon: float = 1e-4, shape=()):
+        self.mean = np.zeros(shape, dtype=np.float64)
+        self.var = np.ones(shape, dtype=np.float64)
+        self.count = float(epsilon)
+
+    def update(self, x: np.ndarray):
+        x = np.asarray(x, dtype=np.float64)
+        batch_mean = x.mean(axis=0)
+        batch_var = x.var(axis=0)
+        batch_count = x.shape[0]
+        self._update_from_moments(batch_mean, batch_var, batch_count)
+
+    def _update_from_moments(self, batch_mean, batch_var, batch_count):
+        delta = batch_mean - self.mean
+        tot_count = self.count + batch_count
+
+        new_mean = self.mean + delta * batch_count / tot_count
+
+        m_a = self.var * self.count
+        m_b = batch_var * batch_count
+        M2 = m_a + m_b + (delta * delta) * self.count * batch_count / tot_count
+        new_var = M2 / tot_count
+
+        self.mean = new_mean
+        self.var = new_var
+        self.count = tot_count
+
+class RewardScaler:
+    def __init__(self, gamma: float, clip: float = 5.0, eps: float = 1e-8, min_std: float = 0.1, warmup_steps: int = 2000):
+        self.gamma = float(gamma)
+        self.clip = float(clip)
+        self.eps = float(eps)
+        self.min_std = float(min_std)
+        self.warmup_steps = int(warmup_steps)
+
+        self.ret_rms = RunningMeanStd(shape=())
+        self.ret = 0.0
+        self.t = 0
+
+    def __call__(self, reward: float, done: bool) -> float:
+        self.t += 1
+        self.ret = self.ret * self.gamma + float(reward)
+        self.ret_rms.update(np.array([self.ret], dtype=np.float64))
+
+        if done:
+            self.ret = 0.0
+
+        # During warmup, return raw reward (or lightly clipped raw reward)
+        if self.t < self.warmup_steps:
+            return float(np.clip(reward, -self.clip, self.clip)) if self.clip is not None else float(reward)
+
+        std = float(np.sqrt(self.ret_rms.var + self.eps))
+        std = max(std, self.min_std)
+
+        r = float(reward) / std
+        if self.clip is not None:
+            r = float(np.clip(r, -self.clip, self.clip))
+        return r

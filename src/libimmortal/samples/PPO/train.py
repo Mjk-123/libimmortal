@@ -6,7 +6,7 @@ import argparse
 from datetime import datetime
 from typing import Optional, Tuple
 
-from reward import RewardConfig, RewardShaper
+from reward import RewardConfig, RewardShaper, RunningMeanStd, RewardScaler
 
 import gym
 import numpy as np
@@ -349,7 +349,11 @@ def train(args):
             elif not isinstance(info, dict):
                 info = {"env_info": info}
 
+            reward_scaler = RewardScaler(gamma=gamma, clip=5.0, eps= 1e-8, min_std=0.1, warmup_steps=10000)
+
+            # inside main loop, after computing shaped reward
             reward = shaper(raw_reward, next_vec_obs, done, info)
+            reward = reward_scaler(reward, done)
 
             ppo_agent.buffer.rewards.append(float(reward))
             ppo_agent.buffer.is_terminals.append(bool(done))
@@ -362,7 +366,16 @@ def train(args):
             # PPO update
             if step % update_timestep == 0:
                 t0 = time.time()
-                ppo_agent.update()
+                with torch.no_grad():
+                    if done:
+                        ppo_agent.buffer.last_value = 0.0
+                    else:
+                        map_t = torch.from_numpy(next_id_map).to(model_device, dtype=torch.long).unsqueeze(0)
+                        vec_t = torch.from_numpy(next_vec_obs).to(model_device, dtype=torch.float32).unsqueeze(0)
+                        feat = ppo_agent.policy_old.encode(map_t, vec_t)
+                        v = ppo_agent.policy_old.critic_head(feat)   # (1,1)
+                        ppo_agent.buffer.last_value = float(v.item())
+                ppo_agent.update(0.95) # GAE constant = 0.95
                 dt = time.time() - t0
 
                 if wandb is not None:
