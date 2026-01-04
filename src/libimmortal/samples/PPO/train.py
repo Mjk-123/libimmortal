@@ -8,6 +8,7 @@ from typing import Optional, Tuple
 
 from reward import RewardConfig, RewardShaper
 
+import gym
 import numpy as np
 import torch
 
@@ -89,6 +90,28 @@ def _make_map_and_vec(obs) -> Tuple[np.ndarray, np.ndarray, int]:
     K = int(onehot.shape[0])
     return id_map, vec_obs, K
 
+def _format_action_for_env(action_np, action_space):
+    # Make action compatible with gym spaces before env.step()
+    if isinstance(action_space, gym.spaces.Box):
+        a = np.asarray(action_np, dtype=np.float32).reshape(action_space.shape)
+        low = getattr(action_space, "low", None)
+        high = getattr(action_space, "high", None)
+        if low is not None and high is not None:
+            a = np.clip(a, low, high)
+        return a
+
+    if isinstance(action_space, gym.spaces.Discrete):
+        return int(np.asarray(action_np).item())
+
+    if isinstance(action_space, gym.spaces.MultiDiscrete):
+        a = np.asarray(action_np, dtype=np.int64).reshape(action_space.shape)
+        # Optional safety clamp: keep within [0, nvec_i-1]
+        a = np.minimum(np.maximum(a, 0), action_space.nvec - 1)
+        return a
+
+    raise TypeError(f"Unsupported action space: {type(action_space)}")
+
+
 # -------------------------
 # Training
 # -------------------------
@@ -139,12 +162,29 @@ def train(args):
     id_map, vec_obs, K = _make_map_and_vec(obs)
 
     action_space = _get_action_space(env)
-    has_continuous_action_space = hasattr(action_space, "shape") and action_space.shape is not None
 
-    if has_continuous_action_space:
+    # Check continuity of action space
+
+    has_continuous_action_space = isinstance(action_space, gym.spaces.Box)
+
+    if isinstance(action_space, gym.spaces.Box):
+        # Continuous: action is a float vector
         action_dim = int(np.prod(action_space.shape))
-    else:
+        action_nvec = None
+
+    elif isinstance(action_space, gym.spaces.Discrete):
+        # Single discrete: one categorical
         action_dim = int(action_space.n)
+        action_nvec = None
+
+    elif isinstance(action_space, gym.spaces.MultiDiscrete):
+        # MultiDiscrete: multiple categoricals (branches)
+        action_nvec = action_space.nvec.astype(int).tolist()   # e.g. [2,2,2,2,2,2,2,2]
+        action_dim = len(action_nvec)                          # e.g. 8 (num branches)
+        has_continuous_action_space = False
+
+    else:
+        raise TypeError(f"Unsupported action space: {type(action_space)}")
 
     vec_dim = int(vec_obs.shape[0])
     num_ids = int(K)
@@ -159,6 +199,7 @@ def train(args):
         has_continuous_action_space,
         action_std_init=action_std,
         mini_batch_size=mini_batch_size,
+        action_nvec=action_nvec,   # <-- ADD
     )
 
     # Reward shaping
@@ -285,6 +326,7 @@ def train(args):
             action = _select_action_and_store(cur_id_map, cur_vec_obs)
 
             # Shape action for env
+            '''
             if has_continuous_action_space:
                 action = np.asarray(action, dtype=np.float32).reshape(action_space.shape)
 
@@ -293,7 +335,9 @@ def train(args):
                 high = getattr(action_space, "high", None)
                 if low is not None and high is not None:
                     action = np.clip(action, low, high)
+            '''
 
+            action = _format_action_for_env(action, action_space)
             obs, raw_reward, done, info = env.step(action)
             done = _infer_done(done, info)
 
@@ -394,7 +438,7 @@ def train(args):
 
     finally:
         # Final save
-        final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}final.pth")
+        final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
         torch.save(ppo_agent.policy_old.state_dict(), final_path)
         print("Final model saved at:", final_path)
 
@@ -423,7 +467,7 @@ def build_argparser():
     p.add_argument("--verbose", action="store_true")
 
     # Runner steps
-    p.add_argument("--max_steps", type=int, default=18000)  # assessment uses 18000
+    p.add_argument("--max_steps", type=int, default=100000)  # assessment uses 18000
 
     # PPO hyperparams
     p.add_argument("--max_ep_len", type=int, default=1000)
@@ -431,8 +475,8 @@ def build_argparser():
     p.add_argument("--k_epochs", type=int, default=10)
     p.add_argument("--eps_clip", type=float, default=0.2)
     p.add_argument("--gamma", type=float, default=0.99)
-    p.add_argument("--lr_actor", type=float, default=3e-4)
-    p.add_argument("--lr_critic", type=float, default=1e-3)
+    p.add_argument("--lr_actor", type=float, default=1e-4)
+    p.add_argument("--lr_critic", type=float, default=2e-4)
 
     p.add_argument("--mini_batch_size", type=int, default=64)
 
@@ -443,7 +487,7 @@ def build_argparser():
     p.add_argument("--action_std_decay_freq", type=int, default=250000)
 
     # Saving
-    p.add_argument("--save_model_freq", type=int, default=50000)
+    p.add_argument("--save_model_freq", type=int, default=30000)
 
     # Resume
     p.add_argument("--resume", action="store_true")

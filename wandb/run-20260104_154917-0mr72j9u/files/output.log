@@ -1,0 +1,29 @@
+Started training at (GMT): 2026-01-04 15:49:19
+============================================================================================
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_20000.pth
+model saved
+Elapsed Time: 0:28:50
+--------------------------------------------------------------------------------------------
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_40000.pth
+model saved
+Elapsed Time: 0:57:08
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_60000.pth
+model saved
+Elapsed Time: 1:25:39
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_80000.pth
+model saved
+Elapsed Time: 1:54:23
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_100000.pth
+model saved
+Elapsed Time: 2:22:48
+--------------------------------------------------------------------------------------------
+Final model saved at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_42_100000.pth
