@@ -9,7 +9,12 @@ src/libimmortal.egg-info/entry_points.txt
 src/libimmortal.egg-info/requires.txt
 src/libimmortal.egg-info/top_level.txt
 src/libimmortal/samples/__init__.py
-src/libimmortal/samples/agents.py
+src/libimmortal/samples/randomAgent.py
+src/libimmortal/samples/PPO/PPO.py
+src/libimmortal/samples/PPO/__init__.py
+src/libimmortal/samples/PPO/reward.py
+src/libimmortal/samples/PPO/test.py
+src/libimmortal/samples/PPO/train.py
 src/libimmortal/utils/__init__.py
 src/libimmortal/utils/aux_func.py
 src/libimmortal/utils/enums.py

@@ -1,360 +1,369 @@
-# PPO.py
-import math
-from dataclasses import dataclass
-from typing import List, Tuple, Optional
-
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.distributions import MultivariateNormal
+from torch.distributions import MultivariateNormal, Categorical
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 class RolloutBuffer:
-    """
-    Stores multimodal observations:
-      - id_map: (H,W) int/uint8 class ids
-      - vec_obs: (V,) float
-    We keep them on CPU to avoid GPU memory blowup during rollout collection.
-    """
-
     def __init__(self):
-        self.id_maps: List[torch.Tensor] = []
-        self.vec_obs: List[torch.Tensor] = []
+        self.actions = []
 
-        self.actions: List[torch.Tensor] = []
-        self.logprobs: List[torch.Tensor] = []
-        self.rewards: List[float] = []
-        self.state_values: List[torch.Tensor] = []
-        self.is_terminals: List[bool] = []
+        # CHANGED: split state into 2 streams
+        # map_states: (H,W) id_map (uint8)  -- keep uint8 to save memory
+        self.map_states = []
+        # vec_states: (103,) float32
+        self.vec_states = []
 
-    def add_state(self, id_map_np: np.ndarray, vec_np: np.ndarray):
-        # Store on CPU
-        id_map = torch.as_tensor(id_map_np, dtype=torch.uint8, device="cpu")
-        vec = torch.as_tensor(vec_np, dtype=torch.float32, device="cpu")
-        self.id_maps.append(id_map)
-        self.vec_obs.append(vec)
-
+        self.logprobs = []
+        self.rewards = []
+        self.state_values = []
+        self.is_terminals = []
+    
     def clear(self):
-        self.id_maps.clear()
-        self.vec_obs.clear()
-        self.actions.clear()
-        self.logprobs.clear()
-        self.rewards.clear()
-        self.state_values.clear()
-        self.is_terminals.clear()
+        del self.actions[:]
+        del self.map_states[:]
+        del self.vec_states[:]
+        del self.logprobs[:]
+        del self.rewards[:]
+        del self.state_values[:]
+        del self.is_terminals[:]
+
+    def add_state(self, id_map, vec_obs):
+        """
+        id_map: np.ndarray of shape (H,W) from colormap encoder
+        vec_obs: np.ndarray of shape (103,)
+        """
+        self.map_states.append(np.asarray(id_map, dtype=np.uint8))
+        self.vec_states.append(np.asarray(vec_obs, dtype=np.float32).reshape(-1))
 
 
-class ResidualBlock(nn.Module):
-    def __init__(self, channels: int):
+class ResBlock2D(nn.Module):
+    """Basic 2D residual block with optional downsampling."""
+    def __init__(self, in_ch: int, out_ch: int, stride: int = 1):
         super().__init__()
-        self.conv1 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
-        self.act = nn.ReLU(inplace=True)
+        self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=stride, padding=1)
+        self.conv2 = nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1)
+        self.act = nn.ReLU()
+
+        if stride != 1 or in_ch != out_ch:
+            self.skip = nn.Conv2d(in_ch, out_ch, kernel_size=1, stride=stride)
+        else:
+            self.skip = nn.Identity()
 
     def forward(self, x):
-        identity = x
-        x = self.act(self.conv1(x))
-        x = self.conv2(x)
-        x = self.act(x + identity)
-        return x
+        y = self.act(self.conv1(x))
+        y = self.conv2(y)
+        return self.act(y + self.skip(x))
 
 
-class CNNEncoder(nn.Module):
-    """
-    Encodes id_map (B,H,W) -> feature (B, C)
-    We first embed ids -> (B,H,W,E), then permute -> (B,E,H,W), then CNN.
-    """
-
-    def __init__(self, num_ids: int, embed_dim: int = 16, base_channels: int = 32, out_dim: int = 256):
+class ResMLPBlock(nn.Module):
+    """Residual MLP block: x -> Linear(d,d) -> ReLU -> Linear(d,d) + x -> ReLU."""
+    def __init__(self, d: int):
         super().__init__()
-        self.id_embed = nn.Embedding(num_ids, embed_dim)
-
-        self.stem = nn.Sequential(
-            nn.Conv2d(embed_dim, base_channels, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(base_channels, base_channels, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-        )
-
-        self.block1 = ResidualBlock(base_channels)
-        self.down1 = nn.Conv2d(base_channels, base_channels * 2, kernel_size=3, stride=2, padding=1)
-
-        self.block2 = ResidualBlock(base_channels * 2)
-        self.down2 = nn.Conv2d(base_channels * 2, base_channels * 4, kernel_size=3, stride=2, padding=1)
-
-        self.block3 = ResidualBlock(base_channels * 4)
-
-        self.head = nn.Sequential(
-            nn.AdaptiveAvgPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(base_channels * 4, out_dim),
-            nn.ReLU(inplace=True),
-        )
-
-    def forward(self, id_map_long: torch.Tensor) -> torch.Tensor:
-        # id_map_long: (B,H,W) long
-        x = self.id_embed(id_map_long)          # (B,H,W,E)
-        x = x.permute(0, 3, 1, 2).contiguous()  # (B,E,H,W)
-
-        x = self.stem(x)
-        x = self.block1(x)
-        x = F.relu(self.down1(x), inplace=True)
-
-        x = self.block2(x)
-        x = F.relu(self.down2(x), inplace=True)
-
-        x = self.block3(x)
-        x = self.head(x)  # (B,out_dim)
-        return x
-
-
-class VecEncoder(nn.Module):
-    def __init__(self, vec_dim: int, out_dim: int = 256):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(vec_dim, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, out_dim),
-            nn.ReLU(inplace=True),
-        )
-
-    def forward(self, v: torch.Tensor) -> torch.Tensor:
-        return self.net(v)
-
-
-class Fusion(nn.Module):
-    def __init__(self, in_dim: int, out_dim: int = 256):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(in_dim, 512),
-            nn.ReLU(inplace=True),
-            nn.Linear(512, out_dim),
-            nn.ReLU(inplace=True),
-        )
+        self.fc1 = nn.Linear(d, d)
+        self.fc2 = nn.Linear(d, d)
+        self.act = nn.ReLU()
 
     def forward(self, x):
-        return self.net(x)
+        y = self.act(self.fc1(x))
+        y = self.fc2(y)
+        return self.act(x + y)
 
 
 class ActorCritic(nn.Module):
     """
-    Multimodal:
-      - id_map: (B,H,W) long
-      - vec_obs: (B,V) float
-    """
+    Actor-Critic backbone for (id_map, vector_obs) input.
 
+    - id_map: (H,W) or (B,H,W), integer IDs in [0, num_ids-1]
+    - vector_obs: (103,) or (B,103), float
+    """
     def __init__(
         self,
-        num_ids: int,
-        vec_dim: int,
+        num_ids: int,                 # K (palette size)
+        vec_dim: int,                 # 103
         action_dim: int,
-        action_std_init: float = 0.6,
-        embed_dim: int = 16,
-        cnn_base: int = 32,
-        feat_dim: int = 256,
+        has_continuous_action_space: bool,
+        action_std_init: float,
+        *,
+        emb_dim: int = 16,            # id embedding dim
+        map_feat_dim: int = 256,      # map encoder output dim
+        vec_feat_dim: int = 128,      # vector encoder output dim
+        fused_dim: int = 256,         # fusion trunk width
+        fusion_blocks: int = 2,       # residual blocks in fusion MLP
     ):
         super().__init__()
 
+        self.has_continuous_action_space = has_continuous_action_space
         self.action_dim = action_dim
-        self.action_var = torch.full((action_dim,), action_std_init * action_std_init).to(device)
 
-        self.cnn = CNNEncoder(num_ids=num_ids, embed_dim=embed_dim, base_channels=cnn_base, out_dim=feat_dim)
-        self.vec = VecEncoder(vec_dim=vec_dim, out_dim=feat_dim)
-        self.fuse = Fusion(in_dim=feat_dim * 2, out_dim=feat_dim)
+        # --- ID embedding (id_map -> embedding channels) ---
+        self.id_embed = nn.Embedding(num_embeddings=num_ids, embedding_dim=emb_dim)
 
-        # Actor head (mean of Gaussian)
-        self.actor = nn.Sequential(
-            nn.Linear(feat_dim, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, action_dim),
-            nn.Tanh(),
+        # --- Map encoder (CNN + residual) ---
+        # Input after embedding: (B, emb_dim, H, W)
+        self.map_stem = nn.Sequential(
+            nn.Conv2d(emb_dim, 64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
         )
 
-        # Critic head (state value)
-        self.critic = nn.Sequential(
-            nn.Linear(feat_dim, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+        # Deeper CNN with downsampling
+        self.map_backbone = nn.Sequential(
+            ResBlock2D(64, 64, stride=1),
+            ResBlock2D(64, 64, stride=1),
+
+            ResBlock2D(64, 128, stride=2),  # downsample
+            ResBlock2D(128, 128, stride=1),
+
+            ResBlock2D(128, 256, stride=2), # downsample
+            ResBlock2D(256, 256, stride=1),
         )
 
-    def set_action_std(self, new_action_std: float):
-        self.action_var = torch.full((self.action_dim,), new_action_std * new_action_std).to(device)
+        # Make output size-independent of (90,160)
+        self.map_pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.map_proj = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(256, map_feat_dim),
+            nn.ReLU(),
+        )
 
-    def encode(self, id_map: torch.Tensor, vec_obs: torch.Tensor) -> torch.Tensor:
-        # id_map: (B,H,W) long ; vec_obs: (B,V) float
-        img_feat = self.cnn(id_map)
-        vec_feat = self.vec(vec_obs)
-        feat = self.fuse(torch.cat([img_feat, vec_feat], dim=-1))
-        return feat
+        # --- Vector encoder (FFN + residual) ---
+        self.vec_proj = nn.Sequential(
+            nn.Linear(vec_dim, vec_feat_dim),
+            nn.ReLU(),
+        )
+        self.vec_res = nn.Sequential(
+            ResMLPBlock(vec_feat_dim),
+            ResMLPBlock(vec_feat_dim),
+        )
 
-    def act(self, id_map: torch.Tensor, vec_obs: torch.Tensor):
+        # --- Fusion trunk (concat -> residual FFN) ---
+        fusion_in = map_feat_dim + vec_feat_dim
+        self.fusion = nn.Sequential(
+            nn.Linear(fusion_in, fused_dim),
+            nn.ReLU(),
+            *[ResMLPBlock(fused_dim) for _ in range(fusion_blocks)],
+        )
+
+        # --- Actor head / Critic head ---
+        if self.has_continuous_action_space:
+            self.actor_head = nn.Sequential(
+                nn.Linear(fused_dim, fused_dim),
+                nn.ReLU(),
+                nn.Linear(fused_dim, action_dim),  # NOTE: no Tanh (unbounded mean)
+            )
+            # Keep as buffer so it follows .to(device)
+            self.register_buffer(
+                "action_var",
+                torch.full((action_dim,), action_std_init * action_std_init),
+            )
+        else:
+            self.actor_head = nn.Sequential(
+                nn.Linear(fused_dim, fused_dim),
+                nn.ReLU(),
+                nn.Linear(fused_dim, action_dim),
+                nn.Softmax(dim=-1),
+            )
+
+        self.critic_head = nn.Sequential(
+            nn.Linear(fused_dim, fused_dim),
+            nn.ReLU(),
+            nn.Linear(fused_dim, 1),
+        )
+
+    def encode(self, id_map, vec_obs):
+        # id_map: (H,W) or (B,H,W) -> (B,H,W)
+        if id_map.dim() == 2:
+            id_map = id_map.unsqueeze(0)
+        if vec_obs.dim() == 1:
+            vec_obs = vec_obs.unsqueeze(0)
+
+        # Ensure dtypes
+        id_map = id_map.long()
+        vec_obs = vec_obs.float()
+
+        # Embedding: (B,H,W) -> (B,H,W,emb_dim) -> (B,emb_dim,H,W)
+        x = self.id_embed(id_map).permute(0, 3, 1, 2).contiguous()
+
+        x = self.map_stem(x)
+        x = self.map_backbone(x)
+        x = self.map_pool(x)
+        map_feat = self.map_proj(x)  # (B, map_feat_dim)
+
+        vec_feat = self.vec_proj(vec_obs)
+        vec_feat = self.vec_res(vec_feat)  # (B, vec_feat_dim)
+
+        fused = torch.cat([map_feat, vec_feat], dim=1)
+        fused = self.fusion(fused)  # (B, fused_dim)
+        return fused
+
+    def act(self, id_map, vec_obs):
+        """Sample action + logprob + state value (for rollout collection)."""
         feat = self.encode(id_map, vec_obs)
-        action_mean = self.actor(feat)
+        state_value = self.critic_head(feat)
 
-        cov_mat = torch.diag(self.action_var).unsqueeze(0).expand(action_mean.shape[0], -1, -1)
-        dist = MultivariateNormal(action_mean, covariance_matrix=cov_mat)
+        if self.has_continuous_action_space:
+            action_mean = self.actor_head(feat)
+            action_var = self.action_var.expand_as(action_mean)               # (B, action_dim)
+            cov_mat = torch.diag_embed(action_var)                             # (B, action_dim, action_dim)
+            dist = MultivariateNormal(action_mean, cov_mat)
 
-        action = dist.sample()
-        action_logprob = dist.log_prob(action)
-        state_val = self.critic(feat).squeeze(-1)
+            action = dist.sample()
+            action_logprob = dist.log_prob(action)
+            return action, action_logprob, state_value
+        else:
+            action_probs = self.actor_head(feat)
+            dist = Categorical(action_probs)
 
-        return action, action_logprob, state_val
+            action = dist.sample()
+            action_logprob = dist.log_prob(action)
+            return action, action_logprob, state_value
 
-    def evaluate(self, id_map: torch.Tensor, vec_obs: torch.Tensor, action: torch.Tensor):
+    def evaluate(self, id_map, vec_obs, action):
+        """Compute logprobs, values, entropy for PPO update."""
         feat = self.encode(id_map, vec_obs)
-        action_mean = self.actor(feat)
+        state_values = self.critic_head(feat)
 
-        cov_mat = torch.diag(self.action_var).unsqueeze(0).expand(action_mean.shape[0], -1, -1)
-        dist = MultivariateNormal(action_mean, covariance_matrix=cov_mat)
+        if self.has_continuous_action_space:
+            action_mean = self.actor_head(feat)
+            action_var = self.action_var.expand_as(action_mean)
+            cov_mat = torch.diag_embed(action_var)
+            dist = MultivariateNormal(action_mean, cov_mat)
 
-        action_logprobs = dist.log_prob(action)
-        dist_entropy = dist.entropy()
-        state_values = self.critic(feat).squeeze(-1)
+            action_logprobs = dist.log_prob(action)
+            dist_entropy = dist.entropy()
+            return action_logprobs, state_values, dist_entropy
+        else:
+            action_probs = self.actor_head(feat)
+            dist = Categorical(action_probs)
 
-        return action_logprobs, state_values, dist_entropy
+            action_logprobs = dist.log_prob(action)
+            dist_entropy = dist.entropy()
+            return action_logprobs, state_values, dist_entropy
 
 
 class PPO:
-    def __init__(
-        self,
-        num_ids: int,
-        vec_dim: int,
-        action_dim: int,
-        lr_actor: float,
-        lr_critic: float,
-        gamma: float,
-        K_epochs: int,
-        eps_clip: float,
-        action_std_init: float = 0.6,
-        minibatch_size: int = 64,
-    ):
+    def __init__(self, 
+                 num_ids, vec_dim, action_dim,
+                 lr_actor, lr_critic,
+                 gamma, K_epochs, eps_clip,
+                 has_continuous_action_space,
+                 action_std_init=0.6,
+                 mini_batch_size=128):   # <-- NEW
+        self.has_continuous_action_space = has_continuous_action_space
         self.gamma = gamma
         self.eps_clip = eps_clip
         self.K_epochs = K_epochs
-        self.minibatch_size = minibatch_size
+        self.mini_batch_size = mini_batch_size  # <-- NEW
+
+        if has_continuous_action_space:
+            self.action_std = action_std_init
 
         self.buffer = RolloutBuffer()
 
-        self.policy = ActorCritic(num_ids, vec_dim, action_dim, action_std_init).to(device)
-        self.policy_old = ActorCritic(num_ids, vec_dim, action_dim, action_std_init).to(device)
+        self.policy = ActorCritic(
+            num_ids=num_ids, vec_dim=vec_dim, action_dim=action_dim,
+            has_continuous_action_space=has_continuous_action_space,
+            action_std_init=action_std_init
+        ).to(device)
+
+        self.policy_old = ActorCritic(
+            num_ids=num_ids, vec_dim=vec_dim, action_dim=action_dim,
+            has_continuous_action_space=has_continuous_action_space,
+            action_std_init=action_std_init
+        ).to(device)
+
         self.policy_old.load_state_dict(self.policy.state_dict())
 
+        # Optimizer (원하는대로 유지/수정 가능)
+        shared_and_actor = []
+        critic_only = []
+
+        shared_and_actor += list(self.policy.id_embed.parameters())
+        shared_and_actor += list(self.policy.map_stem.parameters())
+        shared_and_actor += list(self.policy.map_backbone.parameters())
+        shared_and_actor += list(self.policy.map_proj.parameters())
+        shared_and_actor += list(self.policy.vec_proj.parameters())
+        shared_and_actor += list(self.policy.vec_res.parameters())
+        shared_and_actor += list(self.policy.fusion.parameters())
+        shared_and_actor += list(self.policy.actor_head.parameters())
+        critic_only += list(self.policy.critic_head.parameters())
+
         self.optimizer = torch.optim.Adam(
-            [
-                {"params": self.policy.actor.parameters(), "lr": lr_actor},
-                {"params": self.policy.critic.parameters(), "lr": lr_critic},
-                {"params": self.policy.cnn.parameters(), "lr": lr_actor},
-                {"params": self.policy.vec.parameters(), "lr": lr_actor},
-                {"params": self.policy.fuse.parameters(), "lr": lr_actor},
-            ]
+            [{"params": shared_and_actor, "lr": lr_actor},
+             {"params": critic_only, "lr": lr_critic}]
         )
 
         self.MseLoss = nn.MSELoss()
 
-    def set_action_std(self, new_action_std: float):
-        self.policy.set_action_std(new_action_std)
-        self.policy_old.set_action_std(new_action_std)
-
-    def decay_action_std(self, action_std_decay_rate: float, min_action_std: float):
-        # You can track current std outside if needed; here we read from policy_old.action_var
-        cur_std = float(torch.sqrt(self.policy_old.action_var[0]).detach().cpu().item())
-        new_std = max(min_action_std, round(cur_std - action_std_decay_rate, 4))
-        self.set_action_std(new_std)
-
-    @torch.no_grad()
-    def select_action(self, id_map_np: np.ndarray, vec_np: np.ndarray) -> np.ndarray:
-        # Store state first
-        self.buffer.add_state(id_map_np, vec_np)
-
-        id_map = torch.as_tensor(id_map_np, dtype=torch.long, device=device).unsqueeze(0)  # (1,H,W)
-        vec = torch.as_tensor(vec_np, dtype=torch.float32, device=device).unsqueeze(0)     # (1,V)
-
-        action, action_logprob, state_val = self.policy_old.act(id_map, vec)
-
-        self.buffer.actions.append(action.squeeze(0).detach().cpu())
-        self.buffer.logprobs.append(action_logprob.squeeze(0).detach().cpu())
-        self.buffer.state_values.append(state_val.squeeze(0).detach().cpu())
-
-        return action.squeeze(0).detach().cpu().numpy()
-
     def update(self):
-        # ---------- compute returns ----------
-        returns = []
-        discounted = 0.0
+        # 1) returns 계산 (CPU에서 해도 OK)
+        rewards = []
+        discounted_reward = 0.0
         for r, is_terminal in zip(reversed(self.buffer.rewards), reversed(self.buffer.is_terminals)):
             if is_terminal:
-                discounted = 0.0
-            discounted = float(r) + self.gamma * discounted
-            returns.insert(0, discounted)
+                discounted_reward = 0.0
+            discounted_reward = float(r) + self.gamma * discounted_reward
+            rewards.insert(0, discounted_reward)
 
-        returns = torch.tensor(returns, dtype=torch.float32)  # CPU
-        returns = (returns - returns.mean()) / (returns.std() + 1e-7)
+        rewards = torch.tensor(rewards, dtype=torch.float32)  # CPU
+        rewards = (rewards - rewards.mean()) / (rewards.std() + 1e-7)
 
-        # ---------- stack rollout (CPU) ----------
-        old_maps = torch.stack(self.buffer.id_maps, dim=0)          # (T,H,W) uint8 CPU
-        old_vec = torch.stack(self.buffer.vec_obs, dim=0)           # (T,V) float32 CPU
-        old_actions = torch.stack(self.buffer.actions, dim=0)       # (T,A) float32 CPU
-        old_logprobs = torch.stack(self.buffer.logprobs, dim=0)     # (T,) CPU
-        old_state_values = torch.stack(self.buffer.state_values, dim=0)  # (T,) CPU
+        # 2) rollout tensors (큰 map은 CPU 유지!)
+        # map: (T,H,W) long (CPU)
+        old_map = torch.from_numpy(np.stack(self.buffer.map_states, axis=0)).long()     # CPU
+        old_vec = torch.from_numpy(np.stack(self.buffer.vec_states, axis=0)).float()   # CPU
 
-        advantages = returns - old_state_values
-        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-7)
+        # actions/logprobs/values는 크기 작으니 CPU로 통일해도 충분
+        old_actions = torch.stack(self.buffer.actions, dim=0).detach().cpu()
+        old_logprobs = torch.stack(self.buffer.logprobs, dim=0).detach().cpu().view(-1)
+        old_state_values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)
 
-        T = old_actions.shape[0]
-        idx_all = torch.arange(T)
+        # continuous면 action shape 정리
+        if self.has_continuous_action_space:
+            old_actions = old_actions.view(old_actions.size(0), -1)  # (T, action_dim)
+        else:
+            old_actions = old_actions.view(-1)
 
-        # ---------- PPO epochs w/ minibatches ----------
+        advantages = rewards - old_state_values
+
+        T = rewards.shape[0]
+        mb = int(self.mini_batch_size)
+
         for _ in range(self.K_epochs):
-            perm = idx_all[torch.randperm(T)]
+            idxs = torch.randperm(T)  # CPU indices
 
-            for start in range(0, T, self.minibatch_size):
-                mb_idx = perm[start : start + self.minibatch_size]
+            for start in range(0, T, mb):
+                mb_idx = idxs[start:start + mb]
 
-                mb_map = old_maps[mb_idx].to(device=device, dtype=torch.long)   # (B,H,W)
-                mb_vec = old_vec[mb_idx].to(device=device, dtype=torch.float32) # (B,V)
-                mb_actions = old_actions[mb_idx].to(device=device, dtype=torch.float32)  # (B,A)
-                mb_old_logprobs = old_logprobs[mb_idx].to(device=device, dtype=torch.float32)  # (B,)
-                mb_returns = returns[mb_idx].to(device=device, dtype=torch.float32)  # (B,)
-                mb_adv = advantages[mb_idx].to(device=device, dtype=torch.float32)  # (B,)
+                # 미니배치만 GPU로 이동
+                mb_map = old_map[mb_idx].to(device, non_blocking=True)          # (B,H,W)
+                mb_vec = old_vec[mb_idx].to(device, non_blocking=True)          # (B,103)
+                mb_actions = old_actions[mb_idx].to(device, non_blocking=True)
+                mb_old_logp = old_logprobs[mb_idx].to(device, non_blocking=True)
+                mb_rewards = rewards[mb_idx].to(device, non_blocking=True)
+                mb_adv = advantages[mb_idx].to(device, non_blocking=True)
 
                 logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
+                state_values = state_values.view(-1)
 
-                ratios = torch.exp(logprobs - mb_old_logprobs)
+                ratios = torch.exp(logprobs - mb_old_logp.detach())
 
                 surr1 = ratios * mb_adv
                 surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
 
-                loss_actor = -torch.min(surr1, surr2).mean()
-                loss_critic = 0.5 * self.MseLoss(state_values, mb_returns)
-                loss_entropy = -0.01 * dist_entropy.mean()
-
-                loss = loss_actor + loss_critic + loss_entropy
+                loss = -torch.min(surr1, surr2) \
+                       + 0.5 * self.MseLoss(state_values, mb_rewards) \
+                       - 0.01 * dist_entropy
 
                 self.optimizer.zero_grad(set_to_none=True)
-                loss.backward()
-                nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+                loss.mean().backward()
+
+                # (선택) 안정성용 grad clip 추천
+                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+
                 self.optimizer.step()
 
         self.policy_old.load_state_dict(self.policy.state_dict())
         self.buffer.clear()
-
-    def save(self, checkpoint_path: str):
-        payload = {
-            "policy_old": self.policy_old.state_dict(),
-            "policy": self.policy.state_dict(),
-            "optimizer": self.optimizer.state_dict(),
-        }
-        torch.save(payload, checkpoint_path)
-
-    def load(self, checkpoint_path: str):
-        payload = torch.load(checkpoint_path, map_location="cpu")
-        self.policy_old.load_state_dict(payload["policy_old"])
-        self.policy.load_state_dict(payload["policy"])
-        if "optimizer" in payload:
-            self.optimizer.load_state_dict(payload["optimizer"])
-        # move to device
-        self.policy.to(device)
-        self.policy_old.to(device)
