@@ -213,9 +213,16 @@ def train(args):
         success_if_raw_reward_ge=args.success_if_raw_reward_ge,
         time_limit=args.time_limit,
         success_speed_bonus=args.success_speed_bonus,
+
+        # Optional: BFS knobs (defaults exist, so you can omit these if you want)
+        # use_bfs_progress=True,
+        # bfs_update_every=getattr(args, "bfs_update_every", 10),
+        # bfs_blocked_ids=None,  # keep defaults from encoder (WALL only)
+        # bfs_player_ids=None,   # keep defaults (KNIGHT / KNIGHT_ATTACK)
+        # bfs_goal_ids=None,     # keep defaults (GOAL)
     )
     shaper = RewardShaper(cfg)
-    shaper.reset(vec_obs)
+    shaper.reset(vec_obs, id_map)
 
     # Checkpoints
     ckpt_dir = _checkpoint_dir()
@@ -352,7 +359,7 @@ def train(args):
             reward_scaler = RewardScaler(gamma=gamma, clip=5.0, eps= 1e-8, min_std=0.1, warmup_steps=10000)
 
             # inside main loop, after computing shaped reward
-            reward = shaper(raw_reward, next_vec_obs, done, info)
+            reward = shaper(raw_reward, next_vec_obs, next_id_map, done, info)
             reward = reward_scaler(reward, done)
 
             ppo_agent.buffer.rewards.append(float(reward))
