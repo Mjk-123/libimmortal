@@ -1,0 +1,28 @@
+2026-01-06 02:29:31,293 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Current SDK version is 0.17.4
+2026-01-06 02:29:31,293 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Configure stats pid to 1193000
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Loading settings from /root/.config/wandb/settings
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Loading settings from /root/libimmortal/wandb/settings
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'src/libimmortal/samples/PPO/train.py', 'program_abspath': '/root/libimmortal/src/libimmortal/samples/PPO/train.py', 'program': '/root/libimmortal/./src/libimmortal/samples/PPO/train.py'}
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_setup.py:_flush():76] Applying login settings: {}
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_init.py:_log_setup():529] Logging user logs to /root/libimmortal/wandb/run-20260106_022931-j4ociiab/logs/debug.log
+2026-01-06 02:29:31,294 INFO    MainThread:1193000 [wandb_init.py:_log_setup():530] Logging internal logs to /root/libimmortal/wandb/run-20260106_022931-j4ociiab/logs/debug-internal.log
+2026-01-06 02:29:31,295 INFO    MainThread:1193000 [wandb_init.py:init():569] calling init triggers
+2026-01-06 02:29:31,295 INFO    MainThread:1193000 [wandb_init.py:init():576] wandb.init called with sweep_config: {}
+config: {'env_tag': 'ImmortalSufferingEnv', 'max_steps': 100000, 'max_ep_len': 1000, 'update_timestep': 4000, 'K_epochs': 10, 'eps_clip': 0.2, 'gamma': 0.99, 'lr_actor': 0.0001, 'lr_critic': 0.0002, 'action_std': 0.6, 'action_std_decay_rate': 0.05, 'min_action_std': 0.1, 'action_std_decay_freq': 250000, 'save_model_freq': 20000, 'mini_batch_size': 64, 'seed': 42, 'reward_shaping': {'w_progress': 1.0, 'w_time': 0.001, 'w_damage': 0.05, 'w_not_actionable': 0.01, 'terminal_bonus': 1.0, 'terminal_failure_penalty': 1.0, 'clip': 5.0}, 'resume': False, 'checkpoint': None}
+2026-01-06 02:29:31,295 INFO    MainThread:1193000 [wandb_init.py:init():619] starting backend
+2026-01-06 02:29:31,295 INFO    MainThread:1193000 [wandb_init.py:init():623] setting up manager
+2026-01-06 02:29:31,300 INFO    MainThread:1193000 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2026-01-06 02:29:31,302 INFO    MainThread:1193000 [wandb_init.py:init():631] backend started and connected
+2026-01-06 02:29:31,307 INFO    MainThread:1193000 [wandb_init.py:init():720] updated telemetry
+2026-01-06 02:29:31,313 INFO    MainThread:1193000 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2026-01-06 02:29:32,077 INFO    MainThread:1193000 [wandb_run.py:_on_init():2402] communicating current version
+2026-01-06 02:29:32,301 INFO    MainThread:1193000 [wandb_run.py:_on_init():2411] got version response upgrade_message: "wandb version 0.23.1 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2026-01-06 02:29:32,301 INFO    MainThread:1193000 [wandb_init.py:init():804] starting run threads in backend
+2026-01-06 02:29:32,551 INFO    MainThread:1193000 [wandb_run.py:_console_start():2380] atexit reg
+2026-01-06 02:29:32,551 INFO    MainThread:1193000 [wandb_run.py:_redirect():2235] redirect: wrap_raw
+2026-01-06 02:29:32,551 INFO    MainThread:1193000 [wandb_run.py:_redirect():2300] Wrapping output streams.
+2026-01-06 02:29:32,551 INFO    MainThread:1193000 [wandb_run.py:_redirect():2325] Redirects installed.
+2026-01-06 02:29:32,553 INFO    MainThread:1193000 [wandb_init.py:init():847] run started, returning control to user process

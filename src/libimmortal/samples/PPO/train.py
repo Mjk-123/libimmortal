@@ -382,6 +382,7 @@ def train(args):
                         feat = ppo_agent.policy_old.encode(map_t, vec_t)
                         v = ppo_agent.policy_old.critic_head(feat)   # (1,1)
                         ppo_agent.buffer.last_value = float(v.item())
+                np.savetxt("/root/libimmortal/id_map.txt", cur_id_map, delimiter=',', fmt='%.2f')
                 ppo_agent.update(0.95) # GAE constant = 0.95
                 dt = time.time() - t0
 

@@ -95,8 +95,23 @@ class ColorMapEncoder:
 
 DEFAULT_ENCODER = ColorMapEncoder.from_enum()
 
+def fix_obs_structure(obs):
+        """
+        (3, 90, 160) 형태이지만 RGB가 섞여있는 데이터를 
+        제대로 된 (3, 90, 160) CHW 구조로 바꿈
+        """
+        # 1. 일렬로 나열된 RGB를 (H, W, 3)으로 제대로 쌓기
+        # 이 과정에서 [8, 19, 49]가 하나의 픽셀 묶음이 됨
+        h, w = 90, 160
+        corrected_hwc = obs.reshape(h, w, 3)
+        
+        # 2. 인코더가 기대하는 (3, H, W) 순서로 축 변경
+        corrected_chw = np.transpose(corrected_hwc, (2, 0, 1))
+        
+        return corrected_chw
 
 def colormap_to_ids_and_onehot(img_chw: np.ndarray):
+    img_chw = fix_obs_structure(img_chw)
     return DEFAULT_ENCODER.encode(img_chw)
 
 

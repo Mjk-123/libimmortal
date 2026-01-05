@@ -55,6 +55,15 @@ def _find_first_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[
             return int(xs[0]), int(ys[0])
     return None
 
+def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    cx = int(np.round(xs.mean()))
+    cy = int(np.round(ys.mean()))
+    return cx, cy
 
 def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndarray:
     """4-neighbor BFS distance to goal. Returns inf for unreachable."""
@@ -171,35 +180,30 @@ class RewardShaper:
         return ~blocked
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
-        """
-        Return BFS shortest-path distance from player to goal (grid steps), or None.
-        Uses cached dist_map from goal, recomputed occasionally.
-        """
-        player_xy = _find_first_xy(id_map, self.cfg.bfs_player_ids)
-        goal_xy = _find_first_xy(id_map, self.cfg.bfs_goal_ids)
+        # Use centroid to reduce jitter
+        player_xy = _find_centroid_xy(id_map, self.cfg.bfs_player_ids)
+        goal_xy   = _find_centroid_xy(id_map, self.cfg.bfs_goal_ids)
         if player_xy is None or goal_xy is None:
             return None
 
-        self._step += 1
-
-        need_recompute = False
-        if self._cached_dist_map is None:
-            need_recompute = True
-        if self._cached_goal_xy != goal_xy:
-            need_recompute = True
-        if (self._step % int(self.cfg.bfs_update_every)) == 0:
-            need_recompute = True
+        need_recompute = (
+            self._cached_dist_map is None
+            or self._cached_goal_xy != goal_xy
+            or (self._step % int(self.cfg.bfs_update_every)) == 0
+        )
 
         if need_recompute:
             passable = self._passable_mask(id_map)
+            # Ensure goal cell is passable even if ids are in blocked list
+            gx, gy = goal_xy
+            passable[gy, gx] = True
+
             self._cached_dist_map = _bfs_distance_map(passable, goal_xy)
             self._cached_goal_xy = goal_xy
 
         px, py = player_xy
         d = float(self._cached_dist_map[py, px])
-        if not np.isfinite(d):
-            return None
-        return d
+        return d if np.isfinite(d) else None
 
     def _is_success(self, raw_reward: float, done: bool, info: Dict[str, Any]) -> bool:
         if not done:
@@ -221,6 +225,8 @@ class RewardShaper:
         if info is None:
             info = {}
 
+         # Step counter: increment exactly once per env step.
+        self._step += 1
         r = 0.0
 
         # (0) Keep raw env reward (if you want purely shaped reward, set raw_reward weight outside)
