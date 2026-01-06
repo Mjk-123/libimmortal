@@ -17,7 +17,7 @@ K_epochs:
   value: 10
 eps_clip:
   desc: null
-  value: 0.2
+  value: 0.15
 gamma:
   desc: null
   value: 0.99
@@ -51,13 +51,13 @@ seed:
 reward_shaping:
   desc: null
   value:
-    w_progress: 1.0
+    w_progress: 0.2
     w_time: 0.001
     w_damage: 0.05
     w_not_actionable: 0.01
     terminal_bonus: 1.0
-    terminal_failure_penalty: 1.0
-    clip: 5.0
+    terminal_failure_penalty: 5.0
+    clip: 3.0
 resume:
   desc: null
   value: false
@@ -72,7 +72,7 @@ _wandb:
     framework: torch
     is_jupyter_run: false
     is_kaggle_kernel: false
-    start_time: 1767634171
+    start_time: 1767654781
     t:
       1:
       - 1
@@ -82,7 +82,6 @@ _wandb:
       - 55
       3:
       - 2
-      - 3
       - 13
       - 16
       - 23

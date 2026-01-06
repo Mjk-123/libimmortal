@@ -4,26 +4,30 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import MultivariateNormal, Categorical
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# --- REMOVE THIS (DDP import-time cuda:0 trap) ---
+# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+def _default_device() -> torch.device:
+    """
+    DDP-safe default device.
+    Assumes torch.cuda.set_device(local_rank) has already been called (in train.py).
+    """
+    if torch.cuda.is_available():
+        return torch.device(f"cuda:{torch.cuda.current_device()}")
+    return torch.device("cpu")
+
 
 class RolloutBuffer:
     def __init__(self):
         self.actions = []
-
-        # CHANGED: split state into 2 streams
-        # map_states: (H,W) id_map (uint8)  -- keep uint8 to save memory
         self.map_states = []
-        # vec_states: (103,) float32
         self.vec_states = []
-
         self.logprobs = []
         self.rewards = []
         self.state_values = []
         self.is_terminals = []
-
-        # NEW: bootstrap value for the state after the last transition in the rollout
         self.last_value = 0.0
-    
+
     def clear(self):
         del self.actions[:]
         del self.map_states[:]
@@ -34,10 +38,6 @@ class RolloutBuffer:
         del self.is_terminals[:]
 
     def add_state(self, id_map, vec_obs):
-        """
-        id_map: np.ndarray of shape (H,W) from colormap encoder
-        vec_obs: np.ndarray of shape (103,)
-        """
         self.map_states.append(np.asarray(id_map, dtype=np.uint8))
         self.vec_states.append(np.asarray(vec_obs, dtype=np.float32).reshape(-1))
 
@@ -137,7 +137,7 @@ class ActorCritic(nn.Module):
         has_continuous_action_space: bool,
         action_std_init: float,
         *,
-        emb_dim: int = 16,
+        emb_dim: int = 32,
         map_feat_dim: int = 256,
         vec_feat_dim: int = 128,
         fused_dim: int = 256,
@@ -367,35 +367,29 @@ class ActorCritic(nn.Module):
 PPO implementation
 '''
 
-def calculate_gae(self, rewards, values, is_terminals, gamma, lam=0.95):
-    advantages = []
-    gae = 0
-    # values는 Critic이 예측한 상태 가치 (마지막 상태 포함 필요)
-    # 편의상 여기서는 buffer의 값들을 사용한다고 가정
-    values = values + [0] # 마지막 다음 상태 가치 패딩
-
-    for i in reversed(range(len(rewards))):
-        # delta = r + gamma * V(s') - V(s)
-        delta = rewards[i] + gamma * values[i+1] * (1 - int(is_terminals[i])) - values[i]
-        gae = delta + gamma * lam * (1 - int(is_terminals[i])) * gae
-        advantages.insert(0, gae)
-    
-    return torch.tensor(advantages, dtype=torch.float32)
-
 class PPO:
-    def __init__(self, 
-                 num_ids, vec_dim, action_dim,
-                 lr_actor, lr_critic,
-                 gamma, K_epochs, eps_clip,
-                 has_continuous_action_space,
-                 action_std_init=0.6,
-                 mini_batch_size=128,
-                 action_nvec=None):   # <-- NEW
+    def __init__(
+        self,
+        num_ids, vec_dim, action_dim,
+        lr_actor, lr_critic,
+        gamma, K_epochs, eps_clip,
+        has_continuous_action_space,
+        action_std_init=0.6,
+        mini_batch_size=128,
+        action_nvec=None,
+        device: torch.device | None = None,   # <-- NEW
+    ):
         self.has_continuous_action_space = has_continuous_action_space
         self.gamma = gamma
         self.eps_clip = eps_clip
         self.K_epochs = K_epochs
-        self.mini_batch_size = mini_batch_size  # <-- NEW
+        self.mini_batch_size = mini_batch_size
+
+        # Keep action_nvec for shape handling in update()
+        self.action_nvec = action_nvec
+
+        # DDP-safe device (depends on torch.cuda.set_device called in train.py)
+        self.device = device if device is not None else _default_device()
 
         if has_continuous_action_space:
             self.action_std = action_std_init
@@ -407,18 +401,17 @@ class PPO:
             has_continuous_action_space=has_continuous_action_space,
             action_std_init=action_std_init,
             action_nvec=action_nvec
-        ).to(device)
+        ).to(self.device)
 
         self.policy_old = ActorCritic(
             num_ids=num_ids, vec_dim=vec_dim, action_dim=action_dim,
             has_continuous_action_space=has_continuous_action_space,
             action_std_init=action_std_init,
             action_nvec=action_nvec
-        ).to(device)
+        ).to(self.device)
 
         self.policy_old.load_state_dict(self.policy.state_dict())
 
-        # Optimizer (원하는대로 유지/수정 가능)
         shared_and_actor = []
         critic_only = []
 
@@ -444,50 +437,42 @@ class PPO:
     def update(self, gae_lambda: float = 0.95):
         # 1) Build tensors on CPU
         rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32)          # (T,)
-        dones = torch.tensor(self.buffer.is_terminals, dtype=torch.float32)       # (T,) 1 if terminal else 0
+        dones = torch.tensor(self.buffer.is_terminals, dtype=torch.float32)       # (T,)
 
-        # Values predicted for states s_t (stored during rollout)
         values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
-
-        # Bootstrap value for s_{T} (the state after last transition)
         last_value = torch.tensor([float(getattr(self.buffer, "last_value", 0.0))], dtype=torch.float32)  # (1,)
-
-        # values_{t+1} needs length T; we build next_values = [V(s_1),...,V(s_T)]
         next_values = torch.cat([values[1:], last_value], dim=0)  # (T,)
 
-        # 2) GAE advantages
-        advantages = torch.zeros_like(rewards)  # (T,)
+        # 2) GAE
+        advantages = torch.zeros_like(rewards)
         gae = 0.0
-
         for t in reversed(range(rewards.size(0))):
-            mask = 1.0 - dones[t]  # 0 if terminal else 1
+            mask = 1.0 - dones[t]
             delta = rewards[t] + self.gamma * next_values[t] * mask - values[t]
             gae = delta + self.gamma * gae_lambda * mask * gae
             advantages[t] = gae
 
-        # 3) Returns for value function target
-        returns = advantages + values  # (T,)
+        # 3) Returns
+        returns = advantages + values
 
-        # 4) Normalize advantages (recommended for PPO stability)
+        # 4) Normalize advantages (per-rank; OK for DDP, though global norm is also possible)
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-7)
 
-        # 5) Rollout tensors for states/actions/logprobs
+        # 5) Rollout tensors
         old_map = torch.from_numpy(np.stack(self.buffer.map_states, axis=0)).long()     # (T,H,W) CPU
         old_vec = torch.from_numpy(np.stack(self.buffer.vec_states, axis=0)).float()   # (T,103) CPU
 
         old_actions = torch.stack(self.buffer.actions, dim=0).detach().cpu()
         old_logprobs = torch.stack(self.buffer.logprobs, dim=0).detach().cpu().view(-1)  # (T,)
 
-        # Keep MultiDiscrete shape if applicable (your previous fix)
+        # Keep MultiDiscrete shape
         if self.has_continuous_action_space:
             old_actions = old_actions.view(old_actions.size(0), -1).float()
         else:
-            action_nvec = getattr(self, "action_nvec", None)
-            if action_nvec is None:
-                action_nvec = getattr(self.policy, "action_nvec", None)
+            action_nvec = self.action_nvec if self.action_nvec is not None else getattr(self.policy, "action_nvec", None)
 
             if action_nvec is None:
-                old_actions = old_actions.view(-1).long()  # Single Discrete
+                old_actions = old_actions.view(-1).long()
             else:
                 num_branches = len(action_nvec)
                 old_actions = old_actions.long()
@@ -501,59 +486,48 @@ class PPO:
         T = rewards.shape[0]
         mb = int(self.mini_batch_size)
 
-        # values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
-        old_values = values  # (T,) old V(s) from rollout (policy_old)
-
-        vf_clip = self.eps_clip   # you can also set a separate clip, e.g. self.vf_clip
+        old_values = values  # (T,)
+        vf_clip = self.eps_clip
         vf_coef = 0.5
         ent_coef = 0.01
 
+        # --- FIX: remove accidental double K_epochs loop ---
         for _ in range(self.K_epochs):
             idxs = torch.randperm(T)
 
-            for _ in range(self.K_epochs):
-                idxs = torch.randperm(T)
+            for start in range(0, T, mb):
+                mb_idx = idxs[start:start + mb]
 
-                for start in range(0, T, mb):
-                    mb_idx = idxs[start:start + mb]
+                mb_map = old_map[mb_idx].to(self.device, non_blocking=True)
+                mb_vec = old_vec[mb_idx].to(self.device, non_blocking=True)
+                mb_actions = old_actions[mb_idx].to(self.device, non_blocking=True)
+                mb_old_logp = old_logprobs[mb_idx].to(self.device, non_blocking=True)
 
-                    mb_map = old_map[mb_idx].to(device, non_blocking=True)
-                    mb_vec = old_vec[mb_idx].to(device, non_blocking=True)
-                    mb_actions = old_actions[mb_idx].to(device, non_blocking=True)
-                    mb_old_logp = old_logprobs[mb_idx].to(device, non_blocking=True)
+                mb_returns = returns[mb_idx].to(self.device, non_blocking=True)
+                mb_adv = advantages[mb_idx].to(self.device, non_blocking=True)
+                mb_old_values = old_values[mb_idx].to(self.device, non_blocking=True)
 
-                    mb_returns = returns[mb_idx].to(device, non_blocking=True)
-                    mb_adv = advantages[mb_idx].to(device, non_blocking=True)
+                logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
+                state_values = state_values.view(-1)
 
-                    # NEW: old value predictions for this minibatch
-                    mb_old_values = old_values[mb_idx].to(device, non_blocking=True)  # (B,)
+                ratios = torch.exp(logprobs - mb_old_logp.detach())
+                surr1 = ratios * mb_adv
+                surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
 
-                    logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
-                    state_values = state_values.view(-1)  # (B,)
+                v_pred = state_values
+                v_pred_clipped = mb_old_values + torch.clamp(v_pred - mb_old_values, -vf_clip, vf_clip)
 
-                    ratios = torch.exp(logprobs - mb_old_logp.detach())
-                    surr1 = ratios * mb_adv
-                    surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
+                loss_v1 = (v_pred - mb_returns).pow(2)
+                loss_v2 = (v_pred_clipped - mb_returns).pow(2)
+                loss_critic = torch.max(loss_v1, loss_v2)
 
-                    # --- Clipped value function loss (PPO-style) ---
-                    v_pred = state_values
-                    v_pred_clipped = mb_old_values + torch.clamp(
-                        v_pred - mb_old_values,
-                        -vf_clip,
-                        vf_clip
-                    )
+                loss = -torch.min(surr1, surr2) + vf_coef * loss_critic - ent_coef * dist_entropy
 
-                    loss_v1 = (v_pred - mb_returns).pow(2)
-                    loss_v2 = (v_pred_clipped - mb_returns).pow(2)
-                    loss_critic = torch.max(loss_v1, loss_v2)  # (B,)
+                self.optimizer.zero_grad(set_to_none=True)
+                loss.mean().backward()
+                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+                self.optimizer.step()
 
-                    # --- Final loss ---
-                    loss = -torch.min(surr1, surr2) + vf_coef * loss_critic - ent_coef * dist_entropy
-
-                    self.optimizer.zero_grad(set_to_none=True)
-                    loss.mean().backward()
-                    torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
-                    self.optimizer.step()
-
-        self.policy_old.load_state_dict(self.policy.state_dict())
+        src = self.policy.module if hasattr(self.policy, "module") else self.policy
+        self.policy_old.load_state_dict(src.state_dict())
         self.buffer.clear()

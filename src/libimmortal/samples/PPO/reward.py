@@ -47,6 +47,7 @@ DEFAULT_BLOCKED_IDS = [WALL_ID]
 # -------------------------
 # BFS utilities
 # -------------------------
+'''
 def _find_first_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
     """Return (x,y) of the first occurrence of any target id, else None."""
     for tid in target_ids:
@@ -54,6 +55,7 @@ def _find_first_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[
         if xs.size > 0:
             return int(xs[0]), int(ys[0])
     return None
+'''
 
 def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
     """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
@@ -136,6 +138,11 @@ class RewardShaper:
     """
 
     def __init__(self, cfg: RewardConfig, gamma: float = 0.99):
+        # Distance normalizer
+        self.map_h = 90 
+        self.map_w = 160
+        self.max_dist = float(self.map_h + self.map_w)
+        
         self.cfg = cfg
         self.gamma = float(gamma)
 
@@ -180,7 +187,6 @@ class RewardShaper:
         return ~blocked
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
-        # Use centroid to reduce jitter
         player_xy = _find_centroid_xy(id_map, self.cfg.bfs_player_ids)
         goal_xy   = _find_centroid_xy(id_map, self.cfg.bfs_goal_ids)
         if player_xy is None or goal_xy is None:
@@ -194,16 +200,18 @@ class RewardShaper:
 
         if need_recompute:
             passable = self._passable_mask(id_map)
-            # Ensure goal cell is passable even if ids are in blocked list
             gx, gy = goal_xy
             passable[gy, gx] = True
-
             self._cached_dist_map = _bfs_distance_map(passable, goal_xy)
             self._cached_goal_xy = goal_xy
 
         px, py = player_xy
-        d = float(self._cached_dist_map[py, px])
-        return d if np.isfinite(d) else None
+        raw_d = float(self._cached_dist_map[py, px])
+        
+        if np.isfinite(raw_d):
+            # --- Distance Normalization (0.0 ~ 1.0) ---
+            return raw_d / self.max_dist
+        return None
 
     def _is_success(self, raw_reward: float, done: bool, info: Dict[str, Any]) -> bool:
         if not done:
