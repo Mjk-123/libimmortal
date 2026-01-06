@@ -214,8 +214,8 @@ class RewardShaper:
         return None
 
     def _is_success(self, raw_reward: float, done: bool, info: Dict[str, Any]) -> bool:
-        if not done:
-            return False
+        # if not done:
+        #    return False
         if info is not None and bool(info.get("success", False)):
             return True
         if self.cfg.success_if_raw_reward_ge is not None:

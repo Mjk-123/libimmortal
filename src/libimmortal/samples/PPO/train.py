@@ -280,6 +280,20 @@ def train(args):
     print("============================================================================================")
     from libimmortal.env import ImmortalSufferingEnv
 
+    # Optional: Unity timeout exception type
+    try:
+        from mlagents_envs.exception import UnityTimeOutException  # type: ignore
+    except Exception:
+        UnityTimeOutException = None  # type: ignore
+
+    import os
+    import time
+    import numpy as np
+    import gym
+    import torch
+    import torch.distributed as dist
+    from datetime import datetime
+
     # IMPORTANT: DDP must be setup BEFORE creating PPO / any CUDA tensors
     ddp_setup()
 
@@ -288,16 +302,30 @@ def train(args):
     world = ddp_world_size()
 
     # Each rank must use a unique *PORT RANGE* (Unity uses multiple ports internally).
-    # Use a stride to avoid collisions.
+    # Use a stride to avoid collisions across ranks and restarts.
+    port_stride = int(getattr(args, "port_stride", 10))
+    max_env_restarts = int(getattr(args, "max_env_restarts", 3))
+    no_graphics = bool(getattr(args, "no_graphics", True))
+    unity_timeout_wait = int(getattr(args, "unity_timeout_wait", 60))
+
     # Use a mutable box so nested fns can read/write without Python scoping issues.
     restart_box = {"id": 0}
 
-    # Each rank must use a unique port (Unity/ML-Agents style env will conflict otherwise)
+    def _infer_step_from_ckpt_path(ckpt_path: str) -> int:
+        """
+        Infer step from checkpoint filename like:
+          .../PPO_ImmortalSufferingEnv_seed42_69198.pth  -> 69198
+        Returns 0 if not parsable.
+        """
+        import re
+        m = re.search(r"_(\d+)\.pth$", str(ckpt_path))
+        return int(m.group(1)) if m else 0
+
     def _compute_port() -> int:
         return (
             int(args.port)
-            + int(local_rank) * int(args.port_stride)
-            + int(restart_box["id"]) * int(args.port_stride) * int(world)
+            + int(local_rank) * port_stride
+            + int(restart_box["id"]) * port_stride * int(world)
         )
 
     def _make_env():
@@ -311,12 +339,26 @@ def train(args):
             height=args.height,
             verbose=args.verbose,
         )
-        # If your ImmortalSufferingEnv supports these kwargs, use them.
-        # Otherwise, the TypeError fallback will keep old behavior.
+        # If ImmortalSufferingEnv supports these kwargs, use them; else fallback.
         try:
-            return ImmortalSufferingEnv(**kw, no_graphics=args.no_graphics, timeout_wait=args.unity_timeout_wait), p
+            return ImmortalSufferingEnv(**kw, no_graphics=no_graphics, timeout_wait=unity_timeout_wait), p
         except TypeError:
             return ImmortalSufferingEnv(**kw), p
+
+    class _SigintGuard:
+        """
+        Prevent repeated SIGINT from interrupting the critical save section.
+        """
+        def __enter__(self):
+            import signal
+            self._old = signal.getsignal(signal.SIGINT)
+            signal.signal(signal.SIGINT, signal.SIG_IGN)
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            import signal
+            signal.signal(signal.SIGINT, self._old)
+            return False
 
     # Seeds (offset by rank)
     if args.seed is not None:
@@ -346,12 +388,17 @@ def train(args):
 
     mini_batch_size = int(args.mini_batch_size)
 
+    # ---- step counters ----
+    # base_step: already-trained steps (per-rank) inferred from checkpoint filename
+    # step:      running step counter (per-rank) used for logging/saving/scheduling
+    base_step = 0
+    step = 0  # always defined for finally
+
     # Infer dims from first reset
     obs = env.reset()
     id_map, vec_obs, K = _make_map_and_vec(obs)
 
     action_space = _get_action_space(env)
-
     has_continuous_action_space = isinstance(action_space, gym.spaces.Box)
 
     if isinstance(action_space, gym.spaces.Box):
@@ -376,7 +423,6 @@ def train(args):
         print(f"[Env] num_ids(K)={num_ids}, vec_dim={vec_dim}, action_dim={action_dim}, continuous={has_continuous_action_space}")
 
     # PPO agent
-    # NOTE: PPO.py must NOT hardcode cuda:0. It should use torch.device("cuda") or current device.
     ppo_agent = PPO(
         num_ids, vec_dim, action_dim,
         lr_actor, lr_critic,
@@ -387,9 +433,38 @@ def train(args):
         action_nvec=action_nvec,
     )
 
-    # Wrap BOTH policy and policy_old with DDP so PPO.update() internal weight copying won't break.
-    if hasattr(ppo_agent, "policy") and hasattr(ppo_agent, "policy_old") and ddp_is_enabled():
-        ppo_agent.policy = ddp_wrap_model(ppo_agent.policy)
+    # DDP: wrap ppo_agent.policy (NOT policy_old) and patch the interface so PPO.update() can keep using
+    #   - self.policy.evaluate(...)
+    #   - self.policy.state_dict() / load_state_dict(...)
+    # without breaking due to "DistributedDataParallel has no attribute evaluate" and "module." prefix keys.
+    if hasattr(ppo_agent, "policy") and ddp_is_enabled():
+        ddp_pol = ddp_wrap_model(ppo_agent.policy)
+        base_pol = get_module(ddp_pol)
+
+        # Make DDP forward run the same graph as evaluate (so DDP reducer is prepared correctly).
+        # Then expose .evaluate() on the DDP wrapper to route through ddp_pol(...).
+        if hasattr(base_pol, "evaluate"):
+            if not hasattr(base_pol, "_orig_forward"):
+                base_pol._orig_forward = base_pol.forward
+            base_pol.forward = base_pol.evaluate
+
+            def _ddp_evaluate(mb_map, mb_vec, mb_actions):
+                return ddp_pol(mb_map, mb_vec, mb_actions)
+
+            ddp_pol.evaluate = _ddp_evaluate  # type: ignore
+
+        # Patch state_dict/load_state_dict to return/load *module* keys (no "module." prefix),
+        # so PPO.update() internal "policy_old.load_state_dict(policy.state_dict())" won't break.
+        def _state_dict_no_prefix(*args, **kwargs):
+            return base_pol.state_dict(*args, **kwargs)
+
+        def _load_state_dict_no_prefix(state_dict, *args, **kwargs):
+            return base_pol.load_state_dict(state_dict, *args, **kwargs)
+
+        ddp_pol.state_dict = _state_dict_no_prefix  # type: ignore
+        ddp_pol.load_state_dict = _load_state_dict_no_prefix  # type: ignore
+
+        ppo_agent.policy = ddp_pol
 
     # Reward shaping
     cfg = RewardConfig(
@@ -406,7 +481,7 @@ def train(args):
     shaper = RewardShaper(cfg)
     shaper.reset(vec_obs, id_map)
 
-    # Reward scaler (FIX: do NOT create this inside the loop)
+    # Reward scaler (do NOT create inside loop)
     reward_scaler = RewardScaler(gamma=gamma, clip=5.0, eps=1e-8, min_std=0.1, warmup_steps=10000)
 
     # Checkpoints (only rank0 writes)
@@ -418,15 +493,13 @@ def train(args):
     if is_main_process():
         print("checkpoint dir:", ckpt_dir)
 
-    # Resume (every rank loads the same weights, then barrier)
-    base_step = 0
-
+    # Resume
     if args.resume:
         ckpt_to_load = args.checkpoint
         if ckpt_to_load is None and is_main_process():
             ckpt_to_load = _latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
+
         if ddp_is_enabled():
-            # Broadcast chosen path from rank0 to all ranks
             obj_list = [ckpt_to_load]
             dist.broadcast_object_list(obj_list, src=0)
             ckpt_to_load = obj_list[0]
@@ -434,7 +507,9 @@ def train(args):
         if ckpt_to_load is None:
             raise FileNotFoundError(f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}")
 
-        base_step = _infer_step_from_ckpt_path(ckpt_to_load, ckpt_prefix)
+        base_step = _infer_step_from_ckpt_path(str(ckpt_to_load))
+        step = base_step
+
         if is_main_process():
             print(f"[Resume] loading: {ckpt_to_load}")
             print(f"[Resume] inferred base_step={base_step}")
@@ -444,7 +519,7 @@ def train(args):
         get_module(ppo_agent.policy_old).load_state_dict(state)
         ddp_barrier()
 
-    # Optional wandb (only rank0)
+    # Optional wandb (rank0 only)
     wandb = None
     if args.wandb and is_main_process():
         import wandb as _wandb
@@ -470,6 +545,7 @@ def train(args):
                 mini_batch_size=mini_batch_size,
                 seed=args.seed,
                 ddp_world_size=world,
+                base_step=base_step,
             ),
         )
 
@@ -492,57 +568,67 @@ def train(args):
     # Determine device from policy_old params
     model_device = next(ppo_agent.policy_old.parameters()).device
 
-    def _select_action_and_store(map_np: np.ndarray, vec_np: np.ndarray) -> np.ndarray:
+    def _select_action(cur_map_np: np.ndarray, cur_vec_np: np.ndarray):
         """
-        Runs policy_old.act on GPU (or CPU), stores (state, action, logprob, value) in buffer,
-        returns action as numpy.
+        Runs policy_old.act (no grad), returns:
+          - a_cpu: action tensor on CPU
+          - lp_cpu: logprob tensor on CPU
+          - v_cpu: value tensor on CPU
+          - action_np: numpy action for env
+        NOTE: We do NOT write into buffer here. We only write after env.step() succeeds.
         """
-        map_t = torch.from_numpy(map_np).to(model_device, dtype=torch.long).unsqueeze(0)
-        vec_t = torch.from_numpy(vec_np).to(model_device, dtype=torch.float32).unsqueeze(0)
+        map_t = torch.from_numpy(cur_map_np).to(model_device, dtype=torch.long).unsqueeze(0)
+        vec_t = torch.from_numpy(cur_vec_np).to(model_device, dtype=torch.float32).unsqueeze(0)
 
         with torch.no_grad():
             action_t, logp_t, value_t = get_module(ppo_agent.policy_old).act(map_t, vec_t)
 
-        # Store states as CPU numpy (buffer expects numpy)
-        ppo_agent.buffer.add_state(map_np, vec_np)
+        a_cpu = action_t.squeeze(0).detach().cpu()
+        lp_cpu = logp_t.squeeze(0).detach().cpu()
+        v_cpu = value_t.squeeze(0).detach().cpu()
+        action_np = a_cpu.numpy()
+        return a_cpu, lp_cpu, v_cpu, action_np
 
-        # Store these as CPU tensors to avoid growing GPU memory during rollout
-        ppo_agent.buffer.actions.append(action_t.squeeze(0).detach().cpu())
-        ppo_agent.buffer.logprobs.append(logp_t.squeeze(0).detach().cpu())
-        ppo_agent.buffer.state_values.append(value_t.squeeze(0).detach().cpu())
-
-        action_np = action_t.squeeze(0).detach().cpu().numpy()
-        return action_np
-
-    local_step = 0
     try:
         for local_step in range(1, MAX_STEPS + 1):
-            global_step = base_step + local_step
+            step = base_step + local_step  # per-rank cumulative step
+
             # Retry loop: Unity can time out; restart env on this rank and retry this step.
             while True:
-                action = _select_action_and_store(cur_id_map, cur_vec_obs)
-                action = _format_action_for_env(action, action_space)
+                a_cpu, lp_cpu, v_cpu, action_np = _select_action(cur_id_map, cur_vec_obs)
+                action_env = _format_action_for_env(action_np, action_space)
+
                 try:
-                    obs, raw_reward, done, info = env.step(action)
+                    obs, raw_reward, done, info = env.step(action_env)
+
+                    # ✅ Only after step succeeds, we append to buffer (prevents DDP buffer-length mismatch)
+                    ppo_agent.buffer.add_state(cur_id_map, cur_vec_obs)
+                    ppo_agent.buffer.actions.append(a_cpu)
+                    ppo_agent.buffer.logprobs.append(lp_cpu)
+                    ppo_agent.buffer.state_values.append(v_cpu)
+
                     break
                 except Exception as e:
-                    if UnityTimeOutException is not None and isinstance(e, UnityTimeOutException):
-                        _rollback_last_rollout_entry(ppo_agent.buffer)
+                    is_timeout = (UnityTimeOutException is not None) and isinstance(e, UnityTimeOutException)
+                    if is_timeout:
                         try:
                             env.close()
                         except Exception:
                             pass
+
                         restart_box["id"] += 1
-                        if restart_box["id"] > int(args.max_env_restarts):
+                        if restart_box["id"] > max_env_restarts:
                             raise
+
                         env, port = _make_env()
                         obs = env.reset()
                         cur_id_map, cur_vec_obs, _ = _make_map_and_vec(obs)
                         shaper.reset(cur_vec_obs, cur_id_map)
                         continue
-                    raise
-            done = _infer_done(done, info)
 
+                    raise
+
+            done = _infer_done(done, info)
             next_id_map, next_vec_obs, _ = _make_map_and_vec(obs)
 
             if info is None:
@@ -561,10 +647,10 @@ def train(args):
             episode_len += 1
 
             # PPO update (ALL ranks call update; DDP will sync gradients)
-            if local_step % update_timestep == 0:
-                # ensure all ranks enter update together
+            if step % update_timestep == 0:
                 ddp_barrier()
                 t0 = time.time()
+
                 with torch.no_grad():
                     if done:
                         ppo_agent.buffer.last_value = 0.0
@@ -576,7 +662,6 @@ def train(args):
                         v = po.critic_head(feat)
                         ppo_agent.buffer.last_value = float(v.item())
 
-                # NOTE: Avoid heavy I/O from all ranks
                 if args.dump_id_map and is_main_process():
                     np.savetxt(args.dump_id_map, cur_id_map, delimiter=",", fmt="%d")
 
@@ -589,11 +674,12 @@ def train(args):
                             "train/updated": 1,
                             "train/update_seconds": float(dt),
                             "train/buffer_len": int(update_timestep),
+                            "train/step": int(step),
+                            "train/global_env_steps": int(step * world),
                         },
-                        step=global_step,
+                        step=int(step),
                     )
 
-                # Keep all ranks aligned after update
                 ddp_barrier()
 
             # Action std decay
@@ -601,11 +687,11 @@ def train(args):
                 if hasattr(ppo_agent, "decay_action_std"):
                     ppo_agent.decay_action_std(action_std_decay_rate, min_action_std)
                     if wandb is not None:
-                        wandb.log({"train/action_std": float(getattr(ppo_agent, "action_std", np.nan))}, step=step)
+                        wandb.log({"train/action_std": float(getattr(ppo_agent, "action_std", np.nan))}, step=int(step))
 
-            # Save checkpoint (rank0 only; save underlying module for portability)
-            if global_step % save_model_freq == 0 and is_main_process():
-                ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{global_step}.pth")
+            # Save checkpoint (rank0 only)
+            if (step % save_model_freq == 0) and is_main_process():
+                ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
                 print("--------------------------------------------------------------------------------------------")
                 print("saving model at:", ckpt_path)
                 torch.save(get_module(ppo_agent.policy_old).state_dict(), ckpt_path)
@@ -613,7 +699,7 @@ def train(args):
                 print("Elapsed Time:", datetime.now().replace(microsecond=0) - start_time)
                 print("--------------------------------------------------------------------------------------------")
                 if wandb is not None:
-                    wandb.log({"train/checkpoint_saved": 1}, step=global_step)
+                    wandb.log({"train/checkpoint_saved": 1}, step=int(step))
                     wandb.save(ckpt_path)
 
             # Lightweight wandb logs (rank0 only)
@@ -627,7 +713,7 @@ def train(args):
                         "train/episode_raw_reward_running": float(episode_raw_reward),
                         "train/episode_len_running": int(episode_len),
                     },
-                    step=global_step,
+                    step=int(step),
                 )
 
             # Episode boundary
@@ -640,7 +726,7 @@ def train(args):
                             "episode/len": int(episode_len),
                             "episode/index": int(episode_idx),
                         },
-                        step=global_step,
+                        step=int(step),
                     )
 
                 obs = env.reset()
@@ -659,23 +745,28 @@ def train(args):
             print("\n[Interrupted] saving checkpoint before exit...")
 
     finally:
-        # Final save (rank0 only) - guard against repeated SIGINT
+        # Final save (rank0 only) - atomic + guard against repeated SIGINT
         if is_main_process():
             with _SigintGuard():
-                final_global_step = base_step + int(local_step)
-                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_global_step}.pth")
+                final_step = int(step) if int(step) > 0 else int(base_step)
+                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_step}.pth")
                 tmp = final_path + ".tmp"
                 torch.save(get_module(ppo_agent.policy_old).state_dict(), tmp)
                 os.replace(tmp, final_path)
                 print("Final model saved at:", final_path)
 
-        # Try barrier, but don't crash on shutdown races
+        # Don't hard-barrier in finally: if ranks die, barrier can hang.
         try:
             ddp_barrier()
+        except Exception as e:
+            if is_main_process():
+                print(f"[DDP] barrier skipped in finally due to: {repr(e)}")
+
+        try:
+            env.close()
         except Exception:
             pass
 
-        env.close()
         if wandb is not None:
             wandb.finish()
 
@@ -709,7 +800,7 @@ def build_argparser():
     p.add_argument("--max_env_restarts", type=int, default=20)
 
     # Runner steps (PER RANK)
-    p.add_argument("--max_steps", type=int, default=100000)
+    p.add_argument("--max_steps", type=int, default=1000000)
 
     # PPO hyperparams
     p.add_argument("--max_ep_len", type=int, default=1000)
@@ -729,24 +820,24 @@ def build_argparser():
     p.add_argument("--action_std_decay_freq", type=int, default=250000)
 
     # Saving (rank0 only)
-    p.add_argument("--save_model_freq", type=int, default=15000)
+    p.add_argument("--save_model_freq", type=int, default=35000)
 
     # Resume
     p.add_argument("--resume", action="store_true")
     p.add_argument("--checkpoint", type=str, default=None)
 
     # Reward shaping knobs
-    p.add_argument("--w_progress", type=float, default=60.0) # 20.0, 40.0, 60.0, 80.0
-    p.add_argument("--w_time", type=float, default=0.001)
+    p.add_argument("--w_progress", type=float, default=40.0) # 20.0, 40.0, 60.0, 80.0
+    p.add_argument("--w_time", type=float, default=0.01)
     p.add_argument("--w_damage", type=float, default=0.05)
     p.add_argument("--w_not_actionable", type=float, default=0.01)
     p.add_argument("--terminal_bonus", type=float, default=1.0)
 
-    p.add_argument("--terminal_failure_penalty", type=float, default=5.0)
-    p.add_argument("--reward_clip", type=float, default=3.0)
+    p.add_argument("--terminal_failure_penalty", type=float, default=3.0)
+    p.add_argument("--reward_clip", type=float, default=8.0)
     p.add_argument("--success_if_raw_reward_ge", type=float, default=1.0)
     p.add_argument("--time_limit", type=float, default=300.0)
-    p.add_argument("--success_speed_bonus", type=float, default=1.0)
+    p.add_argument("--success_speed_bonus", type=float, default=10.0)
 
     # Debug: dump id_map path (rank0 only, on update steps)
     p.add_argument("--dump_id_map", type=str, default=None)
@@ -772,4 +863,9 @@ How to run
   --save_model_freq 20000 --wandb \
   --resume --checkpoint ./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_4000.pth
 
+'''
+
+'''
+# torchrun --standalone --nproc_per_node=4  --log_dir /tmp/torchrun_logs  \
+ ./src/libimmortal/samples/PPO/train.py   --port 5205   --wandb
 '''
