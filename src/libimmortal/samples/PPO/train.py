@@ -159,6 +159,7 @@ def _get_action_space(env):
 
 # Helper function
 
+'''
 def save_checkpoint_safely(state_dict, path: str):
     """
     Save checkpoint while temporarily ignoring SIGINT so Ctrl+C doesn't corrupt the save.
@@ -169,6 +170,30 @@ def save_checkpoint_safely(state_dict, path: str):
         torch.save(state_dict, path)
     finally:
         signal.signal(signal.SIGINT, old)
+'''
+
+class _SigintGuard:
+    """
+    During checkpoint save, ignore SIGINT so we don't corrupt / half-save.
+    """
+    def __enter__(self):
+        self._old = signal.getsignal(signal.SIGINT)
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        signal.signal(signal.SIGINT, self._old)
+        return False
+
+def atomic_torch_save_state_dict(make_sd_fn, path: str):
+    """
+    Save to temp then os.replace for atomic commit.
+    Prevents broken checkpoints if the job dies mid-write.
+    """
+    tmp = path + ".tmp"
+    sd = make_sd_fn()
+    torch.save(sd, tmp)
+    os.replace(tmp, path)
 
 # -------------------------
 # Observation preprocessing
@@ -461,6 +486,8 @@ def train(args):
 
             # PPO update (ALL ranks call update; DDP will sync gradients)
             if step % update_timestep == 0:
+                # ensure all ranks enter update together
+                ddp_barrier()
                 t0 = time.time()
                 with torch.no_grad():
                     if done:
@@ -491,7 +518,7 @@ def train(args):
                     )
 
                 # Keep all ranks aligned after update
-                # ddp_barrier()
+                ddp_barrier()
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):
@@ -556,15 +583,21 @@ def train(args):
             print("\n[Interrupted] saving checkpoint before exit...")
 
     finally:
-        # Final save (rank0 only)
+        # Final save (rank0 only) - guard against repeated SIGINT
         if is_main_process():
-            final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
-            sd = get_module(ppo_agent.policy_old).state_dict()
-            save_checkpoint_safely(sd, final_path)
-            print("Final model saved at:", final_path)
+            with _SigintGuard():
+                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
+                atomic_torch_save_state_dict(
+                    lambda: get_module(ppo_agent.policy_old).state_dict(),
+                    final_path
+                )
+                print("Final model saved at:", final_path)
 
-        # Make sure rank0 finishes saving before others exit
-        ddp_barrier()
+        # Try barrier, but don't crash on shutdown races
+        try:
+            ddp_barrier()
+        except Exception:
+            pass
 
         env.close()
         if wandb is not None:
@@ -616,14 +649,14 @@ def build_argparser():
     p.add_argument("--action_std_decay_freq", type=int, default=250000)
 
     # Saving (rank0 only)
-    p.add_argument("--save_model_freq", type=int, default=30000)
+    p.add_argument("--save_model_freq", type=int, default=15000)
 
     # Resume
     p.add_argument("--resume", action="store_true")
     p.add_argument("--checkpoint", type=str, default=None)
 
     # Reward shaping knobs
-    p.add_argument("--w_progress", type=float, default=10.0)
+    p.add_argument("--w_progress", type=float, default=10.0) # 10.0, 20.0, 30.0, 40.0
     p.add_argument("--w_time", type=float, default=0.001)
     p.add_argument("--w_damage", type=float, default=0.05)
     p.add_argument("--w_not_actionable", type=float, default=0.01)
@@ -658,5 +691,5 @@ How to run
   --port 5005 --port_stride 10 \
   --save_model_freq 20000 --wandb \
   --resume --checkpoint ./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_4000.pth
-  
+
 '''

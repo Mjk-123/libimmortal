@@ -1,0 +1,18 @@
+Started training at (GMT): 2026-01-06 12:25:21
+============================================================================================
+[Interrupted] saving checkpoint before exit...
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 673, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 580, in train
+    final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
+  File "/usr/local/lib/python3.10/posixpath.py", line 71, in join
+    def join(a, *p):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 673, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 580, in train
+    final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
+  File "/usr/local/lib/python3.10/posixpath.py", line 71, in join
+    def join(a, *p):

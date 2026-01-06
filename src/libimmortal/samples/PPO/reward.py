@@ -142,7 +142,7 @@ class RewardShaper:
         self.map_h = 90 
         self.map_w = 160
         self.max_dist = float(self.map_h + self.map_w)
-        
+
         self.cfg = cfg
         self.gamma = float(gamma)
 
@@ -171,7 +171,7 @@ class RewardShaper:
         self._step = 0
         self._prev_cum_damage = float(vec_obs[IDX_CUM_DAMAGE]) if vec_obs is not None else None
         self._prev_time = float(vec_obs[IDX_TIME]) if vec_obs is not None else None
-        self._prev_goal_dist_fallback = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else None
+        self._prev_goal_dist_fallback = (float(vec_obs[IDX_GOAL_DIST]) / self.max_dist) if vec_obs is not None else None
 
         self._prev_bfs_dist = None
         self._cached_goal_xy = None
@@ -253,7 +253,7 @@ class RewardShaper:
                 self._prev_bfs_dist = float(d_bfs)
 
         if (not used_bfs) and vec_obs is not None:
-            d_fallback = float(vec_obs[IDX_GOAL_DIST])
+            d_fallback = float(vec_obs[IDX_GOAL_DIST]) / self.max_dist
             if self._prev_goal_dist_fallback is not None:
                 progress = float(self._prev_goal_dist_fallback - d_fallback)
             self._prev_goal_dist_fallback = float(d_fallback)
