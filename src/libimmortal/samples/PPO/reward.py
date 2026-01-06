@@ -59,6 +59,8 @@ def _find_first_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[
 
 def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
     """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
     mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
     ys, xs = np.where(mask)
     if xs.size == 0:
@@ -106,6 +108,7 @@ class RewardConfig:
     w_damage: float = 0.0
     w_not_actionable: float = 0.0
     terminal_failure_penalty: float = 0.0
+    terminal_bonus: float = 5.0
     clip: Optional[float] = None
 
     # Success heuristics / bonus
@@ -115,195 +118,116 @@ class RewardConfig:
 
     # BFS progress shaping
     use_bfs_progress: bool = True
+    w_acceleration: float = 1.0,
     bfs_update_every: int = 10  # recompute BFS map every N steps (goal fixed => can be large)
-    bfs_blocked_ids: Optional[List[int]] = None
-    bfs_player_ids: Optional[List[int]] = None
-    bfs_goal_ids: Optional[List[int]] = None
 
 
 class RewardShaper:
-    """
-    Call signature (recommended):
-        reward = shaper(raw_reward, next_vec_obs, next_id_map, done, info)
-
-    Reset signature (recommended):
-        shaper.reset(initial_vec_obs, initial_id_map)
-
-    Notes:
-    - Progress term uses BFS shortest-path distance on id_map by default.
-    - Falls back to vec_obs[IDX_GOAL_DIST] if player/goal not detectable on id_map.
-    - Damage term uses delta of cumulative damage.
-    - Time term uses delta of time.
-    - Not-actionable term uses vec_obs[IDX_IS_ACTIONABLE] (0/1).
-    """
-
-    def __init__(self, cfg: RewardConfig, gamma: float = 0.99):
-        # Distance normalizer
-        self.map_h = 90 
-        self.map_w = 160
+    def __init__(self, cfg: Any, gamma: float = 0.99):
+        self.map_h, self.map_w = 90, 160
         self.max_dist = float(self.map_h + self.map_w)
 
         self.cfg = cfg
         self.gamma = float(gamma)
 
-        if self.cfg.bfs_blocked_ids is None:
-            self.cfg.bfs_blocked_ids = list(DEFAULT_BLOCKED_IDS)
-        if self.cfg.bfs_player_ids is None:
-            self.cfg.bfs_player_ids = list(PLAYER_IDS)
-        if self.cfg.bfs_goal_ids is None:
-            self.cfg.bfs_goal_ids = [GOAL_ID]
+        # Config fallback
+        self.update_every = int(getattr(self.cfg, 'bfs_update_every', 10))
 
         self._step = 0
+        self._prev_cum_damage = None
+        self._prev_time = None
+        self._prev_bfs_dist = None
 
-        # previous vec values
-        self._prev_cum_damage: Optional[float] = None
-        self._prev_time: Optional[float] = None
-        self._prev_goal_dist_fallback: Optional[float] = None
-
-        # previous BFS distance (player->goal)
-        self._prev_bfs_dist: Optional[float] = None
-
-        # BFS cache
-        self._cached_goal_xy: Optional[Tuple[int, int]] = None
-        self._cached_dist_map: Optional[np.ndarray] = None
+        self._cached_goal_xy = None
+        self._cached_dist_map = None
+        
+        self.virtual_done = False 
 
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
+        self.virtual_done = False
         self._prev_cum_damage = float(vec_obs[IDX_CUM_DAMAGE]) if vec_obs is not None else None
         self._prev_time = float(vec_obs[IDX_TIME]) if vec_obs is not None else None
-        self._prev_goal_dist_fallback = (float(vec_obs[IDX_GOAL_DIST]) / self.max_dist) if vec_obs is not None else None
-
         self._prev_bfs_dist = None
-        self._cached_goal_xy = None
-        self._cached_dist_map = None
+        self._cached_goal_xy, self._cached_dist_map = None, None
 
         if id_map is not None and self.cfg.use_bfs_progress:
             d0 = self._get_bfs_dist(id_map)
-            if d0 is not None:
-                self._prev_bfs_dist = float(d0)
-
-    def _passable_mask(self, id_map: np.ndarray) -> np.ndarray:
-        blocked = np.isin(id_map, np.asarray(self.cfg.bfs_blocked_ids, dtype=id_map.dtype))
-        return ~blocked
+            self._prev_bfs_dist = float(d0) if d0 is not None else None
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
-        player_xy = _find_centroid_xy(id_map, self.cfg.bfs_player_ids)
-        goal_xy   = _find_centroid_xy(id_map, self.cfg.bfs_goal_ids)
-        if player_xy is None or goal_xy is None:
-            return None
+        player_xy = _find_centroid_xy(id_map, PLAYER_IDS)
+        goal_xy   = _find_centroid_xy(id_map, [GOAL_ID])
+        if player_xy is None or goal_xy is None: return None
 
-        need_recompute = (
-            self._cached_dist_map is None
-            or self._cached_goal_xy != goal_xy
-            or (self._step % int(self.cfg.bfs_update_every)) == 0
-        )
-
-        if need_recompute:
-            passable = self._passable_mask(id_map)
+        if (self._cached_dist_map is None or self._cached_goal_xy != goal_xy or (self._step % self.update_every) == 0):
+            passable = ~np.isin(id_map, np.asarray(DEFAULT_BLOCKED_IDS, dtype=id_map.dtype))
             gx, gy = goal_xy
-            passable[gy, gx] = True
+            passable[gy, gx] = True 
             self._cached_dist_map = _bfs_distance_map(passable, goal_xy)
             self._cached_goal_xy = goal_xy
 
         px, py = player_xy
         raw_d = float(self._cached_dist_map[py, px])
-        
-        if np.isfinite(raw_d):
-            # --- Distance Normalization (0.0 ~ 1.0) ---
-            return raw_d / self.max_dist
-        return None
+        return raw_d / self.max_dist if np.isfinite(raw_d) else None
 
-    def _is_success(self, raw_reward: float, done: bool, info: Dict[str, Any]) -> bool:
-        # if not done:
-        #    return False
-        if info is not None and bool(info.get("success", False)):
-            return True
-        if self.cfg.success_if_raw_reward_ge is not None:
-            return float(raw_reward) >= float(self.cfg.success_if_raw_reward_ge)
-        return False
-
-    def __call__(
-        self,
-        raw_reward: float,
-        vec_obs: np.ndarray,
-        id_map: Optional[np.ndarray],
-        done: bool,
-        info: Optional[Dict[str, Any]] = None,
-    ) -> float:
-        if info is None:
-            info = {}
-
-         # Step counter: increment exactly once per env step.
+    def __call__(self, raw_reward: float, vec_obs: np.ndarray, id_map: Optional[np.ndarray], done: bool, info: Optional[Dict[str, Any]] = None) -> float:
+        info = info or {}
         self._step += 1
-        r = 0.0
+        r = float(raw_reward)
 
-        # (0) Keep raw env reward (if you want purely shaped reward, set raw_reward weight outside)
-        r += float(raw_reward)
+        # 1. 거리 계산
+        d_bfs = self._get_bfs_dist(id_map) if (self.cfg.use_bfs_progress and id_map is not None) else None
+        raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
-        # (1) Progress term (BFS distance preferred, fallback to vec goal distance)
-        progress = 0.0
-        used_bfs = False
+        # 2. 종료 판정 통합 (성공 여부 확인)
+        # BFS 기준(1.5칸) OR Vector 기준(0.6 미만)
+        is_success = (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
 
-        if self.cfg.use_bfs_progress and id_map is not None:
-            d_bfs = self._get_bfs_dist(id_map)
-            if d_bfs is not None:
-                used_bfs = True
-                if self._prev_bfs_dist is not None:
-                    progress = float(self._prev_bfs_dist - d_bfs)
-                self._prev_bfs_dist = float(d_bfs)
+        # -----------------------------------------------------------
+        # [Progress & Magnet Reward]
+        # -----------------------------------------------------------
+        if d_bfs is not None:
+            # A. 선형 진행 (-x)
+            if self._prev_bfs_dist is not None:
+                r += float(self.cfg.w_progress) * (self._prev_bfs_dist - d_bfs)
+            self._prev_bfs_dist = d_bfs
 
-        if (not used_bfs) and vec_obs is not None:
-            d_fallback = float(vec_obs[IDX_GOAL_DIST]) / self.max_dist
-            if self._prev_goal_dist_fallback is not None:
-                progress = float(self._prev_goal_dist_fallback - d_fallback)
-            self._prev_goal_dist_fallback = float(d_fallback)
+            # B. 자석 가속 (1/x) - 부드러운 Shift 적용
+            threshold = 0.1
+            if d_bfs < threshold:
+                epsilon = 0.01
+                w_acc = getattr(self.cfg, 'w_acceleration', 1.0)
+                magnet_term = (1.0 / (d_bfs + epsilon)) - (1.0 / (threshold + epsilon))
+                r += w_acc * max(0.0, magnet_term)
 
-        r += float(self.cfg.w_progress) * float(progress)
+        # -----------------------------------------------------------
+        # [Terminal Logic]
+        # -----------------------------------------------------------
+        if is_success:
+            self.virtual_done = True
+            r += float(self.cfg.terminal_bonus) * 10.0  # 성공 보너스 1회 지급
+        elif done:
+            # 가상 성공은 아니지만 환경이 끝난 경우 (실패 처리)
+            # 이미 성공 보상을 받았다면 이 블록은 타지 않음
+            r += float(self.cfg.terminal_failure_penalty) * -1.0
 
-        # (2) Time penalty (delta time)
-        if vec_obs is not None and self.cfg.w_time != 0.0:
-            t = float(vec_obs[IDX_TIME])
-            if self._prev_time is not None:
-                dt = max(0.0, t - float(self._prev_time))
-                r += float(self.cfg.w_time) * (-dt)  # w_time > 0 means penalize time passing
-            self._prev_time = t
-
-        # (3) Damage penalty (delta of cumulative damage)
-        if vec_obs is not None and self.cfg.w_damage != 0.0:
+        # -----------------------------------------------------------
+        # [Penalty Terms]
+        # -----------------------------------------------------------
+        if vec_obs is not None:
+            # Time penalty
+            r += float(self.cfg.w_time) * -1.0
+            # Damage penalty
             dmg = float(vec_obs[IDX_CUM_DAMAGE])
             if self._prev_cum_damage is not None:
-                ddmg = max(0.0, dmg - float(self._prev_cum_damage))
-                r += float(self.cfg.w_damage) * (-ddmg)  # w_damage > 0 means penalize taking damage
+                r += float(self.cfg.w_damage) * -max(0.0, dmg - self._prev_cum_damage)
             self._prev_cum_damage = dmg
+            # Actionable penalty
+            if float(vec_obs[IDX_IS_ACTIONABLE]) < 0.5:
+                r += float(self.cfg.w_not_actionable) * -1.0
 
-        # (4) Not actionable penalty
-        if vec_obs is not None and self.cfg.w_not_actionable != 0.0:
-            actionable = float(vec_obs[IDX_IS_ACTIONABLE])
-            if actionable < 0.5:
-                r += float(self.cfg.w_not_actionable) * (-1.0)
-
-        # (5) Terminal shaping: failure penalty / success speed bonus
-        if done:
-            success = self._is_success(raw_reward=float(raw_reward), done=done, info=info)
-
-            if not success:
-                r += float(self.cfg.terminal_failure_penalty)
-
-            # Speed bonus: more bonus if success with smaller time
-            if success and self.cfg.success_speed_bonus != 0.0:
-                if (self.cfg.time_limit is not None) and (vec_obs is not None):
-                    t = float(vec_obs[IDX_TIME])
-                    tl = float(self.cfg.time_limit)
-                    frac = 1.0 - np.clip(t / max(tl, 1.0), 0.0, 1.0)
-                    r += float(self.cfg.success_speed_bonus) * float(frac)
-                else:
-                    r += float(self.cfg.success_speed_bonus)
-
-        # (6) Clip
-        if self.cfg.clip is not None:
-            r = float(np.clip(r, -float(self.cfg.clip), float(self.cfg.clip)))
-
-        return float(r)
+        return float(np.clip(r, -self.cfg.clip, self.cfg.clip)) if self.cfg.clip else float(r)
 
 class RunningMeanStd:
     """Track running mean/variance with Welford-style parallel update."""

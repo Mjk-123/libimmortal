@@ -465,18 +465,34 @@ def train(args):
         ddp_pol.load_state_dict = _load_state_dict_no_prefix  # type: ignore
 
         ppo_agent.policy = ddp_pol
+    
+    from libimmortal.utils.aux_func import DEFAULT_ENCODER
 
-    # Reward shaping
+    ENC = DEFAULT_ENCODER
+
+    WALL_ID = ENC.name2id["WALL"]
+    GOAL_ID = ENC.name2id["GOAL"]
+
+    # Player marker on minimap
+    PLAYER_IDS = [ENC.name2id["KNIGHT"], ENC.name2id["KNIGHT_ATTACK"]]
+
+    # By default, only WALL blocks movement in BFS.
+    DEFAULT_BLOCKED_IDS = [WALL_ID]
+
     cfg = RewardConfig(
         w_progress=args.w_progress,
         w_time=args.w_time,
         w_damage=args.w_damage,
         w_not_actionable=args.w_not_actionable,
         terminal_failure_penalty=args.terminal_failure_penalty,
+        terminal_bonus=args.terminal_bonus,
         clip=args.reward_clip,
         success_if_raw_reward_ge=args.success_if_raw_reward_ge,
         time_limit=args.time_limit,
         success_speed_bonus=args.success_speed_bonus,
+        use_bfs_progress=True,  
+        w_acceleration=1.0,     # 자석 효과 강도
+        bfs_update_every=10     # 갱신 주기
     )
     shaper = RewardShaper(cfg)
     shaper.reset(vec_obs, id_map)
@@ -638,6 +654,7 @@ def train(args):
 
             reward = shaper(raw_reward, next_vec_obs, next_id_map, done, info)
             reward = reward_scaler(reward, done)
+            done = done or shaper.virtual_done
 
             ppo_agent.buffer.rewards.append(float(reward))
             ppo_agent.buffer.is_terminals.append(bool(done))

@@ -62,7 +62,7 @@ _wandb:
     framework: torch
     is_jupyter_run: false
     is_kaggle_kernel: false
-    start_time: 1767702612
+    start_time: 1767708548
     t:
       1:
       - 1
@@ -75,7 +75,6 @@ _wandb:
       - 13
       - 16
       - 23
-      - 61
       4: 3.10.12
       5: 0.17.4
       8:

@@ -1,0 +1,188 @@
+2026-01-06 23:09:08,541 INFO    StreamThr :2242284 [internal.py:wandb_internal():85] W&B internal server running at pid: 2242284, started at: 2026-01-06 23:09:08.540123
+2026-01-06 23:09:08,544 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: status
+2026-01-06 23:09:08,548 INFO    WriterThread:2242284 [datastore.py:open_for_write():87] open: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/run-bqt2e1b4.wandb
+2026-01-06 23:09:08,552 DEBUG   SenderThread:2242284 [sender.py:send():379] send: header
+2026-01-06 23:09:08,552 DEBUG   SenderThread:2242284 [sender.py:send():379] send: run
+2026-01-06 23:09:09,298 INFO    SenderThread:2242284 [dir_watcher.py:__init__():211] watching files in: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files
+2026-01-06 23:09:09,299 INFO    SenderThread:2242284 [sender.py:_start_run_threads():1188] run started: bqt2e1b4 with start time 1767708548.535615
+2026-01-06 23:09:09,304 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: check_version
+2026-01-06 23:09:09,304 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: check_version
+2026-01-06 23:09:09,594 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: run_start
+2026-01-06 23:09:09,611 DEBUG   HandlerThread:2242284 [system_info.py:__init__():26] System info init
+2026-01-06 23:09:09,611 DEBUG   HandlerThread:2242284 [system_info.py:__init__():41] System info init done
+2026-01-06 23:09:09,611 INFO    HandlerThread:2242284 [system_monitor.py:start():194] Starting system monitor
+2026-01-06 23:09:09,611 INFO    SystemMonitor:2242284 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2026-01-06 23:09:09,611 INFO    HandlerThread:2242284 [system_monitor.py:probe():214] Collecting system info
+2026-01-06 23:09:09,613 INFO    SystemMonitor:2242284 [interfaces.py:start():188] Started cpu monitoring
+2026-01-06 23:09:09,614 INFO    SystemMonitor:2242284 [interfaces.py:start():188] Started disk monitoring
+2026-01-06 23:09:09,616 INFO    SystemMonitor:2242284 [interfaces.py:start():188] Started gpu monitoring
+2026-01-06 23:09:09,617 INFO    SystemMonitor:2242284 [interfaces.py:start():188] Started memory monitoring
+2026-01-06 23:09:09,618 INFO    SystemMonitor:2242284 [interfaces.py:start():188] Started network monitoring
+2026-01-06 23:09:09,651 DEBUG   HandlerThread:2242284 [system_info.py:probe():152] Probing system
+2026-01-06 23:09:09,652 DEBUG   HandlerThread:2242284 [system_info.py:_probe_git():137] Probing git
+2026-01-06 23:09:09,663 DEBUG   HandlerThread:2242284 [system_info.py:_probe_git():145] Probing git done
+2026-01-06 23:09:09,663 DEBUG   HandlerThread:2242284 [system_info.py:probe():200] Probing system done
+2026-01-06 23:09:09,663 DEBUG   HandlerThread:2242284 [system_monitor.py:probe():223] {'os': 'Linux-6.8.0-62-generic-x86_64-with-glibc2.35', 'python': '3.10.12', 'heartbeatAt': '2026-01-06T14:09:09.651454', 'startedAt': '2026-01-06T14:09:08.523811', 'docker': None, 'cuda': None, 'args': ('--port', '5205', '--port_stride', '20', '--no_graphics', '--wandb'), 'state': 'running', 'program': '/root/libimmortal/./src/libimmortal/samples/PPO/train.py', 'codePathLocal': 'src/libimmortal/samples/PPO/train.py', 'codePath': 'src/libimmortal/samples/PPO/train.py', 'git': {'remote': 'https://github.com/Mjk-123/libimmortal.git', 'commit': 'dd979cf819246e20e3c9a0728b2a8dd70dfbf59e'}, 'email': 'mjkmszr0613@gmail.com', 'root': '/root/libimmortal', 'host': '253f93c14aa6', 'username': 'root', 'executable': '/usr/local/bin/python3.10', 'cpu_count': 14, 'cpu_count_logical': 28, 'cpu_freq': {'current': 2075.058714285714, 'min': 1200.0, 'max': 4414.285714285715}, 'cpu_freq_per_core': [{'current': 3722.591, 'min': 1200.0, 'max': 4500.0}, {'current': 1200.002, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.023, 'min': 1200.0, 'max': 4400.0}, {'current': 1899.995, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.931, 'min': 1200.0, 'max': 4400.0}, {'current': 3678.425, 'min': 1200.0, 'max': 4400.0}, {'current': 1999.964, 'min': 1200.0, 'max': 4400.0}, {'current': 2799.961, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.003, 'min': 1200.0, 'max': 4400.0}, {'current': 1399.921, 'min': 1200.0, 'max': 4400.0}, {'current': 3786.372, 'min': 1200.0, 'max': 4500.0}, {'current': 1200.029, 'min': 1200.0, 'max': 4400.0}, {'current': 1399.951, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.005, 'min': 1200.0, 'max': 4400.0}, {'current': 3890.765, 'min': 1200.0, 'max': 4500.0}, {'current': 1200.033, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.979, 'min': 1200.0, 'max': 4400.0}, {'current': 1899.993, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.978, 'min': 1200.0, 'max': 4400.0}, {'current': 3691.588, 'min': 1200.0, 'max': 4400.0}, {'current': 2000.007, 'min': 1200.0, 'max': 4400.0}, {'current': 2800.0, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.005, 'min': 1200.0, 'max': 4400.0}, {'current': 1400.032, 'min': 1200.0, 'max': 4400.0}, {'current': 3770.744, 'min': 1200.0, 'max': 4500.0}, {'current': 1199.968, 'min': 1200.0, 'max': 4400.0}, {'current': 1400.016, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.007, 'min': 1200.0, 'max': 4400.0}], 'disk': {'/': {'total': 1873.7061920166016, 'used': 959.3433303833008}}, 'gpu': 'NVIDIA GeForce RTX 2080 Ti', 'gpu_count': 4, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}], 'memory': {'total': 62.46498107910156}}
+2026-01-06 23:09:09,664 INFO    HandlerThread:2242284 [system_monitor.py:probe():224] Finished collecting system info
+2026-01-06 23:09:09,664 INFO    HandlerThread:2242284 [system_monitor.py:probe():227] Publishing system info
+2026-01-06 23:09:09,664 INFO    HandlerThread:2242284 [system_monitor.py:probe():229] Finished publishing system info
+2026-01-06 23:09:09,670 DEBUG   SenderThread:2242284 [sender.py:send():379] send: files
+2026-01-06 23:09:09,670 INFO    SenderThread:2242284 [sender.py:_save_file():1454] saving file wandb-metadata.json with policy now
+2026-01-06 23:09:09,849 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: python_packages
+2026-01-06 23:09:09,849 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: python_packages
+2026-01-06 23:09:09,851 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: stop_status
+2026-01-06 23:09:09,852 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: stop_status
+2026-01-06 23:09:09,895 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-06 23:09:10,266 DEBUG   SenderThread:2242284 [sender.py:send():379] send: telemetry
+2026-01-06 23:09:10,303 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log
+2026-01-06 23:09:10,304 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-metadata.json
+2026-01-06 23:09:10,304 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/requirements.txt
+2026-01-06 23:09:10,488 INFO    wandb-upload_0:2242284 [upload_job.py:push():130] Uploaded file /tmp/tmprlsmfxbfwandb/uwx889pp-wandb-metadata.json
+2026-01-06 23:09:10,852 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-06 23:09:11,852 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-06 23:09:12,300 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log
+2026-01-06 23:09:12,755 DEBUG   SenderThread:2242284 [sender.py:send():379] send: telemetry
+2026-01-06 23:09:12,755 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: server_info
+2026-01-06 23:09:12,756 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: server_info
+2026-01-06 23:09:12,980 DEBUG   SenderThread:2242284 [sender.py:send():379] send: exit
+2026-01-06 23:09:12,981 INFO    SenderThread:2242284 [sender.py:send_exit():586] handling exit code: 0
+2026-01-06 23:09:12,981 INFO    SenderThread:2242284 [sender.py:send_exit():588] handling runtime: 3
+2026-01-06 23:09:12,982 INFO    SenderThread:2242284 [sender.py:_save_file():1454] saving file wandb-summary.json with policy end
+2026-01-06 23:09:12,983 INFO    SenderThread:2242284 [sender.py:send_exit():594] send defer
+2026-01-06 23:09:12,983 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:12,983 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 0
+2026-01-06 23:09:12,984 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:12,984 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 0
+2026-01-06 23:09:12,984 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 1
+2026-01-06 23:09:12,984 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:12,984 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 1
+2026-01-06 23:09:12,985 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:12,985 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 1
+2026-01-06 23:09:12,985 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 2
+2026-01-06 23:09:12,986 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:12,986 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 2
+2026-01-06 23:09:12,986 INFO    HandlerThread:2242284 [system_monitor.py:finish():203] Stopping system monitor
+2026-01-06 23:09:12,986 DEBUG   SystemMonitor:2242284 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2026-01-06 23:09:12,986 DEBUG   SystemMonitor:2242284 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2026-01-06 23:09:12,987 DEBUG   SystemMonitor:2242284 [system_monitor.py:_start():183] Publishing last batch of metrics
+2026-01-06 23:09:12,987 INFO    HandlerThread:2242284 [interfaces.py:finish():200] Joined cpu monitor
+2026-01-06 23:09:12,990 INFO    HandlerThread:2242284 [interfaces.py:finish():200] Joined disk monitor
+2026-01-06 23:09:13,301 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-summary.json
+2026-01-06 23:09:14,302 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log
+2026-01-06 23:09:14,510 INFO    HandlerThread:2242284 [interfaces.py:finish():200] Joined gpu monitor
+2026-01-06 23:09:14,511 INFO    HandlerThread:2242284 [interfaces.py:finish():200] Joined memory monitor
+2026-01-06 23:09:14,511 INFO    HandlerThread:2242284 [interfaces.py:finish():200] Joined network monitor
+2026-01-06 23:09:14,512 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: poll_exit
+2026-01-06 23:09:14,513 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: status_report
+2026-01-06 23:09:14,513 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,514 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 2
+2026-01-06 23:09:14,514 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 3
+2026-01-06 23:09:14,515 DEBUG   SenderThread:2242284 [sender.py:send():379] send: stats
+2026-01-06 23:09:14,515 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:14,515 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: poll_exit
+2026-01-06 23:09:14,515 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 3
+2026-01-06 23:09:14,516 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,516 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 3
+2026-01-06 23:09:14,517 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 4
+2026-01-06 23:09:14,517 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:14,517 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 4
+2026-01-06 23:09:14,517 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,517 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 4
+2026-01-06 23:09:14,518 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 5
+2026-01-06 23:09:14,518 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:14,518 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 5
+2026-01-06 23:09:14,518 DEBUG   SenderThread:2242284 [sender.py:send():379] send: summary
+2026-01-06 23:09:14,519 INFO    SenderThread:2242284 [sender.py:_save_file():1454] saving file wandb-summary.json with policy end
+2026-01-06 23:09:14,520 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,520 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 5
+2026-01-06 23:09:14,520 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 6
+2026-01-06 23:09:14,520 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:14,520 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 6
+2026-01-06 23:09:14,521 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,521 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 6
+2026-01-06 23:09:14,526 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: status_report
+2026-01-06 23:09:14,785 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 7
+2026-01-06 23:09:14,786 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:14,786 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 7
+2026-01-06 23:09:14,787 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:14,787 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 7
+2026-01-06 23:09:14,982 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: poll_exit
+2026-01-06 23:09:15,303 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-summary.json
+2026-01-06 23:09:15,304 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/config.yaml
+2026-01-06 23:09:16,279 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 8
+2026-01-06 23:09:16,279 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: poll_exit
+2026-01-06 23:09:16,280 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:16,280 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 8
+2026-01-06 23:09:16,282 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:16,283 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 8
+2026-01-06 23:09:16,283 INFO    SenderThread:2242284 [job_builder.py:build():440] Attempting to build job artifact
+2026-01-06 23:09:16,284 INFO    SenderThread:2242284 [job_builder.py:_get_source_type():569] is repo sourced job
+2026-01-06 23:09:16,304 INFO    Thread-12 :2242284 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log
+2026-01-06 23:09:16,342 INFO    SenderThread:2242284 [job_builder.py:build():545] adding wandb-job metadata file
+2026-01-06 23:09:16,350 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 9
+2026-01-06 23:09:16,351 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:16,351 DEBUG   SenderThread:2242284 [sender.py:send():379] send: artifact
+2026-01-06 23:09:16,351 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 9
+2026-01-06 23:09:16,983 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: poll_exit
+2026-01-06 23:09:17,965 INFO    wandb-upload_1:2242284 [upload_job.py:push():85] Skipped uploading /root/.local/share/wandb/artifacts/staging/tmpwlhw7k6b
+2026-01-06 23:09:18,218 INFO    wandb-upload_0:2242284 [upload_job.py:push():88] Uploaded file /tmp/tmpxu3t9qnh/wandb-job.json
+2026-01-06 23:09:19,727 INFO    SenderThread:2242284 [sender.py:send_artifact():1530] sent artifact job-https___github.com_Mjk-123_libimmortal.git_src_libimmortal_samples_PPO_train.py - {'id': 'QXJ0aWZhY3Q6MjM2MDc2NDM0NQ==', 'state': 'PENDING', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjgyMzMyMzI4Nw==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MjM2MDcxODg5Mg==', 'versionIndex': 24}}}
+2026-01-06 23:09:19,728 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:19,728 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: status_report
+2026-01-06 23:09:19,728 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 9
+2026-01-06 23:09:19,729 INFO    SenderThread:2242284 [dir_watcher.py:finish():358] shutting down directory watcher
+2026-01-06 23:09:20,306 INFO    SenderThread:2242284 [dir_watcher.py:finish():388] scan: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files
+2026-01-06 23:09:20,307 INFO    SenderThread:2242284 [dir_watcher.py:finish():402] scan save: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-metadata.json wandb-metadata.json
+2026-01-06 23:09:20,307 INFO    SenderThread:2242284 [dir_watcher.py:finish():402] scan save: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log output.log
+2026-01-06 23:09:20,308 INFO    SenderThread:2242284 [dir_watcher.py:finish():402] scan save: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-summary.json wandb-summary.json
+2026-01-06 23:09:20,314 INFO    SenderThread:2242284 [dir_watcher.py:finish():402] scan save: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/requirements.txt requirements.txt
+2026-01-06 23:09:20,324 INFO    SenderThread:2242284 [dir_watcher.py:finish():402] scan save: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/config.yaml config.yaml
+2026-01-06 23:09:20,333 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 10
+2026-01-06 23:09:20,334 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: poll_exit
+2026-01-06 23:09:20,335 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:20,335 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 10
+2026-01-06 23:09:20,342 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:20,342 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 10
+2026-01-06 23:09:20,342 INFO    SenderThread:2242284 [file_pusher.py:finish():169] shutting down file pusher
+2026-01-06 23:09:20,803 INFO    wandb-upload_1:2242284 [upload_job.py:push():130] Uploaded file /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/output.log
+2026-01-06 23:09:20,930 INFO    wandb-upload_0:2242284 [upload_job.py:push():130] Uploaded file /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/wandb-summary.json
+2026-01-06 23:09:20,985 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: poll_exit
+2026-01-06 23:09:20,987 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: poll_exit
+2026-01-06 23:09:21,164 INFO    wandb-upload_3:2242284 [upload_job.py:push():130] Uploaded file /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/config.yaml
+2026-01-06 23:09:21,218 INFO    wandb-upload_2:2242284 [upload_job.py:push():130] Uploaded file /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/files/requirements.txt
+2026-01-06 23:09:21,419 INFO    Thread-11 (_thread_body):2242284 [sender.py:transition_state():614] send defer: 11
+2026-01-06 23:09:21,420 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:21,421 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 11
+2026-01-06 23:09:21,422 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:21,422 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 11
+2026-01-06 23:09:21,422 INFO    SenderThread:2242284 [file_pusher.py:join():175] waiting for file pusher
+2026-01-06 23:09:21,423 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 12
+2026-01-06 23:09:21,423 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:21,424 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 12
+2026-01-06 23:09:21,424 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:21,425 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 12
+2026-01-06 23:09:21,425 INFO    SenderThread:2242284 [file_stream.py:finish():601] file stream finish called
+2026-01-06 23:09:21,666 INFO    SenderThread:2242284 [file_stream.py:finish():605] file stream finish is done
+2026-01-06 23:09:21,666 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 13
+2026-01-06 23:09:21,666 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:21,667 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 13
+2026-01-06 23:09:21,667 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:21,668 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 13
+2026-01-06 23:09:21,668 INFO    SenderThread:2242284 [sender.py:transition_state():614] send defer: 14
+2026-01-06 23:09:21,668 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: defer
+2026-01-06 23:09:21,669 INFO    HandlerThread:2242284 [handler.py:handle_request_defer():184] handle defer: 14
+2026-01-06 23:09:21,670 DEBUG   SenderThread:2242284 [sender.py:send():379] send: final
+2026-01-06 23:09:21,670 DEBUG   SenderThread:2242284 [sender.py:send():379] send: footer
+2026-01-06 23:09:21,671 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: defer
+2026-01-06 23:09:21,671 INFO    SenderThread:2242284 [sender.py:send_request_defer():610] handle sender defer: 14
+2026-01-06 23:09:21,673 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: poll_exit
+2026-01-06 23:09:21,673 DEBUG   SenderThread:2242284 [sender.py:send_request():406] send_request: poll_exit
+2026-01-06 23:09:21,676 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-06 23:09:21,678 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: get_summary
+2026-01-06 23:09:21,679 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: sampled_history
+2026-01-06 23:09:21,681 DEBUG   HandlerThread:2242284 [handler.py:handle_request():158] handle_request: shutdown
+2026-01-06 23:09:21,682 INFO    HandlerThread:2242284 [handler.py:finish():882] shutting down handler
+2026-01-06 23:09:22,674 INFO    WriterThread:2242284 [datastore.py:close():296] close: /root/libimmortal/wandb/run-20260106_230908-bqt2e1b4/run-bqt2e1b4.wandb
+2026-01-06 23:09:22,674 INFO    SenderThread:2242284 [sender.py:finish():1608] shutting down sender
+2026-01-06 23:09:22,675 INFO    SenderThread:2242284 [file_pusher.py:finish():169] shutting down file pusher
+2026-01-06 23:09:22,675 INFO    SenderThread:2242284 [file_pusher.py:join():175] waiting for file pusher
