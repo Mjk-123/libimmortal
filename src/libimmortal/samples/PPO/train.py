@@ -5,6 +5,7 @@ import time
 import argparse
 from datetime import datetime
 from typing import Optional, Tuple
+import re
 import signal
 
 from reward import RewardConfig, RewardShaper, RewardScaler
@@ -21,6 +22,11 @@ try:
     from mlagents_envs.base_env import TerminalSteps
 except Exception:
     TerminalSteps = None
+
+try:
+    from mlagents_envs.exception import UnityTimeOutException
+except Exception:
+    UnityTimeOutException = None
 
 # DDP
 import torch.distributed as dist
@@ -132,6 +138,17 @@ def _latest_checkpoint_path(ckpt_dir: str, prefix: str) -> Optional[str]:
     paths.sort(key=os.path.getmtime, reverse=True)
     return paths[0]
 
+def _infer_step_from_ckpt_path(ckpt_path: Optional[str], ckpt_prefix: str) -> int:
+    """
+    Expect: <ckpt_prefix><step>.pth
+    Example: PPO_ImmortalSufferingEnv_seed42_4000.pth -> 4000
+    Return 0 if cannot parse.
+    """
+    if not ckpt_path:
+        return 0
+    base = os.path.basename(ckpt_path)
+    m = re.match(re.escape(ckpt_prefix) + r"(\d+)\.pth$", base)
+    return int(m.group(1)) if m else 0
 
 def _infer_done(done_from_env, info) -> bool:
     """Combine env's done with ML-Agents TerminalSteps signal (if present)."""
@@ -171,6 +188,22 @@ def save_checkpoint_safely(state_dict, path: str):
     finally:
         signal.signal(signal.SIGINT, old)
 '''
+
+def _rollback_last_rollout_entry(buf):
+    """
+    Undo the last (state, action, logprob, value) appended BEFORE env.step().
+    Keeps buffer lengths consistent when env.step() fails.
+    """
+    if getattr(buf, "map_states", None) and len(buf.map_states) > 0:
+        buf.map_states.pop()
+    if getattr(buf, "vec_states", None) and len(buf.vec_states) > 0:
+        buf.vec_states.pop()
+    if getattr(buf, "actions", None) and len(buf.actions) > 0:
+        buf.actions.pop()
+    if getattr(buf, "logprobs", None) and len(buf.logprobs) > 0:
+        buf.logprobs.pop()
+    if getattr(buf, "state_values", None) and len(buf.state_values) > 0:
+        buf.state_values.pop()
 
 class _SigintGuard:
     """
@@ -254,23 +287,42 @@ def train(args):
     local_rank = ddp_local_rank()
     world = ddp_world_size()
 
+    # Each rank must use a unique *PORT RANGE* (Unity uses multiple ports internally).
+    # Use a stride to avoid collisions.
+    # Use a mutable box so nested fns can read/write without Python scoping issues.
+    restart_box = {"id": 0}
+
     # Each rank must use a unique port (Unity/ML-Agents style env will conflict otherwise)
-    port = int(args.port) + int(local_rank) * int(args.port_stride)
+    def _compute_port() -> int:
+        return (
+            int(args.port)
+            + int(local_rank) * int(args.port_stride)
+            + int(restart_box["id"]) * int(args.port_stride) * int(world)
+        )
+
+    def _make_env():
+        p = _compute_port()
+        kw = dict(
+            game_path=args.game_path,
+            port=p,
+            time_scale=args.time_scale,
+            seed=(int(args.seed) + rank) if args.seed is not None else None,
+            width=args.width,
+            height=args.height,
+            verbose=args.verbose,
+        )
+        # If your ImmortalSufferingEnv supports these kwargs, use them.
+        # Otherwise, the TypeError fallback will keep old behavior.
+        try:
+            return ImmortalSufferingEnv(**kw, no_graphics=args.no_graphics, timeout_wait=args.unity_timeout_wait), p
+        except TypeError:
+            return ImmortalSufferingEnv(**kw), p
 
     # Seeds (offset by rank)
     if args.seed is not None:
         seed_everything(int(args.seed))
 
-    env = ImmortalSufferingEnv(
-        game_path=args.game_path,
-        port=port,
-        time_scale=args.time_scale,
-        seed=(int(args.seed) + rank) if args.seed is not None else None,
-        width=args.width,
-        height=args.height,
-        verbose=args.verbose,
-    )
-
+    env, port = _make_env()
     env_tag = "ImmortalSufferingEnv"
 
     # Runner-style: total interaction steps PER RANK
@@ -367,6 +419,8 @@ def train(args):
         print("checkpoint dir:", ckpt_dir)
 
     # Resume (every rank loads the same weights, then barrier)
+    base_step = 0
+
     if args.resume:
         ckpt_to_load = args.checkpoint
         if ckpt_to_load is None and is_main_process():
@@ -380,8 +434,10 @@ def train(args):
         if ckpt_to_load is None:
             raise FileNotFoundError(f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}")
 
+        base_step = _infer_step_from_ckpt_path(ckpt_to_load, ckpt_prefix)
         if is_main_process():
             print(f"[Resume] loading: {ckpt_to_load}")
+            print(f"[Resume] inferred base_step={base_step}")
 
         state = torch.load(ckpt_to_load, map_location="cpu")
         get_module(ppo_agent.policy).load_state_dict(state)
@@ -458,13 +514,33 @@ def train(args):
         action_np = action_t.squeeze(0).detach().cpu().numpy()
         return action_np
 
-    step = 0
+    local_step = 0
     try:
-        for step in range(1, MAX_STEPS + 1):
-            action = _select_action_and_store(cur_id_map, cur_vec_obs)
-            action = _format_action_for_env(action, action_space)
-
-            obs, raw_reward, done, info = env.step(action)
+        for local_step in range(1, MAX_STEPS + 1):
+            global_step = base_step + local_step
+            # Retry loop: Unity can time out; restart env on this rank and retry this step.
+            while True:
+                action = _select_action_and_store(cur_id_map, cur_vec_obs)
+                action = _format_action_for_env(action, action_space)
+                try:
+                    obs, raw_reward, done, info = env.step(action)
+                    break
+                except Exception as e:
+                    if UnityTimeOutException is not None and isinstance(e, UnityTimeOutException):
+                        _rollback_last_rollout_entry(ppo_agent.buffer)
+                        try:
+                            env.close()
+                        except Exception:
+                            pass
+                        restart_box["id"] += 1
+                        if restart_box["id"] > int(args.max_env_restarts):
+                            raise
+                        env, port = _make_env()
+                        obs = env.reset()
+                        cur_id_map, cur_vec_obs, _ = _make_map_and_vec(obs)
+                        shaper.reset(cur_vec_obs, cur_id_map)
+                        continue
+                    raise
             done = _infer_done(done, info)
 
             next_id_map, next_vec_obs, _ = _make_map_and_vec(obs)
@@ -485,7 +561,7 @@ def train(args):
             episode_len += 1
 
             # PPO update (ALL ranks call update; DDP will sync gradients)
-            if step % update_timestep == 0:
+            if local_step % update_timestep == 0:
                 # ensure all ranks enter update together
                 ddp_barrier()
                 t0 = time.time()
@@ -514,7 +590,7 @@ def train(args):
                             "train/update_seconds": float(dt),
                             "train/buffer_len": int(update_timestep),
                         },
-                        step=step,
+                        step=global_step,
                     )
 
                 # Keep all ranks aligned after update
@@ -528,8 +604,8 @@ def train(args):
                         wandb.log({"train/action_std": float(getattr(ppo_agent, "action_std", np.nan))}, step=step)
 
             # Save checkpoint (rank0 only; save underlying module for portability)
-            if step % save_model_freq == 0 and is_main_process():
-                ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
+            if global_step % save_model_freq == 0 and is_main_process():
+                ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{global_step}.pth")
                 print("--------------------------------------------------------------------------------------------")
                 print("saving model at:", ckpt_path)
                 torch.save(get_module(ppo_agent.policy_old).state_dict(), ckpt_path)
@@ -537,7 +613,7 @@ def train(args):
                 print("Elapsed Time:", datetime.now().replace(microsecond=0) - start_time)
                 print("--------------------------------------------------------------------------------------------")
                 if wandb is not None:
-                    wandb.log({"train/checkpoint_saved": 1}, step=step)
+                    wandb.log({"train/checkpoint_saved": 1}, step=global_step)
                     wandb.save(ckpt_path)
 
             # Lightweight wandb logs (rank0 only)
@@ -551,7 +627,7 @@ def train(args):
                         "train/episode_raw_reward_running": float(episode_raw_reward),
                         "train/episode_len_running": int(episode_len),
                     },
-                    step=step,
+                    step=global_step,
                 )
 
             # Episode boundary
@@ -564,7 +640,7 @@ def train(args):
                             "episode/len": int(episode_len),
                             "episode/index": int(episode_idx),
                         },
-                        step=step,
+                        step=global_step,
                     )
 
                 obs = env.reset()
@@ -586,11 +662,11 @@ def train(args):
         # Final save (rank0 only) - guard against repeated SIGINT
         if is_main_process():
             with _SigintGuard():
-                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
-                atomic_torch_save_state_dict(
-                    lambda: get_module(ppo_agent.policy_old).state_dict(),
-                    final_path
-                )
+                final_global_step = base_step + int(local_step)
+                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_global_step}.pth")
+                tmp = final_path + ".tmp"
+                torch.save(get_module(ppo_agent.policy_old).state_dict(), tmp)
+                os.replace(tmp, final_path)
                 print("Final model saved at:", final_path)
 
         # Try barrier, but don't crash on shutdown races
@@ -621,12 +697,16 @@ def build_argparser():
     p.add_argument("--game_path", type=str, default=r"/root/immortal_suffering/immortal_suffering_linux_build.x86_64")
     # IMPORTANT: this is the BASE port; each rank uses (port + LOCAL_RANK)
     p.add_argument("--port", type=int, default=5005)
-    p.add_argument("--port_stride", type=int, default=10)
+    p.add_argument("--port_stride", type=int, default=50)
     p.add_argument("--time_scale", type=float, default=1.0)
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--width", type=int, default=720)
     p.add_argument("--height", type=int, default=480)
     p.add_argument("--verbose", action="store_true")
+
+    p.add_argument("--no_graphics", action="store_true")   # if env wrapper supports it
+    p.add_argument("--unity_timeout_wait", type=int, default=120)  # if env wrapper supports it
+    p.add_argument("--max_env_restarts", type=int, default=20)
 
     # Runner steps (PER RANK)
     p.add_argument("--max_steps", type=int, default=100000)
@@ -656,7 +736,7 @@ def build_argparser():
     p.add_argument("--checkpoint", type=str, default=None)
 
     # Reward shaping knobs
-    p.add_argument("--w_progress", type=float, default=10.0) # 10.0, 20.0, 30.0, 40.0
+    p.add_argument("--w_progress", type=float, default=60.0) # 20.0, 40.0, 60.0, 80.0
     p.add_argument("--w_time", type=float, default=0.001)
     p.add_argument("--w_damage", type=float, default=0.05)
     p.add_argument("--w_not_actionable", type=float, default=0.01)

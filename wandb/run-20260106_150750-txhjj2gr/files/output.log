@@ -1,0 +1,26 @@
+Started training at (GMT): 2026-01-06 15:07:51
+============================================================================================
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_15000.pth
+model saved
+Elapsed Time: 0:21:30
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_30000.pth
+model saved
+Elapsed Time: 0:45:41
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_45000.pth
+model saved
+Elapsed Time: 1:11:55
+--------------------------------------------------------------------------------------------
+[WARNING] Environment timed out shutting down. Killing...
+[WARNING] Environment timed out shutting down. Killing...
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_60000.pth
+model saved
+Elapsed Time: 1:40:11
+--------------------------------------------------------------------------------------------
+[Interrupted] saving checkpoint before exit...Final model saved at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_69198.pth
