@@ -362,6 +362,13 @@ class ActorCritic(nn.Module):
         action_logprobs = torch.stack(logps, dim=-1).sum(-1)  # (B,)
         dist_entropy = torch.stack(ents, dim=-1).sum(-1)      # (B,)
         return action_logprobs, state_values, dist_entropy
+    
+    def forward(self, id_map, vec_obs, action):
+        """
+        DDP 호환을 위해 forward를 evaluate로 연결.
+        PPO.update()에서 self.policy(mb_map, mb_vec, mb_actions)로 호출하게 됨.
+        """
+        return self.evaluate(id_map, vec_obs, action)
 
 '''
 PPO implementation
@@ -507,8 +514,8 @@ class PPO:
                 mb_adv = advantages[mb_idx].to(self.device, non_blocking=True)
                 mb_old_values = old_values[mb_idx].to(self.device, non_blocking=True)
 
-                logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
-                state_values = state_values.view(-1)
+                logprobs, state_values, dist_entropy = self.policy(mb_map, mb_vec, mb_actions)
+                state_values = state_values.view(-1)  # (B,)
 
                 ratios = torch.exp(logprobs - mb_old_logp.detach())
                 surr1 = ratios * mb_adv

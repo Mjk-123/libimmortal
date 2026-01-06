@@ -5,6 +5,7 @@ import time
 import argparse
 from datetime import datetime
 from typing import Optional, Tuple
+import signal
 
 from reward import RewardConfig, RewardShaper, RewardScaler
 
@@ -156,6 +157,18 @@ def _get_action_space(env):
         return env.env.action_space
     raise AttributeError("Cannot find action_space on env.")
 
+# Helper function
+
+def save_checkpoint_safely(state_dict, path: str):
+    """
+    Save checkpoint while temporarily ignoring SIGINT so Ctrl+C doesn't corrupt the save.
+    """
+    old = signal.getsignal(signal.SIGINT)
+    try:
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        torch.save(state_dict, path)
+    finally:
+        signal.signal(signal.SIGINT, old)
 
 # -------------------------
 # Observation preprocessing
@@ -407,7 +420,7 @@ def train(args):
         vec_t = torch.from_numpy(vec_np).to(model_device, dtype=torch.float32).unsqueeze(0)
 
         with torch.no_grad():
-            action_t, logp_t, value_t = ppo_agent.policy_old.act(map_t, vec_t)
+            action_t, logp_t, value_t = get_module(ppo_agent.policy_old).act(map_t, vec_t)
 
         # Store states as CPU numpy (buffer expects numpy)
         ppo_agent.buffer.add_state(map_np, vec_np)
@@ -455,8 +468,9 @@ def train(args):
                     else:
                         map_t = torch.from_numpy(next_id_map).to(model_device, dtype=torch.long).unsqueeze(0)
                         vec_t = torch.from_numpy(next_vec_obs).to(model_device, dtype=torch.float32).unsqueeze(0)
-                        feat = ppo_agent.policy_old.encode(map_t, vec_t)
-                        v = ppo_agent.policy_old.critic_head(feat)  # (1,1)
+                        po = get_module(ppo_agent.policy_old)
+                        feat = po.encode(map_t, vec_t)
+                        v = po.critic_head(feat)
                         ppo_agent.buffer.last_value = float(v.item())
 
                 # NOTE: Avoid heavy I/O from all ranks
@@ -545,7 +559,8 @@ def train(args):
         # Final save (rank0 only)
         if is_main_process():
             final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
-            torch.save(get_module(ppo_agent.policy_old).state_dict(), final_path)
+            sd = get_module(ppo_agent.policy_old).state_dict()
+            save_checkpoint_safely(sd, final_path)
             print("Final model saved at:", final_path)
 
         # Make sure rank0 finishes saving before others exit
@@ -587,7 +602,7 @@ def build_argparser():
     p.add_argument("--max_ep_len", type=int, default=1000)
     p.add_argument("--update_timestep", type=int, default=4000)
     p.add_argument("--k_epochs", type=int, default=10)
-    p.add_argument("--eps_clip", type=float, default=0.15)
+    p.add_argument("--eps_clip", type=float, default=0.2)
     p.add_argument("--gamma", type=float, default=0.99)
     p.add_argument("--lr_actor", type=float, default=1e-4)
     p.add_argument("--lr_critic", type=float, default=2e-4)
@@ -608,7 +623,7 @@ def build_argparser():
     p.add_argument("--checkpoint", type=str, default=None)
 
     # Reward shaping knobs
-    p.add_argument("--w_progress", type=float, default=0.2)
+    p.add_argument("--w_progress", type=float, default=10.0)
     p.add_argument("--w_time", type=float, default=0.001)
     p.add_argument("--w_damage", type=float, default=0.05)
     p.add_argument("--w_not_actionable", type=float, default=0.01)
@@ -636,4 +651,12 @@ if __name__ == "__main__":
     args = build_argparser().parse_args()
     train(args)
 
-# torchrun --standalone --nproc_per_node=4 train.py --port 5005 --time_scale 1.0 --max_steps 100000
+'''
+How to run
+
+# torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
+  --port 5005 --port_stride 10 \
+  --save_model_freq 20000 --wandb \
+  --resume --checkpoint ./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_4000.pth
+  
+'''
