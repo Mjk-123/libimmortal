@@ -1,0 +1,59 @@
+2026-01-07 21:12:33,014 INFO    StreamThr :2903248 [internal.py:wandb_internal():85] W&B internal server running at pid: 2903248, started at: 2026-01-07 21:12:33.012926
+2026-01-07 21:12:33,016 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: status
+2026-01-07 21:12:33,019 INFO    WriterThread:2903248 [datastore.py:open_for_write():87] open: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/run-m1hg0w16.wandb
+2026-01-07 21:12:33,022 DEBUG   SenderThread:2903248 [sender.py:send():379] send: header
+2026-01-07 21:12:33,027 DEBUG   SenderThread:2903248 [sender.py:send():379] send: run
+2026-01-07 21:12:33,899 INFO    SenderThread:2903248 [dir_watcher.py:__init__():211] watching files in: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/files
+2026-01-07 21:12:33,899 INFO    SenderThread:2903248 [sender.py:_start_run_threads():1188] run started: m1hg0w16 with start time 1767787953.009794
+2026-01-07 21:12:33,904 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: check_version
+2026-01-07 21:12:33,905 DEBUG   SenderThread:2903248 [sender.py:send_request():406] send_request: check_version
+2026-01-07 21:12:34,144 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: run_start
+2026-01-07 21:12:34,169 DEBUG   HandlerThread:2903248 [system_info.py:__init__():26] System info init
+2026-01-07 21:12:34,170 DEBUG   HandlerThread:2903248 [system_info.py:__init__():41] System info init done
+2026-01-07 21:12:34,170 INFO    HandlerThread:2903248 [system_monitor.py:start():194] Starting system monitor
+2026-01-07 21:12:34,170 INFO    SystemMonitor:2903248 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2026-01-07 21:12:34,171 INFO    HandlerThread:2903248 [system_monitor.py:probe():214] Collecting system info
+2026-01-07 21:12:34,172 INFO    SystemMonitor:2903248 [interfaces.py:start():188] Started cpu monitoring
+2026-01-07 21:12:34,173 INFO    SystemMonitor:2903248 [interfaces.py:start():188] Started disk monitoring
+2026-01-07 21:12:34,175 INFO    SystemMonitor:2903248 [interfaces.py:start():188] Started gpu monitoring
+2026-01-07 21:12:34,177 INFO    SystemMonitor:2903248 [interfaces.py:start():188] Started memory monitoring
+2026-01-07 21:12:34,177 INFO    SystemMonitor:2903248 [interfaces.py:start():188] Started network monitoring
+2026-01-07 21:12:34,203 DEBUG   HandlerThread:2903248 [system_info.py:probe():152] Probing system
+2026-01-07 21:12:34,204 DEBUG   HandlerThread:2903248 [system_info.py:_probe_git():137] Probing git
+2026-01-07 21:12:34,213 DEBUG   HandlerThread:2903248 [system_info.py:_probe_git():145] Probing git done
+2026-01-07 21:12:34,213 DEBUG   HandlerThread:2903248 [system_info.py:probe():200] Probing system done
+2026-01-07 21:12:34,213 DEBUG   HandlerThread:2903248 [system_monitor.py:probe():223] {'os': 'Linux-6.8.0-62-generic-x86_64-with-glibc2.35', 'python': '3.10.12', 'heartbeatAt': '2026-01-07T12:12:34.203794', 'startedAt': '2026-01-07T12:12:32.997966', 'docker': None, 'cuda': None, 'args': ('--port', '5005', '--port_stride', '50', '--save_model_freq', '40000', '--wandb'), 'state': 'running', 'program': '/root/libimmortal/./src/libimmortal/samples/PPO/train.py', 'codePathLocal': 'src/libimmortal/samples/PPO/train.py', 'codePath': 'src/libimmortal/samples/PPO/train.py', 'git': {'remote': 'https://github.com/Mjk-123/libimmortal.git', 'commit': '0614e6406b6620b75c4ebb27632cf217c9758ee6'}, 'email': 'mjkmszr0613@gmail.com', 'root': '/root/libimmortal', 'host': '253f93c14aa6', 'username': 'root', 'executable': '/usr/local/bin/python3.10', 'cpu_count': 14, 'cpu_count_logical': 28, 'cpu_freq': {'current': 1891.424785714286, 'min': 1200.0, 'max': 4414.285714285715}, 'cpu_freq_per_core': [{'current': 3600.091, 'min': 1200.0, 'max': 4500.0}, {'current': 2672.71, 'min': 1200.0, 'max': 4400.0}, {'current': 1733.161, 'min': 1200.0, 'max': 4400.0}, {'current': 1699.982, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.005, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.014, 'min': 1200.0, 'max': 4400.0}, {'current': 1383.614, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.995, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.699, 'min': 1200.0, 'max': 4400.0}, {'current': 1626.891, 'min': 1200.0, 'max': 4400.0}, {'current': 3797.783, 'min': 1200.0, 'max': 4500.0}, {'current': 2110.059, 'min': 1200.0, 'max': 4400.0}, {'current': 1237.892, 'min': 1200.0, 'max': 4400.0}, {'current': 1516.184, 'min': 1200.0, 'max': 4400.0}, {'current': 3600.028, 'min': 1200.0, 'max': 4500.0}, {'current': 2652.344, 'min': 1200.0, 'max': 4400.0}, {'current': 1712.296, 'min': 1200.0, 'max': 4400.0}, {'current': 1699.952, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.017, 'min': 1200.0, 'max': 4400.0}, {'current': 1200.012, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.997, 'min': 1200.0, 'max': 4400.0}, {'current': 1199.986, 'min': 1200.0, 'max': 4400.0}, {'current': 1399.961, 'min': 1200.0, 'max': 4400.0}, {'current': 1399.979, 'min': 1200.0, 'max': 4400.0}, {'current': 3645.951, 'min': 1200.0, 'max': 4500.0}, {'current': 2300.007, 'min': 1200.0, 'max': 4400.0}, {'current': 1400.024, 'min': 1200.0, 'max': 4400.0}, {'current': 1899.957, 'min': 1200.0, 'max': 4400.0}], 'disk': {'/': {'total': 1873.7061920166016, 'used': 959.3624496459961}}, 'gpu': 'NVIDIA GeForce RTX 2080 Ti', 'gpu_count': 4, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}, {'name': 'NVIDIA GeForce RTX 2080 Ti', 'memory_total': 11811160064}], 'memory': {'total': 62.46498107910156}}
+2026-01-07 21:12:34,213 INFO    HandlerThread:2903248 [system_monitor.py:probe():224] Finished collecting system info
+2026-01-07 21:12:34,214 INFO    HandlerThread:2903248 [system_monitor.py:probe():227] Publishing system info
+2026-01-07 21:12:34,215 INFO    HandlerThread:2903248 [system_monitor.py:probe():229] Finished publishing system info
+2026-01-07 21:12:34,222 DEBUG   SenderThread:2903248 [sender.py:send():379] send: files
+2026-01-07 21:12:34,223 INFO    SenderThread:2903248 [sender.py:_save_file():1454] saving file wandb-metadata.json with policy now
+2026-01-07 21:12:34,444 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: python_packages
+2026-01-07 21:12:34,444 DEBUG   SenderThread:2903248 [sender.py:send_request():406] send_request: python_packages
+2026-01-07 21:12:34,447 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: stop_status
+2026-01-07 21:12:34,447 DEBUG   SenderThread:2903248 [sender.py:send_request():406] send_request: stop_status
+2026-01-07 21:12:34,450 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:34,798 DEBUG   SenderThread:2903248 [sender.py:send():379] send: telemetry
+2026-01-07 21:12:34,902 INFO    Thread-12 :2903248 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/files/output.log
+2026-01-07 21:12:34,902 INFO    Thread-12 :2903248 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/files/requirements.txt
+2026-01-07 21:12:34,903 INFO    Thread-12 :2903248 [dir_watcher.py:_on_file_created():271] file/dir created: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/files/wandb-metadata.json
+2026-01-07 21:12:34,993 INFO    wandb-upload_0:2903248 [upload_job.py:push():130] Uploaded file /tmp/tmpj82cay68wandb/z3mmy93d-wandb-metadata.json
+2026-01-07 21:12:35,446 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:36,452 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:36,900 INFO    Thread-12 :2903248 [dir_watcher.py:_on_file_modified():288] file/dir modified: /root/libimmortal/wandb/run-20260107_211232-m1hg0w16/files/output.log
+2026-01-07 21:12:37,472 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:38,462 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:38,802 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: status_report
+2026-01-07 21:12:39,461 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:40,471 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:41,476 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:42,484 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:43,484 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:44,449 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: status_report
+2026-01-07 21:12:44,486 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:45,485 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:46,485 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:47,487 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages
+2026-01-07 21:12:47,724 DEBUG   SenderThread:2903248 [sender.py:send():379] send: telemetry
+2026-01-07 21:12:47,764 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: partial_history
+2026-01-07 21:12:48,497 DEBUG   HandlerThread:2903248 [handler.py:handle_request():158] handle_request: internal_messages

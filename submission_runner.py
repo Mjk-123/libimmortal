@@ -10,8 +10,6 @@ from mlagents_envs.envs.unity_gym_env import UnityToGymWrapper
 from libimmortal.env import ImmortalSufferingEnv
 from libimmortal.utils import colormap_to_ids_and_onehot, parse_observation
 
-
-
 def main():
     import tqdm
     import argparse
@@ -182,9 +180,10 @@ def main():
         )  # one-hot encoded graphic observation
         
         if num_steps % 200 == 0:
-            np.savetxt("/root/libimmortal/id_map.txt", id_map, delimiter=',', fmt='%.2f')
-            print("id_map saved at num_step:", num_steps)
-            save_graphic_obs_to_txt(graphic_obs)
+            #np.savetxt("/root/libimmortal/id_map.txt", id_map, delimiter=',', fmt='%.2f')
+            #print("id_map saved at num_step:", num_steps)
+            #save_graphic_obs_to_txt(graphic_obs)
+            print("vector_obs:", vector_obs)
         
         if done:
             print("[DONE] reward=", reward, "info=", info)

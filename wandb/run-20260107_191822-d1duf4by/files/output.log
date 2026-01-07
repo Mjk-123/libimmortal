@@ -1,0 +1,29 @@
+Started training at: 2026-01-07 19:18:24
+============================================================================================
+[PPO][begin] step=120000 T=3622 terminals=0 (0.00%) reward(mean/std/min/max)=+0.030/0.425/-5.020/+5.510 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%) | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95 | w_progress=60 w_time=0.01 w_damage=0.05 w_not_actionable=0.01 w_acc=0.5 reward_clip=15 scaler_clip=5 terminal_bonus=1 terminal_fail_pen=3 | reward_scaling=0
+[PPO][end]   step=120000 update_seconds=138.662
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_120000.pth
+model saved
+Elapsed Time: 0:06:24
+--------------------------------------------------------------------------------------------
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[PPO][begin] step=124000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.026/0.037/-0.270/-0.020 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%) | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95 | w_progress=60 w_time=0.01 w_damage=0.05 w_not_actionable=0.01 w_acc=0.5 reward_clip=15 scaler_clip=5 terminal_bonus=1 terminal_fail_pen=3 | reward_scaling=0
+[PPO][end]   step=124000 update_seconds=152.703
+[PPO][begin] step=128000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.026/0.037/-0.270/-0.020 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%) | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95 | w_progress=60 w_time=0.01 w_damage=0.05 w_not_actionable=0.01 w_acc=0.5 reward_clip=15 scaler_clip=5 terminal_bonus=1 terminal_fail_pen=3 | reward_scaling=0
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 1176, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 1063, in train
+    if is_main_process():
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 57, in is_main_process
+    def is_main_process() -> bool:
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 1176, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 1063, in train
+    if is_main_process():
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 57, in is_main_process
+    def is_main_process() -> bool:
+KeyboardInterrupt

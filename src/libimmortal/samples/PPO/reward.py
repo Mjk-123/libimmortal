@@ -131,17 +131,20 @@ class RewardShaper:
         self.gamma = float(gamma)
 
         # Config fallback
-        self.update_every = int(getattr(self.cfg, 'bfs_update_every', 10))
+        self.update_every = int(getattr(self.cfg, "bfs_update_every", 10))
 
         self._step = 0
         self._prev_cum_damage = None
         self._prev_time = None
         self._prev_bfs_dist = None
 
+        # Bounded goal potential (delta-based magnet shaping)
+        self._prev_goal_phi = None
+
         self._cached_goal_xy = None
         self._cached_dist_map = None
-        
-        self.virtual_done = False 
+
+        self.virtual_done = False
 
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
@@ -149,21 +152,32 @@ class RewardShaper:
         self._prev_cum_damage = float(vec_obs[IDX_CUM_DAMAGE]) if vec_obs is not None else None
         self._prev_time = float(vec_obs[IDX_TIME]) if vec_obs is not None else None
         self._prev_bfs_dist = None
+        self._prev_goal_phi = None
         self._cached_goal_xy, self._cached_dist_map = None, None
 
         if id_map is not None and self.cfg.use_bfs_progress:
             d0 = self._get_bfs_dist(id_map)
             self._prev_bfs_dist = float(d0) if d0 is not None else None
 
+            # Initialize bounded potential to avoid a large first-step delta
+            if self._prev_bfs_dist is not None:
+                alpha = 30.0  # larger => more emphasis near the goal, still bounded in (0,1]
+                self._prev_goal_phi = float(np.exp(-alpha * float(self._prev_bfs_dist)))
+
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
         player_xy = _find_centroid_xy(id_map, PLAYER_IDS)
-        goal_xy   = _find_centroid_xy(id_map, [GOAL_ID])
-        if player_xy is None or goal_xy is None: return None
+        goal_xy = _find_centroid_xy(id_map, [GOAL_ID])
+        if player_xy is None or goal_xy is None:
+            return None
 
-        if (self._cached_dist_map is None or self._cached_goal_xy != goal_xy or (self._step % self.update_every) == 0):
+        if (
+            self._cached_dist_map is None
+            or self._cached_goal_xy != goal_xy
+            or (self._step % self.update_every) == 0
+        ):
             passable = ~np.isin(id_map, np.asarray(DEFAULT_BLOCKED_IDS, dtype=id_map.dtype))
             gx, gy = goal_xy
-            passable[gy, gx] = True 
+            passable[gy, gx] = True
             self._cached_dist_map = _bfs_distance_map(passable, goal_xy)
             self._cached_goal_xy = goal_xy
 
@@ -171,63 +185,99 @@ class RewardShaper:
         raw_d = float(self._cached_dist_map[py, px])
         return raw_d / self.max_dist if np.isfinite(raw_d) else None
 
-    def __call__(self, raw_reward: float, vec_obs: np.ndarray, id_map: Optional[np.ndarray], done: bool, info: Optional[Dict[str, Any]] = None) -> float:
+    def __call__(
+        self,
+        raw_reward: float,
+        vec_obs: np.ndarray,
+        id_map: Optional[np.ndarray],
+        done: bool,
+        info: Optional[Dict[str, Any]] = None,
+    ) -> float:
         info = info or {}
         self._step += 1
         r = float(raw_reward)
 
-        # 1. 거리 계산
+        # 1) Distance signals
         d_bfs = self._get_bfs_dist(id_map) if (self.cfg.use_bfs_progress and id_map is not None) else None
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
-        # 2. 종료 판정 통합 (성공 여부 확인)
-        # BFS 기준(1.5칸) OR Vector 기준(0.6 미만)
-        is_success = (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
+        # 2) Unified success condition
+        # BFS-based (within ~1.5 tiles) OR vector-based (< 0.6) OR raw_reward>=1.0
+        is_success = (float(raw_reward) >= 1.0) or (
+            (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
+        )
 
         # -----------------------------------------------------------
         # [Progress & Magnet Reward]
         # -----------------------------------------------------------
         if d_bfs is not None:
-            # A. 선형 진행 (-x)
+            # A) Linear progress (only reward if getting closer)
             if self._prev_bfs_dist is not None:
                 r += float(self.cfg.w_progress) * (self._prev_bfs_dist - d_bfs)
-            self._prev_bfs_dist = d_bfs
 
-            # B. 자석 가속 (1/x) - 부드러운 Shift 적용
-            threshold = 0.1
-            if d_bfs < threshold:
-                epsilon = 0.01
-                w_acc = getattr(self.cfg, 'w_acceleration', 1.0)
-                magnet_term = (1.0 / (d_bfs + epsilon)) - (1.0 / (threshold + epsilon))
-                r += w_acc * max(0.0, magnet_term)
+            # B) Bounded "magnet" shaping: delta of exp(-alpha*d)
+            # - phi(d) in (0,1], bounded => no explosion
+            # - derivative increases as d->0 => stronger pull near goal
+            alpha = 30.0
+            w_acc = float(getattr(self.cfg, "w_acceleration", 1.0))
+
+            cur_phi = float(np.exp(-alpha * float(d_bfs)))
+            if self._prev_goal_phi is not None:
+                r += w_acc * max(0.0, cur_phi - self._prev_goal_phi)
+            self._prev_goal_phi = cur_phi
+
+            self._prev_bfs_dist = d_bfs
 
         # -----------------------------------------------------------
         # [Terminal Logic]
         # -----------------------------------------------------------
-        if is_success:
+        did_just_succeed = False
+
+        if is_success and (not self.virtual_done):
+            # Pay terminal reward only once per episode
             self.virtual_done = True
-            r += float(self.cfg.terminal_bonus) * 10.0  # 성공 보너스 1회 지급
+            did_just_succeed = True
         elif done:
-            # 가상 성공은 아니지만 환경이 끝난 경우 (실패 처리)
-            # 이미 성공 보상을 받았다면 이 블록은 타지 않음
+            # Env ended without virtual success => failure penalty
             r += float(self.cfg.terminal_failure_penalty) * -1.0
 
         # -----------------------------------------------------------
         # [Penalty Terms]
         # -----------------------------------------------------------
         if vec_obs is not None:
-            # Time penalty
+            # Time penalty (constant per step)
             r += float(self.cfg.w_time) * -1.0
-            # Damage penalty
+
+            # Damage penalty (delta of cumulative damage)
             dmg = float(vec_obs[IDX_CUM_DAMAGE])
             if self._prev_cum_damage is not None:
                 r += float(self.cfg.w_damage) * -max(0.0, dmg - self._prev_cum_damage)
             self._prev_cum_damage = dmg
-            # Actionable penalty
+
+            # Not-actionable penalty
             if float(vec_obs[IDX_IS_ACTIONABLE]) < 0.5:
                 r += float(self.cfg.w_not_actionable) * -1.0
 
-        return float(np.clip(r, -self.cfg.clip, self.cfg.clip)) if self.cfg.clip else float(r)
+        # -----------------------------------------------------------
+        # [Guarantee: goal entry is the largest per-step reward]
+        # -----------------------------------------------------------
+        if self.cfg.clip:
+            clip = float(self.cfg.clip)
+
+            # Terminal target can be > clip (terminal is "outside" the per-step clip).
+            # Example: clip=20, terminal_bonus=1.5 => terminal_r=30
+            terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
+            terminal_r = clip * terminal_bonus
+
+            if did_just_succeed:
+                # Success step becomes exactly terminal_r (not clipped).
+                return float(terminal_r)
+
+            # Non-success steps: clip normally, but if terminal_r <= clip, force strict separation.
+            hi = clip if terminal_r > clip else (terminal_r - 1e-3)
+            return float(np.clip(r, -clip, hi))
+
+        return float(r)
 
 class RunningMeanStd:
     """Track running mean/variance with Welford-style parallel update."""

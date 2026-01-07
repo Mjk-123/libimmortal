@@ -1,0 +1,8 @@
+Started training at: 2026-01-07 14:39:30
+============================================================================================
+[PPO][begin] step=4000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.007/0.699/-5.000/+5.000 goal_hits=0 (0.00%) shaper_clip_hits=1 (0.03%) scaler_clip_hits=27 (0.68%) | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95 | w_progress=60 w_time=0.01 w_damage=0.05 w_not_actionable=0.01 w_acc=0.5 reward_clip=8 scaler_clip=5 terminal_bonus=1 terminal_fail_pen=3
+[PPO][end]   step=4000 update_seconds=153.673
+[PPO][begin] step=8000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.011/0.665/-5.000/+5.000 goal_hits=0 (0.00%) shaper_clip_hits=2 (0.05%) scaler_clip_hits=17 (0.43%) | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95 | w_progress=60 w_time=0.01 w_damage=0.05 w_not_actionable=0.01 w_acc=0.5 reward_clip=8 scaler_clip=5 terminal_bonus=1 terminal_fail_pen=3
+[PPO][end]   step=8000 update_seconds=153.453
+[Interrupted] saving checkpoint before exit...
+Final model saved at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_8790.pth
