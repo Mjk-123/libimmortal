@@ -180,10 +180,13 @@ def main():
         )  # one-hot encoded graphic observation
         
         if num_steps % 200 == 0:
-            #np.savetxt("/root/libimmortal/id_map.txt", id_map, delimiter=',', fmt='%.2f')
-            #print("id_map saved at num_step:", num_steps)
-            #save_graphic_obs_to_txt(graphic_obs)
-            print("vector_obs:", vector_obs)
+            DEFAULT_BLOCKED_IDS = 1
+            passable = ~np.isin(id_map, np.asarray(DEFAULT_BLOCKED_IDS, dtype=id_map.dtype))
+            np.savetxt("/root/libimmortal/id_map.txt", id_map, delimiter=',', fmt='%.2f')
+            np.savetxt("/root/libimmortal/passable.txt", passable, delimiter=',', fmt='%.2f')
+            print("id_map saved at num_step:", num_steps)
+            save_graphic_obs_to_txt(graphic_obs)
+            #print("vector_obs:", vector_obs)
         
         if done:
             print("[DONE] reward=", reward, "info=", info)

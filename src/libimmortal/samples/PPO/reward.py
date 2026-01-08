@@ -68,6 +68,32 @@ def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tup
     cx = int(np.round(xs.mean()))
     cy = int(np.round(ys.mean()))
     return cx, cy
+'''
+def _find_left_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x_left, y_centroid) for the object pixels in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    x_left = int(xs.min())
+    y_centroid = int(np.round(ys.mean()))
+    return x_left, y_centroid
+
+
+def _find_right_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x_right, y_centroid) for the object pixels in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    x_right = int(xs.max())
+    y_centroid = int(np.round(ys.mean()))
+    return x_right, y_centroid
+'''
 
 def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndarray:
     """4-neighbor BFS distance to goal. Returns inf for unreachable."""
@@ -242,7 +268,7 @@ class RewardShaper:
 
             cur_phi = float(np.exp(-alpha * float(d_bfs)))
             if self._prev_goal_phi is not None:
-                r += w_acc * max(0.0, cur_phi - self._prev_goal_phi)
+                r += w_acc * (cur_phi - self._prev_goal_phi)
             self._prev_goal_phi = cur_phi
 
             self._prev_bfs_dist = d_bfs

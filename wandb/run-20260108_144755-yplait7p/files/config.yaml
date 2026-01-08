@@ -53,7 +53,7 @@ ddp_world_size:
   value: 4
 base_step:
   desc: null
-  value: 0
+  value: 86242
 w_progress:
   desc: null
   value: 100.0
@@ -101,7 +101,7 @@ _wandb:
     framework: torch
     is_jupyter_run: false
     is_kaggle_kernel: false
-    start_time: 1767835991
+    start_time: 1767851275
     t:
       1:
       - 1
@@ -110,7 +110,6 @@ _wandb:
       - 1
       - 55
       3:
-      - 3
       - 13
       - 16
       - 23
