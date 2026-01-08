@@ -1,35 +1,27 @@
 # reward.py
-# Reward shaping with BFS shortest-path distance on id_map.
-# Vector obs indices are integrated:
-#   IDX_CUM_DAMAGE = 4
-#   IDX_IS_ACTIONABLE = 5
-#   IDX_GOAL_DIST = 11
-#   IDX_TIME = 12
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
 from collections import deque
-from typing import Optional, Dict, Any, Tuple, List
 
 import numpy as np
 
-# -------------------------
+from libimmortal.utils.aux_func import DEFAULT_ENCODER
+
+# -----------------------------------------------------------------------------
 # Vector observation indices
-# -------------------------
+# -----------------------------------------------------------------------------
 IDX_CUM_DAMAGE = 4
 IDX_IS_ACTIONABLE = 5
 IDX_GOAL_DIST = 11
 IDX_TIME = 12
 
 
-# -------------------------
-# ColorMap IDs (from your encoder)
-# -------------------------
-# Adjust import path to wherever DEFAULT_ENCODER lives.
-
-from libimmortal.utils.aux_func import DEFAULT_ENCODER
-
+# -----------------------------------------------------------------------------
+# Encoder / IDs
+# -----------------------------------------------------------------------------
 ENC = DEFAULT_ENCODER
 
 WALL_ID = ENC.name2id["WALL"]
@@ -44,19 +36,9 @@ DEFAULT_BLOCKED_IDS = [WALL_ID]
 # DEFAULT_BLOCKED_IDS = [WALL_ID, ENC.name2id["PLATFORM"]]
 
 
-# -------------------------
+# -----------------------------------------------------------------------------
 # BFS utilities
-# -------------------------
-'''
-def _find_first_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x,y) of the first occurrence of any target id, else None."""
-    for tid in target_ids:
-        ys, xs = np.where(id_map == tid)
-        if xs.size > 0:
-            return int(xs[0]), int(ys[0])
-    return None
-'''
-
+# -----------------------------------------------------------------------------
 def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
     """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
     if target_ids is None or len(target_ids) == 0:
@@ -68,9 +50,10 @@ def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tup
     cx = int(np.round(xs.mean()))
     cy = int(np.round(ys.mean()))
     return cx, cy
-'''
+
+
 def _find_left_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x_left, y_centroid) for the object pixels in target_ids, else None."""
+    """Return (x_left, y_centroid) for pixels in target_ids, else None."""
     if target_ids is None or len(target_ids) == 0:
         return None
     mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
@@ -83,7 +66,7 @@ def _find_left_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[
 
 
 def _find_right_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x_right, y_centroid) for the object pixels in target_ids, else None."""
+    """Return (x_right, y_centroid) for pixels in target_ids, else None."""
     if target_ids is None or len(target_ids) == 0:
         return None
     mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
@@ -93,10 +76,10 @@ def _find_right_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional
     x_right = int(xs.max())
     y_centroid = int(np.round(ys.mean()))
     return x_right, y_centroid
-'''
+
 
 def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndarray:
-    """4-neighbor BFS distance to goal. Returns inf for unreachable."""
+    """4-neighbor BFS distance-to-goal. Returns inf for unreachable cells."""
     H, W = passable.shape
     gx, gy = goal_xy
     dist = np.full((H, W), np.inf, dtype=np.float32)
@@ -124,9 +107,9 @@ def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndar
     return dist
 
 
-# -------------------------
+# -----------------------------------------------------------------------------
 # Reward config
-# -------------------------
+# -----------------------------------------------------------------------------
 @dataclass
 class RewardConfig:
     w_progress: float = 1.0
@@ -143,51 +126,109 @@ class RewardConfig:
 
     # BFS progress shaping
     use_bfs_progress: bool = True
-    w_acceleration: float = 1.0,
-    bfs_update_every: int = 10  # recompute BFS map every N steps (goal fixed => can be large)
+    w_acceleration: float = 1.0  # IMPORTANT: no trailing comma (tuple bug)
+    bfs_update_every: int = 10  # kept for compatibility; with caching, can be ignored
+
+    # Optional: map shape if you want to override defaults
+    map_h: int = 90
+    map_w: int = 160
 
 
+# -----------------------------------------------------------------------------
+# Reward shaper
+# -----------------------------------------------------------------------------
 class RewardShaper:
-    def __init__(self, cfg: Any, gamma: float = 0.99):
-        self.map_h, self.map_w = 90, 160
-        self.max_dist = float(self.map_h + self.map_w)
+    """
+    Call signature (recommended):
+        reward = shaper(raw_reward, vec_obs, id_map, done, info)
 
+    Reset signature (recommended):
+        shaper.reset(initial_vec_obs, initial_id_map)
+
+    Notes:
+    - With fixed goal_xy + fixed passable, dist_map is fixed and should be computed once at reset.
+    - Per-step BFS distance becomes O(1): dist_map[py, px].
+    - The remaining per-step cost is finding player_xy from id_map.
+    """
+
+    def __init__(self, cfg: Any, gamma: float = 0.99):
         self.cfg = cfg
         self.gamma = float(gamma)
+
+        self.map_h = int(getattr(cfg, "map_h", 90))
+        self.map_w = int(getattr(cfg, "map_w", 160))
+        self.max_dist = float(self.map_h + self.map_w)
 
         # Config fallback
         self.update_every = int(getattr(self.cfg, "bfs_update_every", 10))
 
         self._step = 0
-        self._prev_cum_damage = None
-        self._prev_time = None
-        self._prev_bfs_dist = None
+        self._prev_cum_damage: Optional[float] = None
+        self._prev_time: Optional[float] = None
+        self._prev_bfs_dist: Optional[float] = None
 
         # Bounded goal potential (delta-based magnet shaping)
-        self._prev_goal_phi = None
+        self._prev_goal_phi: Optional[float] = None
 
-        self._cached_goal_xy = None
-        self._cached_dist_map = None
+        # Cached BFS artifacts (goal/passable/dist map)
+        self._cached_goal_xy: Optional[Tuple[int, int]] = None
+        self._cached_dist_map: Optional[np.ndarray] = None
+        self._cached_passable: Optional[np.ndarray] = None  # bool mask
 
         self.virtual_done = False
 
+        # Debug
         self.dbg_has_bfs = False
-        self.dbg_bfs_dist = None          # normalized [0,1]
-        self.dbg_bfs_delta = None         # prev - curr (normalized)
+        self.dbg_bfs_dist: Optional[float] = None          # normalized [0,1]
+        self.dbg_bfs_delta: Optional[float] = None         # prev - curr (normalized)
         self.dbg_closer = False
         self.dbg_farther = False
         self.dbg_is_success = False
 
+    def _ensure_bfs_cache(self, id_map: np.ndarray) -> None:
+        """
+        Ensure passable, goal_xy, and dist_map are cached.
+        Assumes map/passable/goal are fixed for the episode (or for the whole run).
+        """
+        H, W = id_map.shape[:2]
+
+        # (1) Cache passable mask once per shape.
+        if (self._cached_passable is None) or (self._cached_passable.shape != (H, W)):
+            self._cached_passable = ~np.isin(
+                id_map, np.asarray(DEFAULT_BLOCKED_IDS, dtype=id_map.dtype)
+            )
+
+        # (2) Cache goal_xy (try to set it if missing).
+        if self._cached_goal_xy is None:
+            self._cached_goal_xy = _find_centroid_xy(id_map, [GOAL_ID])
+
+        # (3) Cache dist_map once per shape (depends only on passable + goal_xy).
+        if self._cached_goal_xy is None:
+            self._cached_dist_map = None
+            return
+
+        if (self._cached_dist_map is None) or (self._cached_dist_map.shape != (H, W)):
+            gx, gy = self._cached_goal_xy
+            # Copy passable so we can force-goal cell passable without mutating base mask.
+            passable = self._cached_passable.copy()
+            if 0 <= gx < W and 0 <= gy < H:
+                passable[gy, gx] = True
+            self._cached_dist_map = _bfs_distance_map(passable, self._cached_goal_xy)
+
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
         self.virtual_done = False
+
         self._prev_cum_damage = float(vec_obs[IDX_CUM_DAMAGE]) if vec_obs is not None else None
         self._prev_time = float(vec_obs[IDX_TIME]) if vec_obs is not None else None
         self._prev_bfs_dist = None
         self._prev_goal_phi = None
-        self._cached_goal_xy, self._cached_dist_map = None, None
 
-        if id_map is not None and self.cfg.use_bfs_progress:
+        # Do NOT blindly clear BFS caches; map/goal are assumed fixed.
+        # We'll rebuild only when missing or shape changed.
+        if id_map is not None and bool(getattr(self.cfg, "use_bfs_progress", True)):
+            self._ensure_bfs_cache(id_map)
+
             d0 = self._get_bfs_dist(id_map)
             self._prev_bfs_dist = float(d0) if d0 is not None else None
 
@@ -197,23 +238,24 @@ class RewardShaper:
                 self._prev_goal_phi = float(np.exp(-alpha * float(self._prev_bfs_dist)))
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
+        # You can swap centroid -> right-center later if you want:
+        # player_xy = _find_right_center_xy(id_map, PLAYER_IDS)
         player_xy = _find_centroid_xy(id_map, PLAYER_IDS)
-        goal_xy = _find_centroid_xy(id_map, [GOAL_ID])
-        if player_xy is None or goal_xy is None:
+        if player_xy is None:
             return None
 
-        if (
-            self._cached_dist_map is None
-            or self._cached_goal_xy != goal_xy
-            or (self._step % self.update_every) == 0
-        ):
-            passable = ~np.isin(id_map, np.asarray(DEFAULT_BLOCKED_IDS, dtype=id_map.dtype))
-            gx, gy = goal_xy
-            passable[gy, gx] = True
-            self._cached_dist_map = _bfs_distance_map(passable, goal_xy)
-            self._cached_goal_xy = goal_xy
+        if self._cached_dist_map is None:
+            # Lazy build (in case reset() didn't receive id_map)
+            self._ensure_bfs_cache(id_map)
+
+        if self._cached_dist_map is None:
+            return None
 
         px, py = player_xy
+        H, W = self._cached_dist_map.shape
+        if not (0 <= px < W and 0 <= py < H):
+            return None
+
         raw_d = float(self._cached_dist_map[py, px])
         return raw_d / self.max_dist if np.isfinite(raw_d) else None
 
@@ -231,7 +273,7 @@ class RewardShaper:
 
         # 1) Distance signals
         prev_d_bfs = self._prev_bfs_dist
-        d_bfs = self._get_bfs_dist(id_map) if (self.cfg.use_bfs_progress and id_map is not None) else None
+        d_bfs = self._get_bfs_dist(id_map) if (bool(getattr(self.cfg, "use_bfs_progress", True)) and id_map is not None) else None
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
         # 2) Unified success condition
@@ -239,6 +281,8 @@ class RewardShaper:
         is_success = (float(raw_reward) >= 1.0) or (
             (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
         )
+
+        # Debug stats for trainer-side logging
         self.dbg_has_bfs = (d_bfs is not None)
         self.dbg_bfs_dist = float(d_bfs) if d_bfs is not None else None
         if (prev_d_bfs is not None) and (d_bfs is not None):
@@ -256,13 +300,11 @@ class RewardShaper:
         # [Progress & Magnet Reward]
         # -----------------------------------------------------------
         if d_bfs is not None:
-            # A) Linear progress (only reward if getting closer)
+            # A) Linear progress (SIGNED; no max(0, ...) farming)
             if self._prev_bfs_dist is not None:
-                r += float(self.cfg.w_progress) * (self._prev_bfs_dist - d_bfs)
+                r += float(getattr(self.cfg, "w_progress", 0.0)) * (self._prev_bfs_dist - d_bfs)
 
             # B) Bounded "magnet" shaping: delta of exp(-alpha*d)
-            # - phi(d) in (0,1], bounded => no explosion
-            # - derivative increases as d->0 => stronger pull near goal
             alpha = 30.0
             w_acc = float(getattr(self.cfg, "w_acceleration", 1.0))
 
@@ -277,7 +319,6 @@ class RewardShaper:
         # [Terminal Logic]
         # -----------------------------------------------------------
         did_just_succeed = False
-
         if is_success and (not self.virtual_done):
             # Pay terminal reward only once per episode
             self.virtual_done = True
@@ -288,25 +329,23 @@ class RewardShaper:
         # -----------------------------------------------------------
         if vec_obs is not None:
             # Time penalty (constant per step)
-            r += float(self.cfg.w_time) * -1.0
+            r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
 
             # Damage penalty (delta of cumulative damage)
             dmg = float(vec_obs[IDX_CUM_DAMAGE])
             if self._prev_cum_damage is not None:
-                r += float(self.cfg.w_damage) * -max(0.0, dmg - self._prev_cum_damage)
+                r += float(getattr(self.cfg, "w_damage", 0.0)) * -max(0.0, dmg - self._prev_cum_damage)
             self._prev_cum_damage = dmg
 
             # Not-actionable penalty
             if float(vec_obs[IDX_IS_ACTIONABLE]) < 0.5:
-                r += float(self.cfg.w_not_actionable) * -1.0
+                r += float(getattr(self.cfg, "w_not_actionable", 0.0)) * -1.0
 
         # -----------------------------------------------------------
         # [Guarantee: goal entry is the largest per-step reward]
         # -----------------------------------------------------------
-        if self.cfg.clip:
-            clip = float(self.cfg.clip)
-
-            # Terminal target can be > clip (terminal is "outside" the per-step clip).
+        if getattr(self.cfg, "clip", None):
+            clip = float(getattr(self.cfg, "clip", 0.0))
             terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
 
             if did_just_succeed:
@@ -318,6 +357,7 @@ class RewardShaper:
             return float(np.clip(r, -clip, hi))
 
         return float(r)
+
 
 class RunningMeanStd:
     """Track running mean/variance with Welford-style parallel update."""

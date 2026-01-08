@@ -154,12 +154,23 @@ class _SigintGuard:
     During checkpoint save, ignore SIGINT so we don't corrupt / half-save.
     """
     def __enter__(self):
-        self._old = signal.getsignal(signal.SIGINT)
-        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        self._signals = (signal.SIGINT, signal.SIGTERM)
+        # Prefer signal mask to avoid races (Linux/Unix).
+        self._use_mask = hasattr(signal, "pthread_sigmask")
+        if self._use_mask:
+            self._old_mask = signal.pthread_sigmask(signal.SIG_BLOCK, set(self._signals))
+        else:
+            self._old_handlers = {s: signal.getsignal(s) for s in self._signals}
+            for s in self._signals:
+                signal.signal(s, signal.SIG_IGN)
         return self
 
     def __exit__(self, exc_type, exc, tb):
-        signal.signal(signal.SIGINT, self._old)
+        if getattr(self, "_use_mask", False):
+            signal.pthread_sigmask(signal.SIG_SETMASK, self._old_mask)
+        else:
+            for s, h in self._old_handlers.items():
+                signal.signal(s, h)
         return False
 
 

@@ -167,3 +167,28 @@ Modify reward fucntion using given observations.
 Both graphic observation and vector observation are provided in obs.
 4. **Monitor training process with visualization**  
 Included training visualizing library "tensorflow" and "wandb"
+
+## Run PPO
+1. **How to run**
+Use torchrun for DDP. We used 4 nodes for one run.
+
+``` torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
+  --port 5005 --port_stride 50 \
+  --save_model_freq [save_frequency] --wandb [Optional]
+```
+
+2. **Use checkpoint and resume training.**
+Use ```--resume``` and ```--checkpoint``` flag to resume your learning continuously.
+
+``` torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
+  --port 5005 --port_stride 50 \
+  --save_model_freq [save_frequency] --wandb [Optional] \
+  --resume --checkpoint [checkpoint_directory]
+```
+
+3. **Try to use ```SIGTERM``` instead of ```SIGINT``` for interruption.**
+```KeyboardInterrupt``` and ```SIGINT``` is also fine, but sending ```SIGTERM``` via another process will be more safe. Use following:
+
+```
+ps -ef | grep torchrun | head
+kill -TERM <master_pid> ```
