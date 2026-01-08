@@ -1,0 +1,9 @@
+2026-01-09 02:19:55,450 INFO    StreamThr :3464 [internal.py:wandb_internal():85] W&B internal server running at pid: 3464, started at: 2026-01-09 02:19:55.449514
+2026-01-09 02:19:55,451 DEBUG   HandlerThread:3464 [handler.py:handle_request():158] handle_request: status
+2026-01-09 02:19:55,454 INFO    WriterThread:3464 [datastore.py:open_for_write():87] open: /root/libimmortal/wandb/run-20260109_021955-arrwchgr/run-arrwchgr.wandb
+2026-01-09 02:19:55,456 DEBUG   SenderThread:3464 [sender.py:send():379] send: header
+2026-01-09 02:19:55,458 DEBUG   SenderThread:3464 [sender.py:send():379] send: run
+2026-01-09 02:19:56,095 INFO    SenderThread:3464 [dir_watcher.py:__init__():211] watching files in: /root/libimmortal/wandb/run-20260109_021955-arrwchgr/files
+2026-01-09 02:19:56,096 INFO    SenderThread:3464 [sender.py:_start_run_threads():1188] run started: arrwchgr with start time 1767892795.447593
+2026-01-09 02:19:56,104 DEBUG   HandlerThread:3464 [handler.py:handle_request():158] handle_request: check_version
+2026-01-09 02:19:56,105 DEBUG   SenderThread:3464 [sender.py:send_request():406] send_request: check_version

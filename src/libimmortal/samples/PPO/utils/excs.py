@@ -25,7 +25,19 @@ from libimmortal.samples.PPO.utils.ddp import is_main_process
 
 
 def _is_timeout_exc(e: Exception) -> bool:
-    return (UnityTimeOutException is not None) and isinstance(e, UnityTimeOutException)
+    if UnityTimeOutException is not None and isinstance(e, UnityTimeOutException):
+        return True
+    if isinstance(e, (TimeoutError,)):
+        return True
+    try:
+        import socket
+        if isinstance(e, socket.timeout):
+            return True
+    except Exception:
+        pass
+    msg = str(e).lower()
+    return ("timeout" in msg) or ("timed out" in msg)
+
 
 def _is_unity_env_unloaded_exc(e: Exception) -> bool:
     if UnityEnvironmentException is None:
@@ -47,9 +59,17 @@ def _is_restartable_exc(e: Exception) -> bool:
     restartable = (
         _is_timeout_exc(e)
         or _is_unity_env_unloaded_exc(e)
-        or isinstance(e, (BrokenPipeError, ConnectionResetError, EOFError))
+        or isinstance(e, (
+            BrokenPipeError,
+            ConnectionResetError,
+            ConnectionAbortedError,
+            EOFError,
+            TimeoutError,
+            OSError,          # IMPORTANT: many "connection reset" cases surface as plain OSError
+        ))
     )
     return bool(restartable)
+
 
 def _is_step_after_done_exc(e: Exception) -> bool:
     if UnityGymException is None or not isinstance(e, UnityGymException):
