@@ -1,0 +1,12 @@
+Started training at: 2026-01-08 17:20:36
+============================================================================================
+[PPO][begin] step=124000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.042/1.009/-12.410/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.5059/0.3160/0.8520 bfs_best=0.3160 bfs_delta_mean=0.00012 closer/farther=3.0%/2.9% bfs_missing=6.2%
+[PPO][end]   step=124000 update_seconds=152.286
+[PPO][begin] step=128000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.043/1.068/-14.010/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0

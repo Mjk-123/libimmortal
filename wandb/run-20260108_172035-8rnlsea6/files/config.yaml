@@ -1,0 +1,121 @@
+wandb_version: 1
+
+env_tag:
+  desc: null
+  value: ImmortalSufferingEnv
+max_steps:
+  desc: null
+  value: 1000000
+max_ep_len:
+  desc: null
+  value: 1000
+update_timestep:
+  desc: null
+  value: 4000
+K_epochs:
+  desc: null
+  value: 10
+eps_clip:
+  desc: null
+  value: 0.2
+gamma:
+  desc: null
+  value: 0.99
+lr_actor:
+  desc: null
+  value: 0.0001
+lr_critic:
+  desc: null
+  value: 0.0002
+action_std:
+  desc: null
+  value: 0.6
+action_std_decay_rate:
+  desc: null
+  value: 0.05
+min_action_std:
+  desc: null
+  value: 0.1
+action_std_decay_freq:
+  desc: null
+  value: 250000
+save_model_freq:
+  desc: null
+  value: 40000
+mini_batch_size:
+  desc: null
+  value: 64
+seed:
+  desc: null
+  value: 42
+ddp_world_size:
+  desc: null
+  value: 4
+base_step:
+  desc: null
+  value: 120000
+w_progress:
+  desc: null
+  value: 100.0
+w_time:
+  desc: null
+  value: 0.01
+w_damage:
+  desc: null
+  value: 0.1
+w_not_actionable:
+  desc: null
+  value: 0.01
+terminal_bonus:
+  desc: null
+  value: 4.0
+reward_clip:
+  desc: null
+  value: 20.0
+scaler_clip:
+  desc: null
+  value: 5.0
+w_acc:
+  desc: null
+  value: 1.0
+no_graphics:
+  desc: null
+  value: true
+unity_timeout_wait:
+  desc: null
+  value: 120
+max_env_restarts:
+  desc: null
+  value: 20
+port_stride:
+  desc: null
+  value: 50
+reward_scaling:
+  desc: null
+  value: false
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.12
+    cli_version: 0.17.4
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1767860435
+    t:
+      1:
+      - 1
+      - 55
+      2:
+      - 1
+      - 55
+      3:
+      - 13
+      - 16
+      - 23
+      - 61
+      4: 3.10.12
+      5: 0.17.4
+      8:
+      - 5
+      13: linux-x86_64

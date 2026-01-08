@@ -844,11 +844,25 @@ def train(args):
 
     def _reset_update_counters():
         nonlocal upd_steps, upd_terminals, upd_goal_hits, upd_shaper_clip_hits, upd_scaler_clip_hits
+        nonlocal bfs_n, bfs_sum, bfs_min, bfs_max, bfs_missing
+        nonlocal dd_n, dd_sum, closer_n, farther_n
         upd_steps = 0
         upd_terminals = 0
         upd_goal_hits = 0
         upd_shaper_clip_hits = 0
         upd_scaler_clip_hits = 0
+
+        bfs_n = 0
+        bfs_sum = 0.0
+        bfs_min = float("inf")
+        bfs_max = float("-inf")
+        bfs_missing = 0
+
+        # Reset BFS-delta window stats
+        dd_n = 0
+        dd_sum = 0.0
+        closer_n = 0
+        farther_n = 0
 
     def _update_counters(raw_reward_f: float, done_for_buffer: bool, shaped_reward_f: float, scaled_reward_f: float):
         nonlocal upd_steps, upd_terminals, upd_goal_hits, upd_shaper_clip_hits, upd_scaler_clip_hits
@@ -895,6 +909,7 @@ def train(args):
         extra = ""
         if bfs_mean is not None:
             extra += f" bfs(mean/min/max)={bfs_mean:.4f}/{bfs_min:.4f}/{bfs_max:.4f}"
+            extra += f" bfs_best={bfs_best:.4f}"
         extra += f" bfs_delta_mean={0.0 if dd_mean is None else dd_mean:.5f}"
         extra += f" closer/farther={closer_pct:.1f}%/{farther_pct:.1f}%"
         extra += f" bfs_missing={bfs_miss_pct:.1f}%"
@@ -919,10 +934,12 @@ def train(args):
     def _print_update_post(step_i: int, dt_s: float):
         if is_main_process():
             print(f"[PPO][end]   step={step_i} update_seconds={dt_s:.3f}")
-        _reset_update_counters()
 
     timeouts = 0
     restarts = 0
+
+    # Global best BFS distance (normalized)
+    bfs_best = float("inf")
 
     try:
         for local_step in range(1, MAX_STEPS + 1):
@@ -977,6 +994,7 @@ def train(args):
                 bfs_sum += d
                 bfs_min = min(bfs_min, d)
                 bfs_max = max(bfs_max, d)
+                bfs_best = min(bfs_best, d)
             else:
                 bfs_missing += 1
 
@@ -1060,6 +1078,7 @@ def train(args):
                         step=int(step),
                     )
 
+                _reset_update_counters()
                 ddp_barrier()
 
             # Action std decay
