@@ -56,7 +56,7 @@ base_step:
   value: 0
 w_progress:
   desc: null
-  value: 30.0
+  value: 50.0
 w_time:
   desc: null
   value: 0.01
@@ -104,7 +104,7 @@ _wandb:
     framework: torch
     is_jupyter_run: false
     is_kaggle_kernel: false
-    start_time: 1767787953
+    start_time: 1767794509
     t:
       1:
       - 1
@@ -113,6 +113,7 @@ _wandb:
       - 1
       - 55
       3:
+      - 2
       - 3
       - 13
       - 16

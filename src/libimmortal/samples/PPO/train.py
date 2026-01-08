@@ -28,6 +28,11 @@ try:
 except Exception:
     UnityTimeOutException = None
 
+try:
+    from mlagents_envs.exception import UnityEnvironmentException
+except Exception:
+    UnityEnvironmentException = None
+
 from libimmortal.env import ImmortalSufferingEnv
 
 # DDP
@@ -499,10 +504,26 @@ def train(args):
     def _is_timeout_exc(e: Exception) -> bool:
         return (UnityTimeOutException is not None) and isinstance(e, UnityTimeOutException)
 
+    def _is_unity_env_unloaded_exc(e: Exception) -> bool:
+        if UnityEnvironmentException is None:
+            return False
+        if not isinstance(e, UnityEnvironmentException):
+            return False
+        msg = str(e)
+        # Be conservative: restart only for common transient/comm/unloaded cases
+        if "No Unity environment is loaded" in msg:
+            return True
+        if "timed out" in msg.lower():
+            return True
+        if "communicator" in msg.lower():
+            return True
+        return False
+
     def _is_restartable_exc(e: Exception) -> bool:
         # In practice, ML-Agents comm errors can surface like these.
         restartable = (
             _is_timeout_exc(e)
+            or _is_unity_env_unloaded_exc(e)
             or isinstance(e, (BrokenPipeError, ConnectionResetError, EOFError))
         )
         return bool(restartable)
@@ -553,6 +574,17 @@ def train(args):
 
     expected_id_shape = tuple(id_map.shape)
     expected_vec_dim = int(vec_obs.shape[0])
+
+    # ----- For Debugging -----
+    bfs_n = 0
+    bfs_missing = 0
+    bfs_sum = 0.0
+    bfs_min = 1e9
+    bfs_max = -1e9
+    dd_sum = 0.0
+    dd_n = 0
+    closer_n = 0
+    farther_n = 0
 
     action_space = _get_action_space(env)
     has_continuous_action_space = isinstance(action_space, gym.spaces.Box)
@@ -651,14 +683,13 @@ def train(args):
         w_time=args.w_time,
         w_damage=args.w_damage,
         w_not_actionable=args.w_not_actionable,
-        terminal_failure_penalty=args.terminal_failure_penalty,
         terminal_bonus=args.terminal_bonus,
         clip=args.reward_clip,
         success_if_raw_reward_ge=args.success_if_raw_reward_ge,
         time_limit=args.time_limit,
         success_speed_bonus=args.success_speed_bonus,
         use_bfs_progress=True,
-        w_acceleration=0.2,
+        w_acceleration=1.0,
         bfs_update_every=10,
     )
     shaper = RewardShaper(cfg)
@@ -753,7 +784,6 @@ def train(args):
                 w_damage=float(args.w_damage),
                 w_not_actionable=float(args.w_not_actionable),
                 terminal_bonus=float(args.terminal_bonus),
-                terminal_failure_penalty=float(args.terminal_failure_penalty),
                 reward_clip=float(args.reward_clip),
                 scaler_clip=float(getattr(reward_scaler, "clip", 0.0)),
                 w_acc=float(getattr(cfg, "w_acceleration", 0.0)),
@@ -845,21 +875,34 @@ def train(args):
         scaler_clip_frac = (upd_scaler_clip_hits / upd_steps) if upd_steps > 0 else 0.0
         goal_hit_frac = (upd_goal_hits / upd_steps) if upd_steps > 0 else 0.0
 
+        bfs_mean = (bfs_sum / bfs_n) if bfs_n > 0 else None
+        dd_mean = (dd_sum / dd_n) if dd_n > 0 else None
+        closer_pct = (100.0 * closer_n / dd_n) if dd_n > 0 else 0.0
+        farther_pct = (100.0 * farther_n / dd_n) if dd_n > 0 else 0.0
+        bfs_miss_pct = (100.0 * bfs_missing / max(1, (bfs_n + bfs_missing)))
+
+        extra = ""
+        if bfs_mean is not None:
+            extra += f" bfs(mean/min/max)={bfs_mean:.4f}/{bfs_min:.4f}/{bfs_max:.4f}"
+        extra += f" bfs_delta_mean={0.0 if dd_mean is None else dd_mean:.5f}"
+        extra += f" closer/farther={closer_pct:.1f}%/{farther_pct:.1f}%"
+        extra += f" bfs_missing={bfs_miss_pct:.1f}%"
+
         print(
             f"[PPO][begin] step={step_i} "
             f"T={buf_len_pre} terminals={term_n} ({term_frac:.2%}) "
             f"reward(mean/std/min/max)={rw_mean:+.3f}/{rw_std:.3f}/{rw_min:+.3f}/{rw_max:+.3f} "
             f"goal_hits={upd_goal_hits} ({goal_hit_frac:.2%}) "
             f"shaper_clip_hits={upd_shaper_clip_hits} ({shaper_clip_frac:.2%}) "
-            f"scaler_clip_hits={upd_scaler_clip_hits} ({scaler_clip_frac:.2%}) "
+            f"scaler_clip_hits={upd_scaler_clip_hits} ({scaler_clip_frac:.2%})\n"
             f"| eps_clip={eps_clip:g} K_epochs={K_epochs} mb={mini_batch_size} "
-            f"lr(a/c)={lr_actor:g}/{lr_critic:g} gamma={gamma:g} gae_lambda={gae_lambda:g} "
+            f"lr(a/c)={lr_actor:g}/{lr_critic:g} gamma={gamma:g} gae_lambda={gae_lambda:g}\n"
             f"| w_progress={float(args.w_progress):g} w_time={float(args.w_time):g} "
             f"w_damage={float(args.w_damage):g} w_not_actionable={float(args.w_not_actionable):g} "
             f"w_acc={float(getattr(cfg,'w_acceleration',0.0)):g} "
-            f"reward_clip={float(getattr(cfg,'clip',0.0)):g} scaler_clip={float(getattr(reward_scaler,'clip',0.0)):g} "
-            f"terminal_bonus={float(args.terminal_bonus):g} terminal_fail_pen={float(args.terminal_failure_penalty):g} "
-            f"| reward_scaling={int(args.reward_scaling)}"
+            f"reward_clip={float(getattr(cfg,'clip',0.0)):g} scaler_clip={float(getattr(reward_scaler,'clip',0.0)):g}\n"
+            f"| reward_scaling={int(args.reward_scaling)}\n"
+            f"|{extra}"
         )
 
     def _print_update_post(step_i: int, dt_s: float):
@@ -896,6 +939,7 @@ def train(args):
                         if is_main_process():
                             print(f"[Env][step] exception={repr(e)} -> restart (timeouts={timeouts}, restarts={restarts})")
                         env, port = _restart_env(reason="step")
+                        time.sleep(0.5)
                         obs = _safe_reset(env)
                         cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                         shaper.reset(cur_vec_obs, cur_id_map)
@@ -911,9 +955,28 @@ def train(args):
             elif not isinstance(info, dict):
                 info = {"env_info": info}
 
-            shaped_reward = float(shaper(raw_reward, next_vec_obs, next_id_map, done_env, info))
+            shaped_reward = float(shaper(raw_reward, next_vec_obs, next_id_map, done_env, info))   
             is_goal = (float(raw_reward) >= float(args.success_if_raw_reward_ge))
             done_for_buffer = (bool(done_env) or bool(shaper.virtual_done) or bool(is_goal))
+
+            # Debug: BFS progress stats (cheap, no extra BFS compute)
+            if getattr(shaper, "dbg_has_bfs", False) and (shaper.dbg_bfs_dist is not None):
+                d = float(shaper.dbg_bfs_dist)
+                bfs_n += 1
+                bfs_sum += d
+                bfs_min = min(bfs_min, d)
+                bfs_max = max(bfs_max, d)
+            else:
+                bfs_missing += 1
+
+            if (shaper.dbg_bfs_delta is not None):
+                dd = float(shaper.dbg_bfs_delta)
+                dd_sum += dd
+                dd_n += 1
+                if dd > 0.0:
+                    closer_n += 1
+                elif dd < 0.0:
+                    farther_n += 1
 
             if args.reward_scaling:
                 scaled_reward = float(reward_scaler(shaped_reward, done_for_buffer))
@@ -1150,16 +1213,15 @@ def build_argparser():
     p.add_argument("--checkpoint", type=str, default=None)
 
     # Reward shaping knobs
-    p.add_argument("--w_progress", type=float, default=30.0)
+    p.add_argument("--w_progress", type=float, default=100.0)
     p.add_argument("--w_time", type=float, default=0.01)
-    p.add_argument("--w_damage", type=float, default=0.05)
+    p.add_argument("--w_damage", type=float, default=0.1)
     p.add_argument("--w_not_actionable", type=float, default=0.01)
-    p.add_argument("--terminal_bonus", type=float, default=3.0)
-    p.add_argument("--terminal_failure_penalty", type=float, default=3.0)
+    p.add_argument("--terminal_bonus", type=float, default=4.0)
     p.add_argument("--reward_clip", type=float, default=20.0)
     p.add_argument("--success_if_raw_reward_ge", type=float, default=1.0)
     p.add_argument("--time_limit", type=float, default=300.0)
-    p.add_argument("--success_speed_bonus", type=float, default=10.0)
+    p.add_argument("--success_speed_bonus", type=float, default=0.5)
 
     # Debug: dump id_map path (rank0 only, on update steps)
     p.add_argument("--dump_id_map", type=str, default=None)

@@ -107,7 +107,6 @@ class RewardConfig:
     w_time: float = 0.0
     w_damage: float = 0.0
     w_not_actionable: float = 0.0
-    terminal_failure_penalty: float = 0.0
     terminal_bonus: float = 5.0
     clip: Optional[float] = None
 
@@ -145,6 +144,13 @@ class RewardShaper:
         self._cached_dist_map = None
 
         self.virtual_done = False
+
+        self.dbg_has_bfs = False
+        self.dbg_bfs_dist = None          # normalized [0,1]
+        self.dbg_bfs_delta = None         # prev - curr (normalized)
+        self.dbg_closer = False
+        self.dbg_farther = False
+        self.dbg_is_success = False
 
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
@@ -198,6 +204,7 @@ class RewardShaper:
         r = float(raw_reward)
 
         # 1) Distance signals
+        prev_d_bfs = self._prev_bfs_dist
         d_bfs = self._get_bfs_dist(id_map) if (self.cfg.use_bfs_progress and id_map is not None) else None
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
@@ -206,6 +213,18 @@ class RewardShaper:
         is_success = (float(raw_reward) >= 1.0) or (
             (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
         )
+        self.dbg_has_bfs = (d_bfs is not None)
+        self.dbg_bfs_dist = float(d_bfs) if d_bfs is not None else None
+        if (prev_d_bfs is not None) and (d_bfs is not None):
+            dd = float(prev_d_bfs - d_bfs)
+            self.dbg_bfs_delta = dd
+            self.dbg_closer = (dd > 0.0)
+            self.dbg_farther = (dd < 0.0)
+        else:
+            self.dbg_bfs_delta = None
+            self.dbg_closer = False
+            self.dbg_farther = False
+        self.dbg_is_success = bool(is_success)
 
         # -----------------------------------------------------------
         # [Progress & Magnet Reward]
@@ -237,9 +256,6 @@ class RewardShaper:
             # Pay terminal reward only once per episode
             self.virtual_done = True
             did_just_succeed = True
-        elif done:
-            # Env ended without virtual success => failure penalty
-            r += float(self.cfg.terminal_failure_penalty) * -1.0
 
         # -----------------------------------------------------------
         # [Penalty Terms]
@@ -265,16 +281,14 @@ class RewardShaper:
             clip = float(self.cfg.clip)
 
             # Terminal target can be > clip (terminal is "outside" the per-step clip).
-            # Example: clip=20, terminal_bonus=1.5 => terminal_r=30
             terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
-            terminal_r = clip * terminal_bonus
 
             if did_just_succeed:
-                # Success step becomes exactly terminal_r (not clipped).
-                return float(terminal_r)
+                # Success step becomes exactly terminal_bonus (not clipped).
+                return float(terminal_bonus)
 
-            # Non-success steps: clip normally, but if terminal_r <= clip, force strict separation.
-            hi = clip if terminal_r > clip else (terminal_r - 1e-3)
+            # Non-success steps: clip normally, but if terminal_bonus <= clip, force strict separation.
+            hi = clip if terminal_bonus > clip else (terminal_bonus - 1e-3)
             return float(np.clip(r, -clip, hi))
 
         return float(r)
