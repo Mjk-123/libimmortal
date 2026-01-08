@@ -185,7 +185,7 @@ Use ```--resume``` and ```--checkpoint``` flag to resume your learning continuou
 torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
   --port 5005 --port_stride 50 \
   --save_model_freq [save_frequency] --wandb [Optional] \
-  --resume --checkpoint [checkpoint_directory]
+  --resume --checkpoint [checkpoint_path]
 ```
 
 3. **Try to use ```SIGTERM``` instead of ```SIGINT``` for interruption.**
