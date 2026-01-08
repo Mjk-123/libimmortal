@@ -24,6 +24,12 @@ except Exception:
     TerminalSteps = None
 
 try:
+    # Raised when calling step() after done=True without reset()
+    from mlagents_envs.envs.unity_gym_env import UnityGymException
+except Exception:
+    UnityGymException = None
+
+try:
     from mlagents_envs.exception import UnityTimeOutException
 except Exception:
     UnityTimeOutException = None
@@ -469,6 +475,7 @@ def train(args):
     def _make_env():
         p = _compute_port()
         last_port_box["port"] = p
+        print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p}", flush=True)
 
         kw = dict(
             game_path=args.game_path,
@@ -538,17 +545,22 @@ def train(args):
             or isinstance(e, (BrokenPipeError, ConnectionResetError, EOFError))
         )
         return bool(restartable)
+    
+    def _is_step_after_done_exc(e: Exception) -> bool:
+        if UnityGymException is None or not isinstance(e, UnityGymException):
+            return False
+        return "already returned done = True" in str(e)
 
-    def _safe_reset(cur_env):
+    def _safe_reset():
+        nonlocal env, port
         while True:
             try:
-                return cur_env.reset()
+                return env.reset()
             except Exception as e:
                 if _is_restartable_exc(e):
                     if is_main_process():
                         print(f"[Env][reset] exception={repr(e)} -> restart")
-                    new_env, _ = _restart_env(reason="reset")
-                    cur_env = new_env
+                    env, port = _restart_env(reason="reset")
                     continue
                 raise
 
@@ -580,7 +592,7 @@ def train(args):
     step = 0  # for finally
 
     # Infer dims from first reset (robust reset)
-    obs = _safe_reset(env)
+    obs = _safe_reset()
     id_map, vec_obs, K = _make_map_and_vec(obs)
 
     expected_id_shape = tuple(id_map.shape)
@@ -961,6 +973,20 @@ def train(args):
                     break
 
                 except Exception as e:
+                    # UnityGym: if env has returned done=True previously, we MUST reset before stepping again.
+                    if _is_step_after_done_exc(e):
+                        if is_main_process():
+                            print(f"[Env][step] step-after-done -> reset and retry: {repr(e)}")
+                        obs = _safe_reset(env)
+                        cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
+                        shaper.reset(cur_vec_obs, cur_id_map)
+                        # Episode counters are now stale; reset them (logging-only).
+                        episode_reward = 0.0
+                        episode_raw_reward = 0.0
+                        episode_len = 0
+                        episode_idx += 1
+                        continue
+
                     if _is_restartable_exc(e):
                         timeouts += int(_is_timeout_exc(e))
                         restarts += 1
@@ -968,7 +994,7 @@ def train(args):
                             print(f"[Env][step] exception={repr(e)} -> restart (timeouts={timeouts}, restarts={restarts})")
                         env, port = _restart_env(reason="step")
                         time.sleep(0.5)
-                        obs = _safe_reset(env)
+                        obs = _safe_reset()
                         cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                         shaper.reset(cur_vec_obs, cur_id_map)
                         continue
@@ -1135,7 +1161,7 @@ def train(args):
                         step=int(step),
                     )
 
-                obs = _safe_reset(env)
+                obs = _safe_reset()
                 cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                 shaper.reset(cur_vec_obs, cur_id_map)
 
@@ -1276,9 +1302,8 @@ if __name__ == "__main__":
 How to run
 
 torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
-  --port 5005 --port_stride 50 \
-  --save_model_freq 20000 --wandb \
-  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_116378.pth
+ --port 5005 --port_stride 200 --save_model_freq 40000 --wandb \
+ --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_160000.pth
 
 If you want reward scaling:
   --reward_scaling

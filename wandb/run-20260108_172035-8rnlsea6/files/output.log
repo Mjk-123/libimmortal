@@ -10,3 +10,439 @@ Started training at: 2026-01-08 17:20:36
 | eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
 | w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
 | reward_scaling=0
+| bfs(mean/min/max)=0.4276/0.2960/0.5160 bfs_best=0.2960 bfs_delta_mean=0.00002 closer/farther=3.0%/2.8% bfs_missing=6.2%
+[PPO][end]   step=128000 update_seconds=151.727
+[PPO][begin] step=132000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.045/0.992/-16.020/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4338/0.3000/0.5240 bfs_best=0.2960 bfs_delta_mean=-0.00002 closer/farther=3.1%/2.6% bfs_missing=4.6%
+[PPO][end]   step=132000 update_seconds=152.205
+[PPO][begin] step=136000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.042/1.022/-16.810/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4348/0.3360/0.5160 bfs_best=0.2960 bfs_delta_mean=0.00002 closer/farther=3.0%/3.0% bfs_missing=7.9%
+[PPO][end]   step=136000 update_seconds=152.134
+[PPO][begin] step=140000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.048/1.031/-13.210/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4262/0.3240/0.5160 bfs_best=0.2960 bfs_delta_mean=-0.00000 closer/farther=3.1%/2.8% bfs_missing=3.8%
+[PPO][end]   step=140000 update_seconds=151.620
+[GOAL] step=141674 raw=1.0000000000 shaped=4.000 scaled=4.000 done_env=1 done_buf=1 virtual_done=1 ep_len=674 ep_reward_running=-11.297 clip=20.0 w_time=0.01 w_prog=100.0 termB=4.0
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=1, restarts=1)
+[Env] restart #1 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+[Env][step] --- end tail ---
+[PPO][begin] step=144000 T=4000 terminals=1 (0.03%) reward(mean/std/min/max)=-0.029/0.948/-15.220/+4.000 goal_hits=1 (0.03%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4318/0.0400/0.8520 bfs_best=0.0400 bfs_delta_mean=0.00027 closer/farther=3.0%/2.8% bfs_missing=4.1%
+[PPO][end]   step=144000 update_seconds=151.996
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=2, restarts=2)
+[Env] restart #2 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+Goal Reached
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+PlayerAgent:OnGoalReached () (at D:/immortal_suffering/Assets/Scripts/PlayerAgent.cs:190)
+UnityEngine.Events.InvokableCall:Invoke () (at /home/bokken/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent:Invoke () (at /home/bokken/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:57)
+ImmortalSuffering.Goal:CompleteGoal () (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:20)
+ImmortalSuffering.Goal:OnTriggerEnter2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:14)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+More observations (104) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:NotifyAgentDone (Unity.MLAgents.Agent/DoneReason) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:617)
+Unity.MLAgents.Agent:EndEpisodeAndReset (Unity.MLAgents.Agent/DoneReason) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:833)
+Unity.MLAgents.Agent:EndEpisode () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:808)
+PlayerAgent:OnGoalReached () (at D:/immortal_suffering/Assets/Scripts/PlayerAgent.cs:191)
+UnityEngine.Events.InvokableCall:Invoke () (at /home/bokken/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent:Invoke () (at /home/bokken/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:57)
+ImmortalSuffering.Goal:CompleteGoal () (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:20)
+ImmortalSuffering.Goal:OnTriggerEnter2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:14)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+[Env][step] --- end tail ---
+[PPO][begin] step=148000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.035/0.967/-15.220/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6019/0.1760/0.8520 bfs_best=0.0400 bfs_delta_mean=0.00018 closer/farther=3.0%/2.8% bfs_missing=8.2%
+[PPO][end]   step=148000 update_seconds=151.874
+[PPO][begin] step=152000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.057/1.051/-16.010/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4401/0.2400/0.6600 bfs_best=0.0400 bfs_delta_mean=-0.00003 closer/farther=3.0%/2.8% bfs_missing=7.1%
+[PPO][end]   step=152000 update_seconds=151.987
+[PPO][begin] step=156000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.048/1.084/-13.610/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4282/0.3240/0.5160 bfs_best=0.0400 bfs_delta_mean=0.00000 closer/farther=2.9%/2.9% bfs_missing=5.8%
+[PPO][end]   step=156000 update_seconds=151.861
+[PPO][begin] step=160000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.056/1.095/-16.020/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4052/0.2640/0.5160 bfs_best=0.0400 bfs_delta_mean=-0.00002 closer/farther=2.9%/2.9% bfs_missing=3.4%
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[PPO][end]   step=160000 update_seconds=151.849
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/./src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_160000.pth
+model saved
+Elapsed Time: 1:05:14
+--------------------------------------------------------------------------------------------
+[PPO][begin] step=164000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.046/1.037/-11.610/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4051/0.2840/0.5160 bfs_best=0.0400 bfs_delta_mean=0.00001 closer/farther=2.9%/2.9% bfs_missing=5.0%
+[PPO][end]   step=164000 update_seconds=151.757
+[PPO][begin] step=168000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.051/1.011/-19.220/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.4070/0.2440/0.6000 bfs_best=0.0400 bfs_delta_mean=0.00000 closer/farther=3.1%/2.7% bfs_missing=5.0%
+[PPO][end]   step=168000 update_seconds=151.697
+[PPO][begin] step=172000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.032/0.872/-10.820/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
