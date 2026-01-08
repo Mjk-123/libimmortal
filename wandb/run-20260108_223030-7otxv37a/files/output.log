@@ -1,0 +1,44 @@
+Started training at: 2026-01-08 22:30:32
+============================================================================================
+[PPO][begin] step=164000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.036/0.848/-8.810/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6678/0.5160/0.8520 bfs_best=0.5160 bfs_delta_mean=0.00006 closer/farther=2.7%/3.1% bfs_missing=9.1%
+[PPO][end]   step=164000 update_seconds=152.539
+[Interrupted] saving checkpoint before exit...
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 899, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 791, in train
+    save.atomic_torch_save(lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler), final_path)
+  File "/root/libimmortal/src/libimmortal/samples/PPO/utils/save.py", line 37, in atomic_torch_save
+    obj = make_obj_fn()
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 791, in <lambda>
+    save.atomic_torch_save(lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler), final_path)
+  File "/root/libimmortal/src/libimmortal/samples/PPO/utils/save.py", line 107, in _make_checkpoint
+    "policy_old": ddp.get_module(ppo_agent.policy_old).state_dict() if hasattr(ppo_agent, "policy_old") else None,
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1897, in state_dict
+    module.state_dict(destination=destination, prefix=prefix + name + '.', keep_vars=keep_vars)
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1894, in state_dict
+    self._save_to_state_dict(destination, prefix, keep_vars)
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1803, in _save_to_state_dict
+    destination[prefix + name] = param if keep_vars else param.detach()
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 899, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 791, in train
+    save.atomic_torch_save(lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler), final_path)
+  File "/root/libimmortal/src/libimmortal/samples/PPO/utils/save.py", line 37, in atomic_torch_save
+    obj = make_obj_fn()
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train.py", line 791, in <lambda>
+    save.atomic_torch_save(lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler), final_path)
+  File "/root/libimmortal/src/libimmortal/samples/PPO/utils/save.py", line 107, in _make_checkpoint
+    "policy_old": ddp.get_module(ppo_agent.policy_old).state_dict() if hasattr(ppo_agent, "policy_old") else None,
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1897, in state_dict
+    module.state_dict(destination=destination, prefix=prefix + name + '.', keep_vars=keep_vars)
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1894, in state_dict
+    self._save_to_state_dict(destination, prefix, keep_vars)
+  File "/usr/local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1803, in _save_to_state_dict
+    destination[prefix + name] = param if keep_vars else param.detach()

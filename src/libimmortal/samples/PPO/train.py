@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
 import os
-import glob
 import time
 import argparse
-import re
-import signal
 from datetime import datetime
+
 from typing import Optional, Tuple, Dict, Any
 
 from reward import RewardConfig, RewardShaper, RewardScaler
 
+import libimmortal.samples.PPO.utils.ddp as ddp
+import libimmortal.samples.PPO.utils.save as save
+import libimmortal.samples.PPO.utils.debug as dbg
+import libimmortal.samples.PPO.utils.utilities as utilities
+import libimmortal.samples.PPO.utils.excs as excs
+
+from libimmortal.samples.PPO.utils.signaling import GracefulStop
+
 import gym
 import numpy as np
 import torch
+import torch.distributed as dist
 
 # PPO.py should be in the same directory as this train.py
 from PPO import PPO
@@ -41,99 +48,6 @@ except Exception:
 
 from libimmortal.env import ImmortalSufferingEnv
 
-# DDP
-import torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel as DDP
-
-
-# -------------------------
-# DDP helpers
-# -------------------------
-def ddp_is_enabled() -> bool:
-    return int(os.environ.get("WORLD_SIZE", "1")) > 1
-
-
-def ddp_rank() -> int:
-    return int(os.environ.get("RANK", "0"))
-
-
-def ddp_local_rank() -> int:
-    return int(os.environ.get("LOCAL_RANK", "0"))
-
-
-def ddp_world_size() -> int:
-    return int(os.environ.get("WORLD_SIZE", "1"))
-
-
-def is_main_process() -> bool:
-    return ddp_rank() == 0
-
-
-def ddp_setup():
-    if not ddp_is_enabled():
-        return
-    if torch.cuda.is_available():
-        torch.cuda.set_device(ddp_local_rank())
-    dist.init_process_group(backend="nccl", init_method="env://")
-
-
-def ddp_cleanup():
-    if dist.is_initialized():
-        dist.destroy_process_group()
-
-
-def ddp_barrier():
-    if dist.is_initialized():
-        dist.barrier()
-
-
-def seed_everything(seed: int):
-    s = int(seed) + ddp_rank()
-    np.random.seed(s)
-    torch.manual_seed(s)
-    torch.cuda.manual_seed_all(s)
-
-
-def get_module(m):
-    return m.module if hasattr(m, "module") else m
-
-
-def ddp_wrap_model(m: torch.nn.Module) -> torch.nn.Module:
-    if not ddp_is_enabled():
-        return m
-    if not torch.cuda.is_available():
-        raise RuntimeError("DDP requested (WORLD_SIZE>1) but CUDA is not available.")
-    local_rank = ddp_local_rank()
-    return DDP(
-        m,
-        device_ids=[local_rank],
-        output_device=local_rank,
-        broadcast_buffers=False,
-        find_unused_parameters=False,
-    )
-
-
-# -------------------------
-# Checkpoint helpers
-# -------------------------
-def _checkpoint_dir() -> str:
-    return os.path.join(os.path.dirname(__file__), "checkpoints")
-
-
-def _latest_checkpoint_path(ckpt_dir: str, prefix: str) -> Optional[str]:
-    paths = glob.glob(os.path.join(ckpt_dir, f"{prefix}*.pth"))
-    if not paths:
-        return None
-    paths.sort(key=os.path.getmtime, reverse=True)
-    return paths[0]
-
-
-def _infer_step_from_ckpt_path(ckpt_path: Optional[str], ckpt_prefix: str) -> int:
-    if not ckpt_path:
-        return 0
-    base = os.path.basename(ckpt_path)
-    m = re.match(re.escape(ckpt_prefix) + r"(\d+)\.pth$", base)
-    return int(m.group(1)) if m else 0
 
 
 def _infer_done(done_from_env, info) -> bool:
@@ -146,7 +60,6 @@ def _infer_done(done_from_env, info) -> bool:
             return True
     return done
 
-
 def _get_action_space(env):
     if hasattr(env, "action_space"):
         return env.action_space
@@ -155,306 +68,47 @@ def _get_action_space(env):
     raise AttributeError("Cannot find action_space on env.")
 
 
-class _SigintGuard:
-    """
-    During checkpoint save, ignore SIGINT so we don't corrupt / half-save.
-    """
-    def __enter__(self):
-        self._signals = (signal.SIGINT, signal.SIGTERM)
-        # Prefer signal mask to avoid races (Linux/Unix).
-        self._use_mask = hasattr(signal, "pthread_sigmask")
-        if self._use_mask:
-            self._old_mask = signal.pthread_sigmask(signal.SIG_BLOCK, set(self._signals))
-        else:
-            self._old_handlers = {s: signal.getsignal(s) for s in self._signals}
-            for s in self._signals:
-                signal.signal(s, signal.SIG_IGN)
-        return self
-
-    def __exit__(self, exc_type, exc, tb):
-        if getattr(self, "_use_mask", False):
-            signal.pthread_sigmask(signal.SIG_SETMASK, self._old_mask)
-        else:
-            for s, h in self._old_handlers.items():
-                signal.signal(s, h)
-        return False
-
-
-def atomic_torch_save(make_obj_fn, path: str):
-    tmp = path + ".tmp"
-    obj = make_obj_fn()
-    torch.save(obj, tmp)
-    os.replace(tmp, path)
-
-
-def _optimizer_to_device(opt: torch.optim.Optimizer, device: torch.device):
-    """
-    Move optimizer state tensors onto `device`.
-    This matters when you load optimizer state saved on CPU.
-    """
-    try:
-        for state in opt.state.values():
-            for k, v in state.items():
-                if torch.is_tensor(v):
-                    state[k] = v.to(device)
-    except Exception:
-        # Best-effort: do not crash training on optimizer migration
-        pass
-
-
-def _find_optimizers(ppo_agent) -> Dict[str, torch.optim.Optimizer]:
-    """
-    Try common attribute names used across PPO implementations.
-    Also tries nested under policy module (best-effort).
-    """
-    cands = [
-        "optimizer",
-        "actor_optimizer",
-        "critic_optimizer",
-        "optimizer_actor",
-        "optimizer_critic",
-        "optim",
-        "opt",
-    ]
-
-    out: Dict[str, torch.optim.Optimizer] = {}
-
-    # 1) PPO object itself
-    for name in cands:
-        opt = getattr(ppo_agent, name, None)
-        if opt is not None and hasattr(opt, "state_dict") and hasattr(opt, "load_state_dict"):
-            out[f"ppo::{name}"] = opt
-
-    # 2) policy module (some implementations keep optimizer there)
-    try:
-        pol = getattr(ppo_agent, "policy", None)
-        pol = get_module(pol) if pol is not None else None
-        if pol is not None:
-            for name in cands:
-                opt = getattr(pol, name, None)
-                if opt is not None and hasattr(opt, "state_dict") and hasattr(opt, "load_state_dict"):
-                    out[f"policy::{name}"] = opt
-    except Exception:
-        pass
-
-    return out
-
-
-def _make_checkpoint(
-    ppo_agent,
-    step: int,
-    args,
-    cfg: RewardConfig,
-    reward_scaler: Optional[RewardScaler],
-) -> Dict[str, Any]:
-    """
-    Full checkpoint: model + optimizer(s) + a bit of metadata.
-    """
-    ckpt: Dict[str, Any] = {
-        "format": 2,
-        "step": int(step),
-        "policy_old": get_module(ppo_agent.policy_old).state_dict() if hasattr(ppo_agent, "policy_old") else None,
-        "policy": get_module(ppo_agent.policy).state_dict() if hasattr(ppo_agent, "policy") else None,
-        "args": vars(args),
-        "reward_cfg": getattr(cfg, "__dict__", None),
-    }
-
-    # Optimizers (best-effort)
-    opts = _find_optimizers(ppo_agent)
-    for name, opt in opts.items():
-        ckpt[f"opt::{name}"] = opt.state_dict()
-
-    # Optional: reward scaler stats (only meaningful if you use it)
-    if reward_scaler is not None:
-        try:
-            ckpt["reward_scaler"] = {
-                "t": int(getattr(reward_scaler, "t", 0)),
-                "ret": float(getattr(reward_scaler, "ret", 0.0)),
-                "ret_rms_mean": float(np.asarray(reward_scaler.ret_rms.mean).reshape(())),
-                "ret_rms_var": float(np.asarray(reward_scaler.ret_rms.var).reshape(())),
-                "ret_rms_count": float(getattr(reward_scaler.ret_rms, "count", 1e-4)),
-                "gamma": float(getattr(reward_scaler, "gamma", 0.99)),
-            }
-        except Exception:
-            pass
-
-    # Optional: RNG states (helps exact reproducibility)
-    try:
-        ckpt["rng"] = {
-            "torch": torch.random.get_rng_state(),
-            "numpy": np.random.get_state(),
-            "cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
-        }
-    except Exception:
-        pass
-
-    return ckpt
-
-
-def _load_checkpoint_into(
-    ppo_agent,
-    obj: Any,
-    model_device: torch.device,
-    reward_scaler: Optional[RewardScaler],
-) -> int:
-    """
-    Load either:
-      - old format: a plain state_dict (weights only)
-      - new format: dict with policy/policy_old + opt states
-    Returns loaded step if available, else 0.
-    """
-    # Old format: state_dict directly (dict of tensors)
-    if not isinstance(obj, dict) or ("policy_old" not in obj and "policy" not in obj and "format" not in obj):
-        get_module(ppo_agent.policy).load_state_dict(obj)
-        get_module(ppo_agent.policy_old).load_state_dict(obj)
-        return 0
-
-    # New-ish format
-    if obj.get("policy_old") is not None and hasattr(ppo_agent, "policy_old"):
-        get_module(ppo_agent.policy_old).load_state_dict(obj["policy_old"])
-    if obj.get("policy") is not None and hasattr(ppo_agent, "policy"):
-        get_module(ppo_agent.policy).load_state_dict(obj["policy"])
-
-    # Optimizers
-    opts = _find_optimizers(ppo_agent)
-    for name, opt in opts.items():
-        key = f"opt::{name}"
-        if key in obj:
-            try:
-                opt.load_state_dict(obj[key])
-                _optimizer_to_device(opt, model_device)
-            except Exception:
-                pass
-
-    # Reward scaler stats (optional)
-    if reward_scaler is not None and isinstance(obj.get("reward_scaler", None), dict):
-        rs = obj["reward_scaler"]
-        try:
-            reward_scaler.t = int(rs.get("t", 0))
-            reward_scaler.ret = float(rs.get("ret", 0.0))
-            reward_scaler.ret_rms.mean = np.array(rs.get("ret_rms_mean", 0.0), dtype=np.float64)
-            reward_scaler.ret_rms.var = np.array(rs.get("ret_rms_var", 1.0), dtype=np.float64)
-            reward_scaler.ret_rms.count = float(rs.get("ret_rms_count", 1e-4))
-        except Exception:
-            pass
-
-    # RNG restore (optional)
-    try:
-        rng = obj.get("rng", None)
-        if isinstance(rng, dict):
-            if rng.get("torch", None) is not None:
-                torch.random.set_rng_state(rng["torch"])
-            if rng.get("numpy", None) is not None:
-                np.random.set_state(rng["numpy"])
-            if torch.cuda.is_available() and rng.get("cuda", None) is not None:
-                torch.cuda.set_rng_state_all(rng["cuda"])
-    except Exception:
-        pass
-
-    return int(obj.get("step", 0))
-
-
-# -------------------------
-# Debug helpers (Player.log)
-# -------------------------
-def _find_latest_player_log() -> Optional[str]:
-    # common default location on Linux
-    pats = [
-        "/root/.config/unity3d/DefaultCompany/**/Player.log",
-        os.path.expanduser("~/.config/unity3d/DefaultCompany/**/Player.log"),
-    ]
-    cands = []
-    for p in pats:
-        cands.extend(glob.glob(p, recursive=True))
-    if not cands:
-        return None
-    cands.sort(key=os.path.getmtime, reverse=True)
-    return cands[0]
-
-
-def _tail_file(path: str, n: int = 200) -> str:
-    try:
-        with open(path, "rb") as f:
-            data = f.read()
-        lines = data.splitlines()[-n:]
-        return "\n".join([ln.decode("utf-8", errors="replace") for ln in lines])
-    except Exception as e:
-        return f"[tail failed] {repr(e)}"
-
-
-def _print_player_log_tail(prefix: str, n: int = 200):
-    if not is_main_process():
-        return
-    pl = _find_latest_player_log()
-    if pl is None:
-        print(f"{prefix} no Player.log found under DefaultCompany/**/Player.log")
-        return
-    print(f"{prefix} Player.log: {pl}")
-    print(f"{prefix} --- tail -n {n} ---")
-    print(_tail_file(pl, n=n))
-    print(f"{prefix} --- end tail ---")
-
-
-# -------------------------
-# Observation preprocessing
-# -------------------------
-def _make_map_and_vec(obs) -> Tuple[np.ndarray, np.ndarray, int]:
-    """
-    Return:
-      id_map: (H,W) uint8 (IDs)
-      vec_obs: (D,) float32
-      K: number of IDs in palette (num_ids)
-    """
-    from libimmortal.utils import colormap_to_ids_and_onehot, parse_observation
-
-    graphic_obs, vector_obs = parse_observation(obs)
-    id_map, onehot = colormap_to_ids_and_onehot(graphic_obs)
-
-    id_map = np.asarray(id_map, dtype=np.uint8)
-    vec_obs = np.asarray(vector_obs, dtype=np.float32).reshape(-1)
-
-    K = int(onehot.shape[0])
-    return id_map, vec_obs, K
-
-
-def _format_action_for_env(action_np, action_space):
-    if isinstance(action_space, gym.spaces.Box):
-        a = np.asarray(action_np, dtype=np.float32).reshape(action_space.shape)
-        low = getattr(action_space, "low", None)
-        high = getattr(action_space, "high", None)
-        if low is not None and high is not None:
-            a = np.clip(a, low, high)
-        return a
-
-    if isinstance(action_space, gym.spaces.Discrete):
-        return int(np.asarray(action_np).item())
-
-    if isinstance(action_space, gym.spaces.MultiDiscrete):
-        a = np.asarray(action_np, dtype=np.int64).reshape(action_space.shape)
-        a = np.minimum(np.maximum(a, 0), action_space.nvec - 1)
-        return a
-
-    raise TypeError(f"Unsupported action space: {type(action_space)}")
-
-
 # -------------------------
 # Training
 # -------------------------
+
 def train(args):
     print("============================================================================================")
 
-    ddp_setup()
-    rank = ddp_rank()
-    local_rank = ddp_local_rank()
-    world = ddp_world_size()
+    # --- graceful stop (NO KeyboardInterrupt on SIGINT/SIGTERM) ---
+    from libimmortal.samples.PPO.utils.signaling import GracefulStop
+    stopper = GracefulStop()
+    stopper.install()
+
+    ddp.ddp_setup()
+    rank = ddp.ddp_rank()
+    local_rank = ddp.ddp_local_rank()
+    world = ddp.ddp_world_size()
 
     if args.seed is not None:
-        seed_everything(int(args.seed))
+        ddp.seed_everything(int(args.seed))
 
     # Per-rank device
     device = torch.device(f"cuda:{local_rank}" if torch.cuda.is_available() else "cpu")
-    if is_main_process():
+    if ddp.is_main_process():
         print(f"[Device] rank={rank} local_rank={local_rank} device={device}")
+
+    # Helper: sync "stop requested" across ranks to avoid barrier hangs
+    def _ddp_stop_any() -> bool:
+        if not stopper.should_stop():
+            local_flag = 0
+        else:
+            local_flag = 1
+
+        if not ddp.ddp_is_enabled() or (not dist.is_initialized()):
+            return bool(local_flag)
+
+        # NCCL requires CUDA tensors.
+        backend = dist.get_backend()
+        tdev = device if (backend == "nccl" and torch.cuda.is_available()) else torch.device("cpu")
+        t = torch.tensor([local_flag], dtype=torch.int32, device=tdev)
+        dist.all_reduce(t, op=dist.ReduceOp.MAX)
+        return bool(int(t.item()))
 
     # Unity env control
     port_stride = int(args.port_stride)
@@ -465,7 +119,7 @@ def train(args):
     restart_box = {"id": 0}
     last_port_box = {"port": int(args.port)}
 
-    def _compute_port() -> int:
+    def _compute_port(args) -> int:
         return (
             int(args.port)
             + int(local_rank) * port_stride
@@ -473,7 +127,7 @@ def train(args):
         )
 
     def _make_env():
-        p = _compute_port()
+        p = _compute_port(args)
         last_port_box["port"] = p
         print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p}", flush=True)
 
@@ -500,12 +154,11 @@ def train(args):
         return env, p
 
     def _restart_env(reason: str):
-        # rank-local restart counter
         restart_box["id"] += 1
         if restart_box["id"] > max_env_restarts:
             raise RuntimeError(f"[Env] exceeded max_env_restarts={max_env_restarts} (last reason={reason})")
 
-        if is_main_process():
+        if ddp.is_main_process():
             print(f"[Env] restart #{restart_box['id']} reason={reason}")
 
         try:
@@ -513,52 +166,24 @@ def train(args):
         except Exception:
             pass
 
-        # Helpful debug: tail player log when something bad happens
-        _print_player_log_tail(prefix=f"[Env][{reason}]", n=int(args.player_log_tail))
-
+        dbg._print_player_log_tail(prefix=f"[Env][{reason}]", n=int(args.player_log_tail))
         new_env, new_port = _make_env()
         return new_env, new_port
-
-    def _is_timeout_exc(e: Exception) -> bool:
-        return (UnityTimeOutException is not None) and isinstance(e, UnityTimeOutException)
-
-    def _is_unity_env_unloaded_exc(e: Exception) -> bool:
-        if UnityEnvironmentException is None:
-            return False
-        if not isinstance(e, UnityEnvironmentException):
-            return False
-        msg = str(e)
-        # Be conservative: restart only for common transient/comm/unloaded cases
-        if "No Unity environment is loaded" in msg:
-            return True
-        if "timed out" in msg.lower():
-            return True
-        if "communicator" in msg.lower():
-            return True
-        return False
-
-    def _is_restartable_exc(e: Exception) -> bool:
-        # In practice, ML-Agents comm errors can surface like these.
-        restartable = (
-            _is_timeout_exc(e)
-            or _is_unity_env_unloaded_exc(e)
-            or isinstance(e, (BrokenPipeError, ConnectionResetError, EOFError))
-        )
-        return bool(restartable)
-    
-    def _is_step_after_done_exc(e: Exception) -> bool:
-        if UnityGymException is None or not isinstance(e, UnityGymException):
-            return False
-        return "already returned done = True" in str(e)
 
     def _safe_reset():
         nonlocal env, port
         while True:
+            if _ddp_stop_any():
+                # Stop requested: just try once (or bail) to avoid hanging forever.
+                try:
+                    return env.reset()
+                except Exception:
+                    raise
             try:
                 return env.reset()
             except Exception as e:
-                if _is_restartable_exc(e):
-                    if is_main_process():
+                if excs._is_restartable_exc(e):
+                    if ddp.is_main_process():
                         print(f"[Env][reset] exception={repr(e)} -> restart")
                     env, port = _restart_env(reason="reset")
                     continue
@@ -568,7 +193,6 @@ def train(args):
     env, port = _make_env()
     env_tag = "ImmortalSufferingEnv"
 
-    # Runner-style: total interaction steps PER RANK
     MAX_STEPS = int(args.max_steps)
 
     # PPO hyperparameters
@@ -591,14 +215,14 @@ def train(args):
     base_step = 0
     step = 0  # for finally
 
-    # Infer dims from first reset (robust reset)
+    # Infer dims from first reset
     obs = _safe_reset()
-    id_map, vec_obs, K = _make_map_and_vec(obs)
+    id_map, vec_obs, K = utilities._make_map_and_vec(obs)
 
     expected_id_shape = tuple(id_map.shape)
     expected_vec_dim = int(vec_obs.shape[0])
 
-    # ----- For Debugging -----
+    # ----- Debug stats -----
     bfs_n = 0
     bfs_missing = 0
     bfs_sum = 0.0
@@ -627,7 +251,7 @@ def train(args):
 
     num_ids = int(K)
 
-    if is_main_process():
+    if ddp.is_main_process():
         print(f"[DDP] world_size={world}, rank={rank}, local_rank={local_rank}")
         print(f"[Env] base_port={args.port}, this_rank_port={port}, port_stride={port_stride}, no_graphics={no_graphics}")
         print(f"[Obs] num_ids(K)={num_ids}, vec_dim={expected_vec_dim}, id_shape={expected_id_shape}")
@@ -635,24 +259,23 @@ def train(args):
 
     def _make_map_and_vec_checked(obs_):
         nonlocal expected_vec_dim, expected_id_shape, num_ids
-        idm, vec, k = _make_map_and_vec(obs_)
+        idm, vec, k = utilities._make_map_and_vec(obs_)
 
         if tuple(idm.shape) != expected_id_shape:
-            if is_main_process():
+            if ddp.is_main_process():
                 print(f"[Obs][WARN] id_map shape changed: got={idm.shape}, expected={expected_id_shape}")
             expected_id_shape = tuple(idm.shape)
 
         if int(vec.shape[0]) != expected_vec_dim:
-            if is_main_process():
+            if ddp.is_main_process():
                 print(f"[Obs][WARN] vec_dim mismatch: got={vec.shape[0]}, expected={expected_vec_dim} (will pad/truncate)")
             if vec.shape[0] > expected_vec_dim:
                 vec = vec[:expected_vec_dim]
             else:
                 vec = np.pad(vec, (0, expected_vec_dim - vec.shape[0]), mode="constant")
 
-        # K mismatch is rare; keep first K as authoritative
         if int(k) != int(num_ids):
-            if is_main_process():
+            if ddp.is_main_process():
                 print(f"[Obs][WARN] K changed: got={k}, expected={num_ids} (keeping expected)")
         return idm, vec, k
 
@@ -667,18 +290,16 @@ def train(args):
         action_nvec=action_nvec,
     )
 
-    # Make sure both networks live on the correct per-rank device
     if hasattr(ppo_agent, "policy"):
-        get_module(ppo_agent.policy).to(device)
+        ddp.get_module(ppo_agent.policy).to(device)
     if hasattr(ppo_agent, "policy_old"):
-        get_module(ppo_agent.policy_old).to(device)
+        ddp.get_module(ppo_agent.policy_old).to(device)
 
     # DDP: wrap ppo_agent.policy (NOT policy_old)
-    if hasattr(ppo_agent, "policy") and ddp_is_enabled():
-        ddp_pol = ddp_wrap_model(ppo_agent.policy)
-        base_pol = get_module(ddp_pol)
+    if hasattr(ppo_agent, "policy") and ddp.ddp_is_enabled():
+        ddp_pol = ddp.ddp_wrap_model(ppo_agent.policy)
+        base_pol = ddp.get_module(ddp_pol)
 
-        # Make DDP forward run the same graph as evaluate
         if hasattr(base_pol, "evaluate"):
             if not hasattr(base_pol, "_orig_forward"):
                 base_pol._orig_forward = base_pol.forward
@@ -689,7 +310,6 @@ def train(args):
 
             ddp_pol.evaluate = _ddp_evaluate  # type: ignore
 
-        # Patch state_dict/load_state_dict so PPO can use them without "module." prefix trouble
         def _state_dict_no_prefix(*a, **kw):
             return base_pol.state_dict(*a, **kw)
 
@@ -718,7 +338,6 @@ def train(args):
     shaper = RewardShaper(cfg)
     shaper.reset(vec_obs, id_map)
 
-    # IMPORTANT: reward_scaler is ALWAYS defined to avoid NameError in logs/config.
     reward_scaler = RewardScaler(
         gamma=gamma,
         clip=5.0,
@@ -727,25 +346,23 @@ def train(args):
         warmup_steps=10000,
     )
 
-    # Checkpoints (only rank0 writes)
-    ckpt_dir = _checkpoint_dir()
-    if is_main_process():
+    ckpt_dir = save._checkpoint_dir()
+    if ddp.is_main_process():
         os.makedirs(ckpt_dir, exist_ok=True)
 
     ckpt_prefix = f"PPO_{env_tag}_seed{int(args.seed) if args.seed is not None else 0}_"
-    if is_main_process():
+    if ddp.is_main_process():
         print("checkpoint dir:", ckpt_dir)
 
-    # Determine device from policy_old params (after moving to device)
-    model_device = next(get_module(ppo_agent.policy_old).parameters()).device
+    model_device = next(ddp.get_module(ppo_agent.policy_old).parameters()).device
 
     # Resume
     if args.resume:
         ckpt_to_load = args.checkpoint
-        if ckpt_to_load is None and is_main_process():
-            ckpt_to_load = _latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
+        if ckpt_to_load is None and ddp.is_main_process():
+            ckpt_to_load = save._latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
 
-        if ddp_is_enabled():
+        if ddp.ddp_is_enabled():
             obj_list = [ckpt_to_load]
             dist.broadcast_object_list(obj_list, src=0)
             ckpt_to_load = obj_list[0]
@@ -753,14 +370,14 @@ def train(args):
         if ckpt_to_load is None:
             raise FileNotFoundError(f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}")
 
-        inferred_step = _infer_step_from_ckpt_path(str(ckpt_to_load), ckpt_prefix)
+        inferred_step = save._infer_step_from_ckpt_path(str(ckpt_to_load), ckpt_prefix)
 
-        if is_main_process():
+        if ddp.is_main_process():
             print(f"[Resume] loading: {ckpt_to_load}")
             print(f"[Resume] inferred base_step(from filename)={inferred_step}")
 
         obj = torch.load(ckpt_to_load, map_location="cpu")
-        loaded_step = _load_checkpoint_into(
+        loaded_step = save._load_checkpoint_into(
             ppo_agent,
             obj,
             model_device=model_device,
@@ -770,14 +387,14 @@ def train(args):
         base_step = loaded_step if loaded_step > 0 else inferred_step
         step = base_step
 
-        if is_main_process():
+        if ddp.is_main_process():
             print(f"[Resume] base_step(used)={base_step} (loaded_step={loaded_step})")
 
-        ddp_barrier()
+        ddp.ddp_barrier()
 
     # Optional wandb (rank0 only)
     wandb = None
-    if args.wandb and is_main_process():
+    if args.wandb and ddp.is_main_process():
         import wandb as _wandb
         wandb = _wandb
         wandb.init(
@@ -820,7 +437,7 @@ def train(args):
 
     # Runner-style main loop
     start_time = datetime.now().replace(microsecond=0)
-    if is_main_process():
+    if ddp.is_main_process():
         print("Started training at:", start_time)
         print("============================================================================================")
 
@@ -837,7 +454,7 @@ def train(args):
         vec_t = torch.from_numpy(cur_vec_np).to(model_device, dtype=torch.float32).unsqueeze(0)
 
         with torch.no_grad():
-            action_t, logp_t, value_t = get_module(ppo_agent.policy_old).act(map_t, vec_t)
+            action_t, logp_t, value_t = ddp.get_module(ppo_agent.policy_old).act(map_t, vec_t)
 
         a_cpu = action_t.squeeze(0).detach().cpu()
         lp_cpu = logp_t.squeeze(0).detach().cpu()
@@ -847,7 +464,6 @@ def train(args):
 
     # PPO update debug counters
     gae_lambda = 0.95
-
     upd_steps = 0
     upd_terminals = 0
     upd_goal_hits = 0
@@ -870,7 +486,6 @@ def train(args):
         bfs_max = float("-inf")
         bfs_missing = 0
 
-        # Reset BFS-delta window stats
         dd_n = 0
         dd_sum = 0.0
         closer_n = 0
@@ -896,7 +511,7 @@ def train(args):
                 upd_scaler_clip_hits += 1
 
     def _print_update_pre(step_i: int, buf_len_pre: int):
-        if not is_main_process():
+        if not ddp.is_main_process():
             return
 
         term_n = int(sum(1 for t in ppo_agent.buffer.is_terminals if t))
@@ -944,23 +559,32 @@ def train(args):
         )
 
     def _print_update_post(step_i: int, dt_s: float):
-        if is_main_process():
+        if ddp.is_main_process():
             print(f"[PPO][end]   step={step_i} update_seconds={dt_s:.3f}")
 
     timeouts = 0
     restarts = 0
-
-    # Global best BFS distance (normalized)
     bfs_best = float("inf")
+
+    interrupted = False
 
     try:
         for local_step in range(1, MAX_STEPS + 1):
+            # Stop check (synced)
+            if _ddp_stop_any():
+                interrupted = True
+                break
+
             step = base_step + local_step
 
             # Retry loop: restart env on this rank and retry this step if step/reset fails.
             while True:
+                if _ddp_stop_any():
+                    interrupted = True
+                    break
+
                 a_cpu, lp_cpu, v_cpu, action_np = _select_action(cur_id_map, cur_vec_obs)
-                action_env = _format_action_for_env(action_np, action_space)
+                action_env = utilities._format_action_for_env(action_np, action_space)
 
                 try:
                     obs, raw_reward, done, info = env.step(action_env)
@@ -973,34 +597,34 @@ def train(args):
                     break
 
                 except Exception as e:
-                    # UnityGym: if env has returned done=True previously, we MUST reset before stepping again.
-                    if _is_step_after_done_exc(e):
-                        if is_main_process():
+                    if excs._is_step_after_done_exc(e):
+                        if ddp.is_main_process():
                             print(f"[Env][step] step-after-done -> reset and retry: {repr(e)}")
-                        obs = _safe_reset(env)
+                        obs = _safe_reset()
                         cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                         shaper.reset(cur_vec_obs, cur_id_map)
-                        # Episode counters are now stale; reset them (logging-only).
                         episode_reward = 0.0
                         episode_raw_reward = 0.0
                         episode_len = 0
                         episode_idx += 1
                         continue
 
-                    if _is_restartable_exc(e):
-                        timeouts += int(_is_timeout_exc(e))
+                    if excs._is_restartable_exc(e):
+                        timeouts += int(excs._is_timeout_exc(e))
                         restarts += 1
-                        if is_main_process():
+                        if ddp.is_main_process():
                             print(f"[Env][step] exception={repr(e)} -> restart (timeouts={timeouts}, restarts={restarts})")
                         env, port = _restart_env(reason="step")
-                        time.sleep(0.5)
+                        stopper.sleep_poll(0.5)
                         obs = _safe_reset()
                         cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                         shaper.reset(cur_vec_obs, cur_id_map)
                         continue
                     raise
 
-            done = _infer_done(done, info)
+            if interrupted:
+                break
+
             done_env = _infer_done(done, info)
             next_id_map, next_vec_obs, _ = _make_map_and_vec_checked(obs)
 
@@ -1009,11 +633,11 @@ def train(args):
             elif not isinstance(info, dict):
                 info = {"env_info": info}
 
-            shaped_reward = float(shaper(raw_reward, next_vec_obs, next_id_map, done_env, info))   
+            shaped_reward = float(shaper(raw_reward, next_vec_obs, next_id_map, done_env, info))
             is_goal = (float(raw_reward) >= float(args.success_if_raw_reward_ge))
             done_for_buffer = (bool(done_env) or bool(shaper.virtual_done) or bool(is_goal))
 
-            # Debug: BFS progress stats (cheap, no extra BFS compute)
+            # Debug: BFS progress stats
             if getattr(shaper, "dbg_has_bfs", False) and (shaper.dbg_bfs_dist is not None):
                 d = float(shaper.dbg_bfs_dist)
                 bfs_n += 1
@@ -1038,8 +662,6 @@ def train(args):
             else:
                 scaled_reward = float(shaped_reward)
 
-            done = done_for_buffer
-
             ppo_agent.buffer.rewards.append(float(scaled_reward))
             ppo_agent.buffer.is_terminals.append(bool(done_for_buffer))
 
@@ -1049,7 +671,7 @@ def train(args):
             episode_raw_reward += float(raw_reward)
             episode_len += 1
 
-            if is_goal and is_main_process():
+            if is_goal and ddp.is_main_process():
                 print(
                     f"[GOAL] step={step} raw={float(raw_reward):.10f} shaped={shaped_reward:.3f} scaled={scaled_reward:.3f} "
                     f"done_env={int(done_env)} done_buf={int(done_for_buffer)} virtual_done={int(bool(shaper.virtual_done))} "
@@ -1059,22 +681,26 @@ def train(args):
 
             # PPO update (ALL ranks call update; DDP will sync gradients)
             if step % update_timestep == 0:
-                ddp_barrier()
+                # Decide once (synced) whether to proceed into barrier/update.
+                if _ddp_stop_any():
+                    interrupted = True
+                    break
+
+                ddp.ddp_barrier()
                 t0 = time.time()
 
-                # last_value for bootstrapping when rollout ends non-terminal
                 with torch.no_grad():
                     if done_for_buffer:
                         ppo_agent.buffer.last_value = 0.0
                     else:
                         map_t = torch.from_numpy(next_id_map).to(model_device, dtype=torch.long).unsqueeze(0)
                         vec_t = torch.from_numpy(next_vec_obs).to(model_device, dtype=torch.float32).unsqueeze(0)
-                        po = get_module(ppo_agent.policy_old)
+                        po = ddp.get_module(ppo_agent.policy_old)
                         feat = po.encode(map_t, vec_t)
                         v = po.critic_head(feat)
                         ppo_agent.buffer.last_value = float(v.item())
 
-                if args.dump_id_map and is_main_process():
+                if args.dump_id_map and ddp.is_main_process():
                     np.savetxt(args.dump_id_map, cur_id_map, delimiter=",", fmt="%d")
 
                 buf_len_pre = int(len(ppo_agent.buffer.rewards))
@@ -1105,7 +731,7 @@ def train(args):
                     )
 
                 _reset_update_counters()
-                ddp_barrier()
+                ddp.ddp_barrier()
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):
@@ -1114,13 +740,18 @@ def train(args):
                     if wandb is not None:
                         wandb.log({"train/action_std": float(getattr(ppo_agent, "action_std", np.nan))}, step=int(step))
 
-            # Save checkpoint (rank0 only) - atomic
-            if (step % save_model_freq == 0) and is_main_process():
+            # Save checkpoint (rank0 only) - atomic + ignore signals
+            if (step % save_model_freq == 0) and ddp.is_main_process():
                 ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
                 print("--------------------------------------------------------------------------------------------")
                 print("saving model at:", ckpt_path)
-                with _SigintGuard():
-                    atomic_torch_save(lambda: _make_checkpoint(ppo_agent, step, args, cfg, reward_scaler), ckpt_path)
+
+                with stopper.ignore_signals():
+                    save.atomic_torch_save(
+                        lambda: save._make_checkpoint(ppo_agent, step, args, cfg, reward_scaler),
+                        ckpt_path,
+                    )
+
                 print("model saved")
                 print("Elapsed Time:", datetime.now().replace(microsecond=0) - start_time)
                 print("--------------------------------------------------------------------------------------------")
@@ -1172,32 +803,38 @@ def train(args):
             else:
                 cur_id_map, cur_vec_obs = next_id_map, next_vec_obs
 
+        # loop end
+
     except KeyboardInterrupt:
-        if is_main_process():
-            print("\n[Interrupted] saving checkpoint before exit...")
+        # This should rarely happen now (SIGINT handler no longer raises), but keep as safety.
+        interrupted = True
+        if ddp.is_main_process():
+            print("\n[KeyboardInterrupt] requested stop (will save in finally).")
 
     except Exception as e:
-        if is_main_process():
+        if ddp.is_main_process():
             print(f"\n[FATAL] exception={repr(e)}")
-        _print_player_log_tail(prefix="[FATAL]", n=int(args.player_log_tail))
+        dbg._print_player_log_tail(prefix="[FATAL]", n=int(args.player_log_tail))
         raise
 
     finally:
-        # Final save (rank0 only) - atomic + guard
-        if is_main_process():
-            with _SigintGuard():
+        # Final save (rank0 only) - atomic + ignore signals
+        if ddp.is_main_process():
+            try:
                 final_step = int(step) if int(step) > 0 else int(base_step)
                 final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_step}.pth")
-                atomic_torch_save(lambda: _make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler), final_path)
+                if interrupted:
+                    print("[Exit] stop requested -> saving final checkpoint:", final_path)
+                with stopper.ignore_signals():
+                    save.atomic_torch_save(
+                        lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler),
+                        final_path,
+                    )
                 print("Final model saved at:", final_path)
+            except Exception as e:
+                print(f"[Exit][WARN] failed to save final checkpoint: {repr(e)}")
 
-        # Don't hard-barrier in finally (can hang if ranks died)
-        try:
-            ddp_barrier()
-        except Exception as e:
-            if is_main_process():
-                print(f"[DDP] barrier skipped in finally due to: {repr(e)}")
-
+        # DO NOT barrier here (can hang if any rank already died)
         try:
             env.close()
         except Exception:
@@ -1207,7 +844,7 @@ def train(args):
             wandb.finish()
 
         end_time = datetime.now().replace(microsecond=0)
-        if is_main_process():
+        if ddp.is_main_process():
             print("============================================================================================")
             print("Started training at:", start_time)
             print("Finished training at:", end_time)
@@ -1215,7 +852,8 @@ def train(args):
             print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
             print("============================================================================================")
 
-        ddp_cleanup()
+        ddp.ddp_cleanup()
+
 
 
 def build_argparser():
@@ -1233,7 +871,7 @@ def build_argparser():
 
     # Graphics flags: default is headless (no_graphics=True)
     g = p.add_mutually_exclusive_group()
-    g.add_argument("--no_graphics", dest="no_graphics", action="store_true", default=True)
+    g.add_argument("--no_graphics", dest="no_graphics", action="store_true", default=False)
     g.add_argument("--graphics", dest="no_graphics", action="store_false")
 
     p.add_argument("--unity_timeout_wait", type=int, default=120)
