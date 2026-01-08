@@ -172,7 +172,8 @@ Included training visualizing library "tensorflow" and "wandb"
 1. **How to run**
 Use torchrun for DDP. We used 4 nodes for one run.
 
-``` torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
+```
+torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
   --port 5005 --port_stride 50 \
   --save_model_freq [save_frequency] --wandb [Optional]
 ```
@@ -180,7 +181,8 @@ Use torchrun for DDP. We used 4 nodes for one run.
 2. **Use checkpoint and resume training.**
 Use ```--resume``` and ```--checkpoint``` flag to resume your learning continuously.
 
-``` torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
+```
+torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/samples/PPO/train.py \
   --port 5005 --port_stride 50 \
   --save_model_freq [save_frequency] --wandb [Optional] \
   --resume --checkpoint [checkpoint_directory]
