@@ -113,21 +113,16 @@ def train(args):
 
     # DDP barrier with timeout
     ddp_barrier_timeout_s = float(getattr(args, "ddp_barrier_timeout_s", 600.0))  # default: 10 min
-    ddp_step_sync_every = int(getattr(args, "ddp_step_sync_every", 1))            # default: sync every step
+    ddp_step_sync_every = int(getattr(args, "ddp_step_sync_every", 0))            # default: sync every step
+    # IMPORTANT: pre/post-update barriers are optional; keeping them always-on can deadlock if ranks diverge.
+    use_update_barriers = bool(getattr(args, "ddp_update_barriers", False))       # default: False
+
 
     # Helper: sync "stop requested" across ranks
     def _ddp_stop_any() -> bool:
-        local_flag = 0 if (not stopper.should_stop()) else 1
-
-        if not ddp.ddp_is_enabled() or (not dist.is_initialized()):
-            return bool(local_flag)
-
-        # NCCL requires CUDA tensors.
-        backend = dist.get_backend()
-        tdev = device if (backend == "nccl" and torch.cuda.is_available()) else torch.device("cpu")
-        t = torch.tensor([local_flag], dtype=torch.int32, device=tdev)
-        dist.all_reduce(t, op=dist.ReduceOp.MAX)
-        return bool(int(t.item()))
+        # IMPORTANT: must be non-collective.
+        # Calling all_reduce here can deadlock if ranks diverge (e.g., some ranks in reset).
+        return bool(stopper.should_stop())
     
     def _ddp_any_flag(local_flag: int) -> bool:
         local_flag = int(bool(local_flag))
@@ -238,7 +233,8 @@ def train(args):
     def _safe_reset():
         nonlocal env, port, step
         while True:
-            stop_requested = _ddp_stop_any()
+            # Local-only stop flag (no collectives inside reset path).
+            stop_requested = bool(stopper.should_stop())
 
             # Always close + recreate env (no env.reset()).
             try:
@@ -269,11 +265,18 @@ def train(args):
                 except Exception as e:
                     if ddp.is_main_process():
                         print(f"[Env][reset][WARN] invalid bootstrap obs -> recreate: {repr(e)}", flush=True)
-                    # Recreate env and retry
+                    # Recreate env WITH a new restart_id/port.
+                     # Otherwise we may loop forever on the same bad port/state.
+                    restart_box["id"] += 1
+                    if restart_box["id"] > max_env_restarts:
+                       raise RuntimeError(
+                            f"[Env] exceeded max_env_restarts={max_env_restarts} (bootstrap_invalid)"
+                        )
                     try:
                         env.close()
                     except Exception:
                         pass
+                    stopper.sleep_poll(0.5)
                     env, port = _make_env()
                     continue
 
@@ -947,7 +950,8 @@ def train(args):
                     interrupted = True
                     break
 
-                ddp._ddp_barrier(f"pre_update@{int(step)}", ddp_barrier_timeout_s)
+                if use_update_barriers:
+                     ddp._ddp_barrier(f"pre_update@{int(step)}", ddp_barrier_timeout_s)
                 t0 = time.time()
 
                 with torch.no_grad():
@@ -992,7 +996,8 @@ def train(args):
                     )
 
                 _reset_update_counters()
-                ddp._ddp_barrier(f"post_update@{int(step)}", ddp_barrier_timeout_s)
+                if use_update_barriers:
+                    ddp._ddp_barrier(f"post_update@{int(step)}", ddp_barrier_timeout_s)
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):

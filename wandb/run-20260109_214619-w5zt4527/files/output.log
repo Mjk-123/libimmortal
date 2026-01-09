@@ -1,0 +1,520 @@
+[Env][reset] closing... step=166837 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.090s
+[Env][reset] closing... step=167837 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.139s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step168777.npz
+[Env][reset] closing... step=168777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.068s
+[Env][reset] closing... step=169777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.049s
+[Env][reset] closing... step=170777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.076s
+[Env][reset] closing... step=171777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.036s
+[Env][reset] closing... step=172777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.049s
+[Env][reset] closing... step=173777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.089s
+[Env][reset] closing... step=174777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.108s
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[Env][reset] closing... step=175777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.026s
+[Env][reset] closing... step=176777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.048s
+[Env][reset] closing... step=177777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.056s
+[Env][reset] closing... step=178777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.042s
+[Env][reset] closing... step=179777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.065s
+[Env][reset] closing... step=180777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.043s
+[Env][reset] closing... step=181777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.039s
+[Env][reset] closing... step=182777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.046s
+[Env][reset] closing... step=183777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.053s
+[Env][reset] closing... step=184777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=185777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.065s
+[Env][reset] closing... step=186777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.031s
+[Env][reset] closing... step=187777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.056s
+[Env][reset] closing... step=188777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.080s
+[Env][reset] closing... step=189777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.047s
+[Env][reset] closing... step=190777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.037s
+[Env][reset] closing... step=191777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.166s
+[Env][reset] closing... step=192777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.063s
+[Env][reset] closing... step=193777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.081s
+[Env][reset] closing... step=194777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.039s
+[Env][reset] closing... step=195777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.059s
+[Env][reset] closing... step=196777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.081s
+[Env][reset] closing... step=197777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.065s
+[Env][reset] closing... step=198777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.070s
+[Env][reset] closing... step=199777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.090s
+[Env][reset] closing... step=200777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.043s
+[Env][reset] closing... step=201777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.057s
+[Env][reset] closing... step=202777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.087s
+[Env][reset] closing... step=203777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.081s
+[Env][reset] closing... step=204777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.058s
+[Env][reset] closing... step=205777 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.074s
+[Env][reset] closing... step=206777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.048s
+[Env][reset] closing... step=207777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.060s
+[Env][reset] closing... step=208777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.063s
+[Env][reset] closing... step=209777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.037s
+[Env][reset] closing... step=210777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.051s
+[Env][reset] closing... step=211777 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.066s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step212522.npz
+[Env][reset] closing... step=212522 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.139s
+[Env][reset] closing... step=213522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.048s
+[Env][reset] closing... step=214522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.078s
+[Env][reset] closing... step=215522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.045s
+[Env][reset] closing... step=216522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.041s
+[Env][reset] closing... step=217522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.037s
+[Env][reset] closing... step=218522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.071s
+[Env][reset] closing... step=219522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.051s
+[Env][reset] closing... step=220522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.051s
+[Env][reset] closing... step=221522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.097s
+[Env][reset] closing... step=222522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.051s
+[Env][reset] closing... step=223522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.080s
+[Env][reset] closing... step=224522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.081s
+[Env][reset] closing... step=225522 port=5005
+[Env][reset] closed in 0.368s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.074s
+[Env][reset] closing... step=226522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.045s
+[Env][reset] closing... step=227522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.044s
+[Env][reset] closing... step=228522 port=5005
+[Env][reset] closed in 0.368s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.092s
+[Env][reset] closing... step=229522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.087s
+[Env][reset] closing... step=230522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.087s
+[Env][reset] closing... step=231522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.040s
+[Env][reset] closing... step=232522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.053s
+[Env][reset] closing... step=233522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.034s
+[Env][reset] closing... step=234522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.073s
+[Env][reset] closing... step=235522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.079s
+[Env][reset] closing... step=236522 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.085s
+[Env][reset] closing... step=237522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.080s
+[Env][reset] closing... step=238522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.052s
+[Env][reset] closing... step=239522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.057s
+[Env][reset] closing... step=240522 port=5005
+[Env][reset] closed in 0.365s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.080s
+[Env][reset] closing... step=241522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.037s
+[Env][reset] closing... step=242522 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.059s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step243476.npz
+[Env][reset] closing... step=243476 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.230s
+[Env][reset] closing... step=244476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.045s
+[Env][reset] closing... step=245476 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.050s
+[Env][reset] closing... step=246476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.037s
+[Env][reset] closing... step=247476 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.048s
+[Env][reset] closing... step=248476 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.040s
+[Env][reset] closing... step=249476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.076s
+[Env][reset] closing... step=250476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.049s
+[Env][reset] closing... step=251476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.031s
+[Env][reset] closing... step=252476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.051s
+[Env][reset] closing... step=253476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.045s
+[Env][reset] closing... step=254476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.050s
+[Env][reset] closing... step=255476 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.090s
+[Env][reset] closing... step=256476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.066s
+[Env][reset] closing... step=257476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.095s
+[Env][reset] closing... step=258476 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.069s
+[Env][reset] closing... step=259476 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.081s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step260138.npz
+[Env][reset] closing... step=260138 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.131s
+[Env][reset] closing... step=261138 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.046s
+[Env][reset] closing... step=262138 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.053s
+[Env][reset] closing... step=263138 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.047s
+[Env][reset] closing... step=264138 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.071s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step264848.npz
+[Env][reset] closing... step=264848 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.196s
+[Env][reset] closing... step=265848 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.040s
+[Env][reset] closing... step=266848 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.046s
+[Env][reset] closing... step=267848 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
