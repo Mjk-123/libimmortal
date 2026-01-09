@@ -19,6 +19,7 @@ import libimmortal.samples.PPO.utils.save as save
 import libimmortal.samples.PPO.utils.debug as dbg
 import libimmortal.samples.PPO.utils.utilities as utilities
 import libimmortal.samples.PPO.utils.excs as excs
+from libimmortal.samples.PPO.utils.ppolog import PPOFileLogger
 
 from libimmortal.samples.PPO.utils.signaling import GracefulStop
 
@@ -390,6 +391,13 @@ def train(args):
     if ddp.is_main_process():
         os.makedirs(ckpt_dir, exist_ok=True)
 
+    ppo_logger = None
+    if ddp.is_main_process():
+        # default: checkpoints/ppo.log (append)
+        log_path = getattr(args, "ppo_log_path", None) or os.path.join(ckpt_dir, "ppo.log")
+        ppo_logger = PPOFileLogger(log_path, also_stdout=False)
+        ppo_logger.log(f"[Init] PPO log file: {log_path}")
+
     ckpt_prefix = f"PPO_{env_tag}_seed{int(args.seed) if args.seed is not None else 0}_"
     if ddp.is_main_process():
         print("checkpoint dir:", ckpt_dir)
@@ -478,8 +486,12 @@ def train(args):
     # Runner-style main loop
     start_time = datetime.now().replace(microsecond=0)
     if ddp.is_main_process():
-        print("Started training at:", start_time)
-        print("============================================================================================")
+        if ppo_logger is not None:
+            ppo_logger.log(f"Started training at: {start_time}")
+            ppo_logger.log("=" * 92)
+        else:
+            print("Started training at:", start_time)
+            print("============================================================================================")
 
     episode_reward = 0.0
     episode_raw_reward = 0.0
@@ -581,7 +593,7 @@ def train(args):
         extra += f" closer/farther={closer_pct:.1f}%/{farther_pct:.1f}%"
         extra += f" bfs_missing={bfs_miss_pct:.1f}%"
 
-        print(
+        msg = (
             f"[PPO][begin] step={step_i} "
             f"T={buf_len_pre} terminals={term_n} ({term_frac:.2%}) "
             f"reward(mean/std/min/max)={rw_mean:+.3f}/{rw_std:.3f}/{rw_min:+.3f}/{rw_max:+.3f} "
@@ -597,10 +609,20 @@ def train(args):
             f"| reward_scaling={int(args.reward_scaling)}\n"
             f"|{extra}"
         )
+        if ppo_logger is not None:
+            ppo_logger.log(msg)
+        else:
+            print(msg)
 
     def _print_update_post(step_i: int, dt_s: float):
-        if ddp.is_main_process():
-            print(f"[PPO][end]   step={step_i} update_seconds={dt_s:.3f}")
+        if not ddp.is_main_process():
+            return
+        msg = f"[PPO][end]   step={step_i} update_seconds={dt_s:.3f}"
+        if ppo_logger is not None:
+            ppo_logger.log(msg)
+        else:
+            print(msg)
+
 
     timeouts = 0
     restarts = 0
@@ -712,12 +734,16 @@ def train(args):
             episode_len += 1
 
             if is_goal and ddp.is_main_process():
-                print(
+                msg = (
                     f"[GOAL] step={step} raw={float(raw_reward):.10f} shaped={shaped_reward:.3f} scaled={scaled_reward:.3f} "
                     f"done_env={int(done_env)} done_buf={int(done_for_buffer)} virtual_done={int(bool(shaper.virtual_done))} "
                     f"ep_len={episode_len} ep_reward_running={episode_reward:.3f} "
                     f"clip={getattr(cfg,'clip',None)} w_time={args.w_time} w_prog={args.w_progress} termB={args.terminal_bonus}"
                 )
+                if ppo_logger is not None:
+                    ppo_logger.log(msg)
+                else:
+                    print(msg)
 
             # PPO update (ALL ranks call update; DDP will sync gradients)
             if step % update_timestep == 0:
@@ -783,8 +809,13 @@ def train(args):
             # Save checkpoint (rank0 only) - atomic + ignore signals
             if (step % save_model_freq == 0) and ddp.is_main_process():
                 ckpt_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{step}.pth")
-                print("--------------------------------------------------------------------------------------------")
-                print("saving model at:", ckpt_path)
+                if ppo_logger is not None:
+                    ppo_logger.log("-" * 92)
+                    ppo_logger.log(f"saving model at: {ckpt_path}")
+                else:
+                    print("--------------------------------------------------------------------------------------------")
+                    print("saving model at:", ckpt_path)
+
 
                 with stopper.ignore_signals():
                     save.atomic_torch_save(
@@ -792,9 +823,13 @@ def train(args):
                         ckpt_path,
                     )
 
-                print("model saved")
-                print("Elapsed Time:", datetime.now().replace(microsecond=0) - start_time)
-                print("--------------------------------------------------------------------------------------------")
+                if ppo_logger is not None:
+                    ppo_logger.log("-" * 92)
+                    ppo_logger.log(f"saving model at: {ckpt_path}")
+                else:
+                    print("--------------------------------------------------------------------------------------------")
+                    print("saving model at:", ckpt_path)
+
                 if wandb is not None:
                     wandb.log({"train/checkpoint_saved": 1}, step=int(step))
                     wandb.save(ckpt_path)
@@ -900,12 +935,23 @@ def train(args):
 
         end_time = datetime.now().replace(microsecond=0)
         if ddp.is_main_process():
-            print("============================================================================================")
-            print("Started training at:", start_time)
-            print("Finished training at:", end_time)
-            print("Total training time:", end_time - start_time)
-            print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
-            print("============================================================================================")
+            if ppo_logger is not None:
+                ppo_logger.log("=" * 92)
+                ppo_logger.log(f"Started training at: {start_time}")
+                ppo_logger.log(f"Finished training at: {end_time}")
+                ppo_logger.log(f"Total training time: {end_time - start_time}")
+                ppo_logger.log(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
+                ppo_logger.log("=" * 92)
+            else:
+                print("============================================================================================")
+                print("Started training at:", start_time)
+                print("Finished training at:", end_time)
+                print("Total training time:", end_time - start_time)
+                print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
+                print("============================================================================================")
+
+        if ppo_logger is not None:
+            ppo_logger.close()
 
         if not force_exit:
             try:
