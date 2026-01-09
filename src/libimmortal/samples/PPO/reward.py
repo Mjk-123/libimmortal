@@ -198,6 +198,15 @@ class RewardShaper:
         done: bool,
         info: Optional[Dict[str, Any]] = None,
     ) -> float:
+        # If map observation is missing, skip BFS-based terms.
+        # Keep training stable by falling back to vec-based distance or no progress term.
+        if id_map is None:
+            self.dbg_has_bfs = True
+            self.dbg_bfs_dist = None
+            self.dbg_bfs_delta = None
+            # IMPORTANT: do not raise; just compute reward without BFS.
+            return self._reward_without_bfs(raw_reward, vec_obs, done, info)
+        
         info = info or {}
         self._step += 1
         r = float(raw_reward)
@@ -288,6 +297,86 @@ class RewardShaper:
             return float(np.clip(r, -clip, hi))
 
         return float(r)
+    
+    def _reward_without_bfs(
+        self,
+        raw_reward: float,
+        vec_obs: Optional[np.ndarray],
+        done: bool,
+        info: Optional[Dict[str, Any]] = None,
+    ) -> float:
+        """
+        Fallback reward when id_map is missing (id_map=None).
+        Mirrors __call__'s structure but skips BFS-based progress/magnet terms.
+        """
+        info = info or {}
+        self._step += 1
+
+        r = float(raw_reward)
+
+        # Vector-based goal distance fallback (if available)
+        raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
+
+        # Same success condition as __call__ but without BFS term
+        is_success = (r >= 1.0) or (raw_goal_dist < 0.6)
+
+        # Debug flags (no BFS available)
+        self.dbg_has_bfs = False
+        self.dbg_bfs_dist = None
+        self.dbg_bfs_delta = None
+        self.dbg_closer = False
+        self.dbg_farther = False
+        self.dbg_is_success = bool(is_success)
+
+        # Break BFS continuity so we don't compute deltas using stale values later.
+        self._prev_bfs_dist = None
+        self._prev_goal_phi = None
+
+        # Terminal-on-missing-map often happens; ensure we don't carry damage deltas across episode boundary.
+        if done:
+            self._prev_cum_damage = None
+
+        # -----------------------------------------------------------
+        # [Terminal Logic]
+        # -----------------------------------------------------------
+        did_just_succeed = False
+        if is_success and (not self.virtual_done):
+            self.virtual_done = True
+            did_just_succeed = True
+
+        # -----------------------------------------------------------
+        # [Penalty Terms]
+        # -----------------------------------------------------------
+        if vec_obs is not None:
+            r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
+
+            dmg = float(vec_obs[IDX_CUM_DAMAGE])
+            if self._prev_cum_damage is not None:
+                r += float(getattr(self.cfg, "w_damage", 0.0)) * -max(0.0, dmg - self._prev_cum_damage)
+            self._prev_cum_damage = dmg
+
+            if float(vec_obs[IDX_IS_ACTIONABLE]) < 0.5:
+                r += float(getattr(self.cfg, "w_not_actionable", 0.0)) * -1.0
+
+        # -----------------------------------------------------------
+        # [Guarantee: goal entry is the largest per-step reward]
+        # -----------------------------------------------------------
+        if getattr(self.cfg, "clip", None):
+            clip = float(getattr(self.cfg, "clip", 0.0))
+            terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
+
+            if did_just_succeed:
+                return float(terminal_bonus)
+
+            hi = clip if terminal_bonus > clip else (terminal_bonus - 1e-3)
+            return float(np.clip(r, -clip, hi))
+
+        if did_just_succeed:
+            return float(getattr(self.cfg, "terminal_bonus", 1.0))
+
+        return float(r)
+
+
 
 
 class RunningMeanStd:
