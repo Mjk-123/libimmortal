@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-import os
+import os, time
 from typing import Any
 
 import numpy as np
@@ -70,6 +70,37 @@ def ddp_barrier():
     if dist.is_initialized():
         dist.barrier()
 
+def _ddp_barrier(tag: str, ddp_barrier_timeout_s: float):
+        if not ddp_is_enabled() or (not dist.is_initialized()):
+            return
+        try:
+            # Version-compatible "timeout barrier"
+            work = dist.barrier(async_op=True)
+
+            # Fast path: Work.wait(timeout=...) exists in some builds
+            try:
+                work.wait(timeout=ddp_barrier_timeout_s)  # type: ignore[arg-type]
+                return
+            except TypeError:
+                # No timeout support in wait()
+                pass
+
+            # Polling path: Work.is_completed() is widely available
+            if hasattr(work, "is_completed"):
+                t_deadline = time.time() + float(ddp_barrier_timeout_s)
+                while time.time() < t_deadline:
+                    if work.is_completed():  # type: ignore[attr-defined]
+                        return
+                    time.sleep(0.05)
+                raise TimeoutError(f"DDP barrier timed out after {ddp_barrier_timeout_s}s (tag={tag})")
+
+            # Fallback: no timeout possible (oldest builds)
+            work.wait()
+        except Exception as e:
+             # Raise so we drop to finally and save on rank0.
+             if is_main_process():
+                 print(f"[DDP][barrier][{tag}] FAILED (timeout={ddp_barrier_timeout_s}s): {repr(e)}", flush=True)
+             raise
 
 def seed_everything(seed: int):
     s = int(seed) + ddp_rank()

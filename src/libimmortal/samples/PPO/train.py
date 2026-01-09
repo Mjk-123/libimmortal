@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-import os
+import os, sys
 import time
 import argparse
 from datetime import datetime
-
 from typing import Optional, Tuple, Dict, Any
-
 from reward import RewardConfig, RewardShaper, RewardScaler
+
+import gym
+import numpy as np
+import torch
+import torch.distributed as dist
+import signal, faulthandler
+
+from PPO import PPO
 
 import libimmortal.samples.PPO.utils.ddp as ddp
 import libimmortal.samples.PPO.utils.save as save
@@ -16,13 +22,11 @@ import libimmortal.samples.PPO.utils.excs as excs
 
 from libimmortal.samples.PPO.utils.signaling import GracefulStop
 
-import gym
-import numpy as np
-import torch
-import torch.distributed as dist
+try:
+    faulthandler.register(signal.SIGUSR1, all_threads=True)
+except Exception:
+    pass
 
-# PPO.py should be in the same directory as this train.py
-from PPO import PPO
 
 # Optional: robust terminal detection if your env stuffs ML-Agents steps into info
 try:
@@ -46,9 +50,11 @@ try:
 except Exception:
     UnityEnvironmentException = None
 
+
+
 from libimmortal.env import ImmortalSufferingEnv
 
-
+faulthandler.enable(all_threads=True)
 
 def _infer_done(done_from_env, info) -> bool:
     done = bool(done_from_env)
@@ -79,6 +85,7 @@ def train(args):
     from libimmortal.samples.PPO.utils.signaling import GracefulStop
     stopper = GracefulStop()
     stopper.install()
+    signal.signal(signal.SIGTERM, signal.SIG_DFL)  # torchrun이 rank들을 확실히 정리하게 함
 
     ddp.ddp_setup()
     rank = ddp.ddp_rank()
@@ -92,6 +99,10 @@ def train(args):
     device = torch.device(f"cuda:{local_rank}" if torch.cuda.is_available() else "cpu")
     if ddp.is_main_process():
         print(f"[Device] rank={rank} local_rank={local_rank} device={device}")
+    
+    # DDP barrier with timeout (prevents "wait forever -> NCCL watchdog in 30min")
+    ddp_barrier_timeout_s = float(getattr(args, "ddp_barrier_timeout_s", 600.0))  # default: 10 min
+    ddp_step_sync_every = int(getattr(args, "ddp_step_sync_every", 1))            # default: sync every step
 
     # Helper: sync "stop requested" across ranks to avoid barrier hangs
     def _ddp_stop_any() -> bool:
@@ -170,23 +181,52 @@ def train(args):
         new_env, new_port = _make_env()
         return new_env, new_port
 
+    def _noop_action_np(space: gym.Space) -> np.ndarray:
+        # English comments for copy/paste friendliness.
+        if isinstance(space, gym.spaces.Box):
+            return np.zeros(space.shape, dtype=np.float32)
+        if isinstance(space, gym.spaces.Discrete):
+            return np.array(0, dtype=np.int64)
+        if isinstance(space, gym.spaces.MultiDiscrete):
+            return np.zeros((len(space.nvec),), dtype=np.int64)
+        raise TypeError(f"Unsupported action space: {type(space)}")
+
+    def _bootstrap_obs(_env) -> np.ndarray:
+        # Do NOT call _env.reset() here (double-reset bug).
+        space = _get_action_space(_env)
+        a_np = _noop_action_np(space)
+        a_env = utilities._format_action_for_env(a_np, space)
+        obs, _r, _d, _info = _env.step(a_env)
+        return obs
+
     def _safe_reset():
         nonlocal env, port
         while True:
-            if _ddp_stop_any():
-                # Stop requested: just try once (or bail) to avoid hanging forever.
-                try:
-                    return env.reset()
-                except Exception:
-                    raise
+            # If stop requested, avoid infinite retry loops.
+            stop_requested = _ddp_stop_any()
+
+            # Always close + recreate env (no env.reset()).
             try:
-                return env.reset()
+                if env is not None:
+                    try:
+                        env.close()
+                    except Exception:
+                        pass
+                env, port = _make_env()
+                return _bootstrap_obs(env)
+
             except Exception as e:
-                if excs._is_restartable_exc(e):
+                if excs._is_restartable_exc(e) and (not stop_requested):
                     if ddp.is_main_process():
-                        print(f"[Env][reset] exception={repr(e)} -> restart")
+                        print(f"[Env][reset] exception={repr(e)} -> recreate")
+                    # reuse existing restart logic if you want log tail / port bump
                     env, port = _restart_env(reason="reset")
-                    continue
+                    try:
+                        return _bootstrap_obs(env)
+                    except Exception as e2:
+                        if excs._is_restartable_exc(e2):
+                            continue
+                        raise
                 raise
 
     # Build initial env
@@ -390,7 +430,7 @@ def train(args):
         if ddp.is_main_process():
             print(f"[Resume] base_step(used)={base_step} (loaded_step={loaded_step})")
 
-        ddp.ddp_barrier()
+        ddp._ddp_barrier("resume", ddp_barrier_timeout_s)
 
     # Optional wandb (rank0 only)
     wandb = None
@@ -686,7 +726,7 @@ def train(args):
                     interrupted = True
                     break
 
-                ddp.ddp_barrier()
+                ddp._ddp_barrier(f"pre_update@{int(step)}", ddp_barrier_timeout_s)
                 t0 = time.time()
 
                 with torch.no_grad():
@@ -731,7 +771,7 @@ def train(args):
                     )
 
                 _reset_update_counters()
-                ddp.ddp_barrier()
+                ddp._ddp_barrier(f"post_update@{int(step)}", ddp_barrier_timeout_s)
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):
@@ -803,6 +843,14 @@ def train(args):
             else:
                 cur_id_map, cur_vec_obs = next_id_map, next_vec_obs
 
+            # -------------------------
+            # Step-level DDP synchronization (prevents ranks drifting apart in wall-clock time)
+            # If one rank gets slowed by env restart/timeout, others will wait here instead of
+            # running ahead and later hanging inside update all-reduces.
+            # -------------------------
+            if ddp_step_sync_every > 0 and (local_step % ddp_step_sync_every == 0):
+                ddp._ddp_barrier(f"step_sync@{int(step)}", ddp_barrier_timeout_s)
+
         # loop end
 
     except KeyboardInterrupt:
@@ -819,6 +867,8 @@ def train(args):
 
     finally:
         # Final save (rank0 only) - atomic + ignore signals
+        force_exit = bool(interrupted) or bool(getattr(stopper, "stop_requested", False))
+
         if ddp.is_main_process():
             try:
                 final_step = int(step) if int(step) > 0 else int(base_step)
@@ -834,14 +884,19 @@ def train(args):
             except Exception as e:
                 print(f"[Exit][WARN] failed to save final checkpoint: {repr(e)}")
 
-        # DO NOT barrier here (can hang if any rank already died)
-        try:
-            env.close()
-        except Exception:
-            pass
+        # On interrupt, closing Unity/DDP/W&B can hang. Do best-effort only.
+        if not force_exit:
+            try:
+                env.close()
+            except Exception:
+                pass
 
-        if wandb is not None:
-            wandb.finish()
+
+        if (wandb is not None) and (not force_exit):
+            try:
+                wandb.finish()
+            except Exception:
+                pass
 
         end_time = datetime.now().replace(microsecond=0)
         if ddp.is_main_process():
@@ -852,7 +907,21 @@ def train(args):
             print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
             print("============================================================================================")
 
-        ddp.ddp_cleanup()
+        if not force_exit:
+            try:
+                ddp.ddp_cleanup()
+            except Exception:
+                pass
+
+        # Always ensure torchrun can't hang waiting for a stuck worker.
+        # (Especially on interrupt path.)
+        try:
+            sys.stdout.flush()
+            sys.stderr.flush()
+        except Exception:
+            pass
+        if force_exit:
+            os._exit(0)
 
 
 

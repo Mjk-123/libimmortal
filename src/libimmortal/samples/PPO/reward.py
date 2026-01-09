@@ -10,6 +10,8 @@ import numpy as np
 
 from libimmortal.utils.aux_func import DEFAULT_ENCODER
 
+import libimmortal.samples.PPO.utils.utilities as utilities
+
 # -----------------------------------------------------------------------------
 # Vector observation indices
 # -----------------------------------------------------------------------------
@@ -34,77 +36,6 @@ PLAYER_IDS = [ENC.name2id["KNIGHT"], ENC.name2id["KNIGHT_ATTACK"]]
 DEFAULT_BLOCKED_IDS = [WALL_ID]
 # If PLATFORM is also solid in the minimap, uncomment:
 # DEFAULT_BLOCKED_IDS = [WALL_ID, ENC.name2id["PLATFORM"]]
-
-
-# -----------------------------------------------------------------------------
-# BFS utilities
-# -----------------------------------------------------------------------------
-def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
-    if target_ids is None or len(target_ids) == 0:
-        return None
-    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
-    ys, xs = np.where(mask)
-    if xs.size == 0:
-        return None
-    cx = int(np.round(xs.mean()))
-    cy = int(np.round(ys.mean()))
-    return cx, cy
-
-
-def _find_left_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x_left, y_centroid) for pixels in target_ids, else None."""
-    if target_ids is None or len(target_ids) == 0:
-        return None
-    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
-    ys, xs = np.where(mask)
-    if xs.size == 0:
-        return None
-    x_left = int(xs.min())
-    y_centroid = int(np.round(ys.mean()))
-    return x_left, y_centroid
-
-
-def _find_right_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
-    """Return (x_right, y_centroid) for pixels in target_ids, else None."""
-    if target_ids is None or len(target_ids) == 0:
-        return None
-    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
-    ys, xs = np.where(mask)
-    if xs.size == 0:
-        return None
-    x_right = int(xs.max())
-    y_centroid = int(np.round(ys.mean()))
-    return x_right, y_centroid
-
-
-def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndarray:
-    """4-neighbor BFS distance-to-goal. Returns inf for unreachable cells."""
-    H, W = passable.shape
-    gx, gy = goal_xy
-    dist = np.full((H, W), np.inf, dtype=np.float32)
-
-    if not (0 <= gx < W and 0 <= gy < H):
-        return dist
-    if not passable[gy, gx]:
-        return dist
-
-    q = deque()
-    dist[gy, gx] = 0.0
-    q.append((gx, gy))
-
-    nbrs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    while q:
-        x, y = q.popleft()
-        d = dist[y, x] + 1.0
-        for dx, dy in nbrs:
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < W and 0 <= ny < H and passable[ny, nx]:
-                if d < dist[ny, nx]:
-                    dist[ny, nx] = d
-                    q.append((nx, ny))
-
-    return dist
 
 
 # -----------------------------------------------------------------------------
@@ -200,7 +131,7 @@ class RewardShaper:
 
         # (2) Cache goal_xy (try to set it if missing).
         if self._cached_goal_xy is None:
-            self._cached_goal_xy = _find_centroid_xy(id_map, [GOAL_ID])
+            self._cached_goal_xy = utilities._find_centroid_xy(id_map, [GOAL_ID])
 
         # (3) Cache dist_map once per shape (depends only on passable + goal_xy).
         if self._cached_goal_xy is None:
@@ -213,7 +144,7 @@ class RewardShaper:
             passable = self._cached_passable.copy()
             if 0 <= gx < W and 0 <= gy < H:
                 passable[gy, gx] = True
-            self._cached_dist_map = _bfs_distance_map(passable, self._cached_goal_xy)
+            self._cached_dist_map = utilities._bfs_distance_map(passable, self._cached_goal_xy)
 
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
@@ -240,7 +171,7 @@ class RewardShaper:
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
         # You can swap centroid -> right-center later if you want:
         # player_xy = _find_right_center_xy(id_map, PLAYER_IDS)
-        player_xy = _find_centroid_xy(id_map, PLAYER_IDS)
+        player_xy = utilities._find_centroid_xy(id_map, PLAYER_IDS)
         if player_xy is None:
             return None
 

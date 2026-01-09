@@ -1,0 +1,49 @@
+Started training at: 2026-01-09 02:19:56
+============================================================================================
+[PPO][begin] step=204000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.042/1.016/-20.000/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=1 (0.03%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6481/0.3320/0.8520 bfs_best=0.3320 bfs_delta_mean=0.00005 closer/farther=3.0%/2.7% bfs_missing=4.6%
+[PPO][end]   step=204000 update_seconds=151.984
+[PPO][begin] step=208000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.042/0.934/-14.820/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6250/0.3240/0.7560 bfs_best=0.3240 bfs_delta_mean=-0.00002 closer/farther=2.9%/3.0% bfs_missing=7.1%
+[PPO][end]   step=208000 update_seconds=151.823
+--------------------------------------------------------------------------------------------
+saving model at: /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_210000.pth
+model saved
+Elapsed Time: 0:13:44
+--------------------------------------------------------------------------------------------
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[PPO][begin] step=212000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.038/0.888/-10.410/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6924/0.5920/0.8240 bfs_best=0.3240 bfs_delta_mean=0.00002 closer/farther=2.7%/3.0% bfs_missing=7.4%
+[PPO][end]   step=212000 update_seconds=151.931
+[PPO][begin] step=216000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.047/0.917/-10.810/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6687/0.3920/0.7880 bfs_best=0.3240 bfs_delta_mean=-0.00001 closer/farther=2.8%/2.9% bfs_missing=2.5%
+[PPO][end]   step=216000 update_seconds=152.094
+[PPO][begin] step=220000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.038/0.923/-16.420/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6765/0.5360/0.7840 bfs_best=0.3240 bfs_delta_mean=-0.00002 closer/farther=2.9%/2.9% bfs_missing=9.2%
+[PPO][end]   step=220000 update_seconds=151.678
+[PPO][begin] step=224000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.027/0.767/-14.010/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6893/0.6360/0.8000 bfs_best=0.3240 bfs_delta_mean=0.00000 closer/farther=2.7%/3.0% bfs_missing=13.3%
+[PPO][end]   step=224000 update_seconds=151.757
+[PPO][begin] step=228000 T=4000 terminals=0 (0.00%) reward(mean/std/min/max)=-0.043/0.934/-12.020/+3.999 goal_hits=0 (0.00%) shaper_clip_hits=0 (0.00%) scaler_clip_hits=0 (0.00%)
+| eps_clip=0.2 K_epochs=10 mb=64 lr(a/c)=0.0001/0.0002 gamma=0.99 gae_lambda=0.95
+| w_progress=100 w_time=0.01 w_damage=0.1 w_not_actionable=0.01 w_acc=1 reward_clip=20 scaler_clip=5
+| reward_scaling=0
+| bfs(mean/min/max)=0.6410/0.3600/0.7800 bfs_best=0.3240 bfs_delta_mean=-0.00001 closer/farther=2.8%/3.1% bfs_missing=4.2%

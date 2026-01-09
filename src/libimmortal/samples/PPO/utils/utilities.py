@@ -43,3 +43,75 @@ def _format_action_for_env(action_np, action_space):
 
     raise TypeError(f"Unsupported action space: {type(action_space)}")
 
+# -----------------------------------------------------------------------------
+# BFS utilities
+# -----------------------------------------------------------------------------
+
+import deque
+
+def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    cx = int(np.round(xs.mean()))
+    cy = int(np.round(ys.mean()))
+    return cx, cy
+
+
+def _find_left_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x_left, y_centroid) for pixels in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    x_left = int(xs.min())
+    y_centroid = int(np.round(ys.mean()))
+    return x_left, y_centroid
+
+
+def _find_right_center_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
+    """Return (x_right, y_centroid) for pixels in target_ids, else None."""
+    if target_ids is None or len(target_ids) == 0:
+        return None
+    mask = np.isin(id_map, np.asarray(target_ids, dtype=id_map.dtype))
+    ys, xs = np.where(mask)
+    if xs.size == 0:
+        return None
+    x_right = int(xs.max())
+    y_centroid = int(np.round(ys.mean()))
+    return x_right, y_centroid
+
+
+def _bfs_distance_map(passable: np.ndarray, goal_xy: Tuple[int, int]) -> np.ndarray:
+    """4-neighbor BFS distance-to-goal. Returns inf for unreachable cells."""
+    H, W = passable.shape
+    gx, gy = goal_xy
+    dist = np.full((H, W), np.inf, dtype=np.float32)
+
+    if not (0 <= gx < W and 0 <= gy < H):
+        return dist
+    if not passable[gy, gx]:
+        return dist
+
+    q = deque()
+    dist[gy, gx] = 0.0
+    q.append((gx, gy))
+
+    nbrs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    while q:
+        x, y = q.popleft()
+        d = dist[y, x] + 1.0
+        for dx, dy in nbrs:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < W and 0 <= ny < H and passable[ny, nx]:
+                if d < dist[ny, nx]:
+                    dist[ny, nx] = d
+                    q.append((nx, ny))
+
+    return dist
