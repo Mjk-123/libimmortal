@@ -47,7 +47,7 @@ def _format_action_for_env(action_np, action_space):
 # BFS utilities
 # -----------------------------------------------------------------------------
 
-import deque
+from collections import deque
 
 def _find_centroid_xy(id_map: np.ndarray, target_ids: List[int]) -> Optional[Tuple[int, int]]:
     """Return (x,y) centroid of all pixels whose id is in target_ids, else None."""
