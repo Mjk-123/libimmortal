@@ -1,6 +1,6 @@
 import numpy as np
 import gym
-from typing import Optional, Tuple, Dict, Any
+from typing import Optional, Tuple, Dict, List, Any
 
 # -------------------------
 # Observation preprocessing
