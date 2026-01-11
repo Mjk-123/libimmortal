@@ -1,0 +1,1937 @@
+[Env][reset] closing... step=656936 port=5005
+[Env][reset] closed in 0.316s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 5.903s
+[Env][reset] closing... step=657936 port=5005
+[Env][reset] closed in 0.366s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.063s
+[Env][reset] closing... step=658936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.076s
+[Env][reset] closing... step=659936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.066s
+[Env][reset] closing... step=660936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.128s
+[Env][reset] closing... step=661936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.063s
+[Env][reset] closing... step=662936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.056s
+[Env][reset] closing... step=663936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.056s
+[Env][reset] closing... step=664936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.104s
+[Env][reset] closing... step=665936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.072s
+[Env][reset] closing... step=666936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=667936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.073s
+[Env][reset] closing... step=668936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.087s
+[Env][reset] closing... step=669936 port=5005
+[Env][reset] closed in 0.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.067s
+[Env][reset] closing... step=670936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.062s
+[Env][reset] closing... step=671936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.075s
+[Env][reset] closing... step=672936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.184s
+[Env][reset] closing... step=673936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.071s
+[Env][reset] closing... step=674936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.120s
+[Env][reset] closing... step=675936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.076s
+[Env][reset] closing... step=676936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.185s
+[Env][reset] closing... step=677936 port=5005
+[Env][reset] closed in 0.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.085s
+[Env][reset] closing... step=678936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.069s
+[Env][reset] closing... step=679936 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.114s
+[Env][reset] closing... step=680936 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.181s
+[Env][reset] closing... step=681936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.150s
+[Env][reset] closing... step=682936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.169s
+[Env][reset] closing... step=683936 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.153s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step684871.npz
+[Env][reset] closing... step=684871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.144s
+[Env][reset] closing... step=685871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=686871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.135s
+[Env][reset] closing... step=687871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.135s
+[Env][reset] closing... step=688871 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.124s
+[Env][reset] closing... step=689871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.117s
+[Env][reset] closing... step=690871 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.142s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step691712.npz
+[Env][reset] closing... step=691712 port=5005
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.152s
+[Env][reset] closing... step=692712 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.180s
+[Env][reset] closing... step=693712 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.230s
+[Env][reset] closing... step=694712 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.298s
+[Env][reset] closing... step=695712 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.275s
+[Env][reset] closing... step=696712 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.205s
+[Env][reset] closing... step=697712 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.262s
+[Env][reset] closing... step=698712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.111s
+[Env][reset] closing... step=699712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.144s
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[Env][reset] closing... step=700712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.156s
+[Env][reset] closing... step=701712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.102s
+[Env][reset] closing... step=702712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.090s
+[Env][reset] closing... step=703712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.164s
+[Env][reset] closing... step=704712 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.203s
+[Env][reset] closing... step=705712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.106s
+[Env][reset] closing... step=706712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.148s
+[Env][reset] closing... step=707712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.103s
+[Env][reset] closing... step=708712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.120s
+[Env][reset] closing... step=709712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.140s
+[Env][reset] closing... step=710712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.130s
+[Env][reset] closing... step=711712 port=5005
+[Env][reset] closed in 0.415s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.109s
+[Env][reset] closing... step=712712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.116s
+[Env][reset] closing... step=713712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.136s
+[Env][reset] closing... step=714712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=715712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.106s
+[Env][reset] closing... step=716712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.146s
+[Env][reset] closing... step=717712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.118s
+[Env][reset] closing... step=718712 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.164s
+[Env][reset] closing... step=719712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.161s
+[Env][reset] closing... step=720712 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.253s
+[Env][reset] closing... step=721712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.119s
+[Env][reset] closing... step=722712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.114s
+[Env][reset] closing... step=723712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.097s
+[Env][reset] closing... step=724712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.098s
+[Env][reset] closing... step=725712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.094s
+[Env][reset] closing... step=726712 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.158s
+[Env][reset] closing... step=727712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.139s
+[Env][reset] closing... step=728712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.112s
+[Env][reset] closing... step=729712 port=5005
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.153s
+[Env][reset] closing... step=730712 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.184s
+[Env][reset] closing... step=731712 port=5005
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.161s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step732574.npz
+[Env][reset] closing... step=732574 port=5005
+[Env][reset] closed in 0.566s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.321s
+[Env][reset] closing... step=733574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.298s
+[Env][reset] closing... step=734574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.290s
+[Env][reset] closing... step=735574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.244s
+[Env][reset] closing... step=736574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.289s
+[Env][reset] closing... step=737574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.244s
+[Env][reset] closing... step=738574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.211s
+[Env][reset] closing... step=739574 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.333s
+[Env][reset] closing... step=740574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.270s
+[Env][reset] closing... step=741574 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.192s
+[Env][reset] closing... step=742574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.256s
+[Env][reset] closing... step=743574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.256s
+[Env][reset] closing... step=744574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.279s
+[Env][reset] closing... step=745574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.239s
+[Env][reset] closing... step=746574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.243s
+[Env][reset] closing... step=747574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.281s
+[Env][reset] closing... step=748574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.245s
+[Env][reset] closing... step=749574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.250s
+[Env][reset] closing... step=750574 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.219s
+[Env][reset] closing... step=751574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.208s
+[Env][reset] closing... step=752574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.302s
+[Env][reset] closing... step=753574 port=5005
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.275s
+[Env][reset] closing... step=754574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.291s
+[Env][reset] closing... step=755574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.284s
+[Env][reset] closing... step=756574 port=5005
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.193s
+[Env][reset] closing... step=757574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.216s
+[Env][reset] closing... step=758574 port=5005
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.236s
+[Env][reset] closing... step=759574 port=5005
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=5005
+[Env][reset] created port=5005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.297s
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=1, restarts=1)
+[Env] restart #1 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+Character landed on: OneWayPlatform
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CharacterMovement:FixedUpdate () (at D:/immortal_suffering/Assets/Scripts/CharacterMovement.cs:202)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+TriggerStay0: Player
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:26)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+TriggerStay1: Player
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:29)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+Character Player hit by Explosion with damage: 100, knockback ratio: 1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CharacterHit:OnHit (single,single,UnityEngine.Transform) (at D:/immortal_suffering/Assets/Scripts/CharacterHit.cs:21)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:32)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+[Env][step] --- end tail ---
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] closing... step=760469 port=5805
+[Env][reset] closed in 0.368s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.007s
+[Env][reset] closing... step=760574 port=5805
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.055s
+[Env][reset] closing... step=761574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.135s
+[Env][reset] closing... step=762574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.233s
+[Env][reset] closing... step=763574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.137s
+[Env][reset] closing... step=764574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.282s
+[Env][reset] closing... step=765574 port=5805
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.293s
+[Env][reset] closing... step=766574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.270s
+[Env][reset] closing... step=767574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.229s
+[Env][reset] closing... step=768574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.264s
+[Env][reset] closing... step=769574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.243s
+[Env][reset] closing... step=770574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.214s
+[Env][reset] closing... step=771574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.272s
+[Env][reset] closing... step=772574 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.243s
+[Env][reset] closing... step=773574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.257s
+[Env][reset] closing... step=774574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.307s
+[Env][reset] closing... step=775574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.281s
+[Env][reset] closing... step=776574 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.271s
+[Env][reset] closing... step=777574 port=5805
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.206s
+[Env][reset] closing... step=778574 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.203s
+[Env][reset] closing... step=779574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=780574 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.217s
+[Env][reset] closing... step=781574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.297s
+[Env][reset] closing... step=782574 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.243s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step782953.npz
+[Env][reset] closing... step=782953 port=5805
+[Env][reset] closed in 0.567s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.306s
+[Env][reset] closing... step=783953 port=5805
+[Env][reset] closed in 0.468s -> creating new env
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.212s
+[Env][reset] closing... step=784953 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.232s
+[Env][reset] closing... step=785953 port=5805
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.238s
+[Env][reset] closing... step=786953 port=5805
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.248s
+[Env][reset] closing... step=787953 port=5805
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.246s
+[Env][reset] closing... step=788953 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.267s
+[Env][reset] closing... step=789953 port=5805
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.268s
+[Env][reset] closing... step=790953 port=5805
+[Env][reset] closed in 0.520s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.266s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step791413.npz
+[Env][reset] closing... step=791413 port=5805
+[Env][reset] closed in 0.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.115s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step792218.npz
+[Env][reset] closing... step=792218 port=5805
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.225s
+[Env][reset] closing... step=793218 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.259s
+[Env][reset] closing... step=794218 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.258s
+[Env][reset] closing... step=795218 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.241s
+[Env][reset] closing... step=796218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.258s
+[Env][reset] closing... step=797218 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.244s
+[Env][reset] closing... step=798218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.255s
+[Env][reset] closing... step=799218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=800218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.296s
+[Env][reset] closing... step=801218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.275s
+[Env][reset] closing... step=802218 port=5805
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.200s
+[Env][reset] closing... step=803218 port=5805
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.222s
+[Env][reset] closing... step=804218 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.194s
+[Env][reset] closing... step=805218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.255s
+[Env][reset] closing... step=806218 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.270s
+[Env][reset] closing... step=807218 port=5805
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.279s
+[Env][reset] closing... step=808218 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.202s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step808916.npz
+[Env][reset] closing... step=808916 port=5805
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.254s
+[Env][reset] closing... step=809916 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.207s
+[Env][reset] closing... step=810916 port=5805
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.245s
+[Env][reset] closing... step=811916 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.222s
+[Env][reset] closing... step=812916 port=5805
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.190s
+[Env][reset] closing... step=813916 port=5805
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.188s
+[Env][reset] closing... step=814916 port=5805
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.210s
+[Env][reset] closing... step=815916 port=5805
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.175s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step816301.npz
+[Env][reset] closing... step=816301 port=5805
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.142s
+[Env][reset] closing... step=817301 port=5805
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.265s
+[Env][reset] closing... step=818301 port=5805
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=819301 port=5805
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.175s
+[Env][reset] closing... step=820301 port=5805
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.244s
+[Env][reset] closing... step=821301 port=5805
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=5805
+[Env][reset] created port=5805 -> bootstrapping
+[Env][reset] bootstrap ok in 6.254s
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=2, restarts=2)
+[Env] restart #2 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+Character landed on: OneWayPlatform
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CharacterMovement:FixedUpdate () (at D:/immortal_suffering/Assets/Scripts/CharacterMovement.cs:202)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+TriggerStay0: Player
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:26)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+TriggerStay1: Player
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:29)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+Character Player hit by Explosion with damage: 100, knockback ratio: 1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CharacterHit:OnHit (single,single,UnityEngine.Transform) (at D:/immortal_suffering/Assets/Scripts/CharacterHit.cs:21)
+ImmortalSuffering.ExplosionDamage:OnTriggerStay2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/ExplosionDamage.cs:32)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+[Env][step] --- end tail ---
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] closing... step=822080 port=6605
+[Env][reset] closed in 0.368s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 5.961s
+[Env][reset] closing... step=822301 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.016s
+[Env][reset] closing... step=823301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.129s
+[Env][reset] closing... step=824301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.247s
+[Env][reset] closing... step=825301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=826301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.207s
+[Env][reset] closing... step=827301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.262s
+[Env][reset] closing... step=828301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.268s
+[Env][reset] closing... step=829301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.226s
+[Env][reset] closing... step=830301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.204s
+[Env][reset] closing... step=831301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.248s
+[Env][reset] closing... step=832301 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.263s
+[Env][reset] closing... step=833301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.198s
+[Env][reset] closing... step=834301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.235s
+[Env][reset] closing... step=835301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.300s
+[Env][reset] closing... step=836301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=837301 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.258s
+[Env][reset] closing... step=838301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.196s
+[Env][reset] closing... step=839301 port=6605
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.218s
+[Env][reset] closing... step=840301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.238s
+[Env][reset] closing... step=841301 port=6605
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.203s
+[Env][reset] closing... step=842301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.257s
+[Env][reset] closing... step=843301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.248s
+[Env][reset] closing... step=844301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.237s
+[Env][reset] closing... step=845301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=846301 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.288s
+[Env][reset] closing... step=847301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.205s
+[Env][reset] closing... step=848301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.242s
+[Env][reset] closing... step=849301 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.289s
+[Env][reset] closing... step=850301 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=851301 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.265s
+[Env][reset] closing... step=852301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.202s
+[Env][reset] closing... step=853301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.214s
+[Env][reset] closing... step=854301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.230s
+[Env][reset] closing... step=855301 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.204s
+[Env][reset] closing... step=856301 port=6605
+[Env][reset] closed in 0.469s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.206s
+[Env][reset] closing... step=857301 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.209s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step857914.npz
+[Env][reset] closing... step=857914 port=6605
+[Env][reset] closed in 0.567s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.338s
+[Env][reset] closing... step=858914 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.290s
+[Env][reset] closing... step=859914 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.222s
+[Env][reset] closing... step=860914 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.252s
+[Env][reset] closing... step=861914 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.168s
+[Env][reset] closing... step=862914 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=863914 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.062s
+[Env][reset] closing... step=864914 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.096s
+[Env][reset] closing... step=865914 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.165s
+[Env][reset] closing... step=866914 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.123s
+[Env][reset] closing... step=867914 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.196s
+[Env][reset] closing... step=868914 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.107s
+[Env][reset] closing... step=869914 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.127s
+[Env][reset] closing... step=870914 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.139s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step871912.npz
+[Env][reset] closing... step=871912 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.183s
+[Env][reset] closing... step=872912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.100s
+[Env][reset] closing... step=873912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.102s
+[Env][reset] closing... step=874912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.111s
+[Env][reset] closing... step=875912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.100s
+[Env][reset] closing... step=876912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.114s
+[Env][reset] closing... step=877912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.127s
+[Env][reset] closing... step=878912 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.144s
+[Env][reset] closing... step=879912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.069s
+[Env][reset] closing... step=880912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.116s
+[Env][reset] closing... step=881912 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.229s
+[Env][reset] closing... step=882912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.233s
+[Env][reset] closing... step=883912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.111s
+[Env][reset] closing... step=884912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.100s
+[Env][reset] closing... step=885912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.093s
+[Env][reset] closing... step=886912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.184s
+[Env][reset] closing... step=887912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.100s
+[Env][reset] closing... step=888912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.124s
+[Env][reset] closing... step=889912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.140s
+[Env][reset] closing... step=890912 port=6605
+[Env][reset] closed in 0.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.140s
+[Env][reset] closing... step=891912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.139s
+[Env][reset] closing... step=892912 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.190s
+[Env][reset] closing... step=893912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.174s
+[Env][reset] closing... step=894912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.103s
+[Env][reset] closing... step=895912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.103s
+[Env][reset] closing... step=896912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.096s
+[Env][reset] closing... step=897912 port=6605
+[Env][reset] closed in 0.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.194s
+[Env][reset] closing... step=898912 port=6605
+[Env][reset] closed in 0.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.196s
+[Env][reset] closing... step=899912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.138s
+[Env][reset] closing... step=900912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.104s
+[Env][reset] closing... step=901912 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.137s
+[Env][reset] closing... step=902912 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.122s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step903375.npz
+[Env][reset] closing... step=903375 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.236s
+[Env][reset] closing... step=904375 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.302s
+[Env][reset] closing... step=905375 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.279s
+[Env][reset] closing... step=906375 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.260s
+[Env][reset] closing... step=907375 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.297s
+[Env][reset] closing... step=908375 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.243s
+[Env][reset] closing... step=909375 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.210s
+[Env][reset] closing... step=910375 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=911375 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.302s
+[Env][reset] closing... step=912375 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=913375 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.198s
+[Env][reset] closing... step=914375 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.310s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step915033.npz
+[Env][reset] closing... step=915033 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.170s
+[Env][reset] closing... step=916033 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.250s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step916987.npz
+[Env][reset] closing... step=916987 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.218s
+[Env][reset] closing... step=917987 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.172s
+[Env][reset] closing... step=918987 port=6605
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.217s
+[Env][reset] closing... step=919987 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.203s
+[Env][reset] closing... step=920987 port=6605
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.291s
+[Env][reset] closing... step=921987 port=6605
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.253s
+[Env][reset] closing... step=922987 port=6605
+[Env][reset] closed in 0.520s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.259s
+[Env][reset] closing... step=923987 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.231s
+[Env][reset] closing... step=924987 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.265s
+[Env][reset] closing... step=925987 port=6605
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.258s
+[Env][reset] closing... step=926987 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.284s
+[Env][reset] closing... step=927987 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.251s
+[Env][reset] closing... step=928987 port=6605
+[Env][reset] closed in 0.521s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.294s
+[Env][reset] closing... step=929987 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.279s
+[Env][reset] closing... step=930987 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.289s
+[Env][reset] closing... step=931987 port=6605
+[Env][reset] closed in 0.520s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.233s
+[Env][reset] closing... step=932987 port=6605
+[Env][reset] closed in 0.521s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.242s
+[Env][reset] closing... step=933987 port=6605
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.254s
+[Env][reset] closing... step=934987 port=6605
+[Env][reset] closed in 0.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=935987 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.231s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step936458.npz
+[Env][reset] closing... step=936458 port=6605
+[Env][reset] closed in 0.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.179s
+[Env][reset] closing... step=937458 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.285s
+[Env][reset] closing... step=938458 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.267s
+[Env][reset] closing... step=939458 port=6605
+[Env][reset] closed in 0.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.272s
+[Env][reset] closing... step=940458 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.236s
+[Env][reset] closing... step=941458 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.262s
+[Env][reset] closing... step=942458 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.257s
+[Env][reset] closing... step=943458 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.273s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step944333.npz
+[Env][reset] closing... step=944333 port=6605
+[Env][reset] closed in 0.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.158s
+[Env][reset] closing... step=945333 port=6605
+[Env][reset] closed in 0.469s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.246s
+[Env][reset] closing... step=946333 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.252s
+[Env][reset] closing... step=947333 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.245s
+[Env][reset] closing... step=948333 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.296s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step949230.npz
+[Env][reset] closing... step=949230 port=6605
+[Env][reset] closed in 0.568s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.320s
+[Env][reset] closing... step=950230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.302s
+[Env][reset] closing... step=951230 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.261s
+[Env][reset] closing... step=952230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.265s
+[Env][reset] closing... step=953230 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.259s
+[Env][reset] closing... step=954230 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.202s
+[Env][reset] closing... step=955230 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.249s
+[Env][reset] closing... step=956230 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.236s
+[Env][reset] closing... step=957230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.266s
+[Env][reset] closing... step=958230 port=6605
+[Env][reset] closed in 0.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.219s
+[Env][reset] closing... step=959230 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.261s
+[Env][reset] closing... step=960230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.280s
+[Env][reset] closing... step=961230 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.230s
+[Env][reset] closing... step=962230 port=6605
+[Env][reset] closed in 0.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.237s
+[Env][reset] closing... step=963230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.307s
+[Env][reset] closing... step=964230 port=6605
+[Env][reset] closed in 0.516s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.278s
+[Env][reset] closing... step=965230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.252s
+[Env][reset] closing... step=966230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.286s
+[Env][reset] closing... step=967230 port=6605
+[Env][reset] closed in 0.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.259s
+[Env][reset] closing... step=968230 port=6605
+[Env][reset] closed in 0.466s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=2 port=6605
+[Env][reset] created port=6605 -> bootstrapping

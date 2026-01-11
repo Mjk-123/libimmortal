@@ -201,7 +201,8 @@ class RewardShaper:
         # If map observation is missing, skip BFS-based terms.
         # Keep training stable by falling back to vec-based distance or no progress term.
         if id_map is None:
-            self.dbg_has_bfs = True
+            # No BFS info available when map is missing.
+            self.dbg_has_bfs = False
             self.dbg_bfs_dist = None
             self.dbg_bfs_delta = None
             # IMPORTANT: do not raise; just compute reward without BFS.
@@ -210,6 +211,7 @@ class RewardShaper:
         info = info or {}
         self._step += 1
         r = float(raw_reward)
+        prev_time = self._prev_time  # for detecting whether IDX_TIME is elapsed-time or remaining-time
 
         # 1) Distance signals
         prev_d_bfs = self._prev_bfs_dist
@@ -270,6 +272,11 @@ class RewardShaper:
         if vec_obs is not None:
             # Time penalty (constant per step)
             r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
+            # Track time signal for speed-bonus orientation detection (counts up vs down).
+            try:
+                self._prev_time = float(vec_obs[IDX_TIME])
+            except Exception:
+                self._prev_time = prev_time
 
             # Damage penalty (delta of cumulative damage)
             dmg = float(vec_obs[IDX_CUM_DAMAGE])
@@ -282,21 +289,37 @@ class RewardShaper:
                 r += float(getattr(self.cfg, "w_not_actionable", 0.0)) * -1.0
 
         # -----------------------------------------------------------
-        # [Guarantee: goal entry is the largest per-step reward]
+        # [Clipping + Terminal Bonus (ADD-ON)]
+        #   - First clip the base shaped reward.
+        #   - Then, if goal just happened, add terminal_bonus on top (NOT clipped).
         # -----------------------------------------------------------
-        if getattr(self.cfg, "clip", None):
-            clip = float(getattr(self.cfg, "clip", 0.0))
-            terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
+        clip = float(getattr(self.cfg, "clip", 0.0) or 0.0)
+        base = float(r)
+        if clip > 0.0:
+            base = float(np.clip(base, -clip, clip))
 
-            if did_just_succeed:
-                # Success step becomes exactly terminal_bonus (not clipped).
-                return float(terminal_bonus)
+        if did_just_succeed:
+            base += float(getattr(self.cfg, "terminal_bonus", 1.0))
+            # Success speed bonus (ADD-ON, not clipped):
+            # - Uses cfg.time_limit for normalization.
+            # - Auto-detects whether IDX_TIME counts up (elapsed) or down (remaining).
+            ssb = float(getattr(self.cfg, "success_speed_bonus", 0.0) or 0.0)
+            tl = float(getattr(self.cfg, "time_limit", 0.0) or 0.0)
+            if ssb > 0.0 and tl > 0.0 and vec_obs is not None:
+                try:
+                    cur_t = float(vec_obs[IDX_TIME])
+                    # If time decreased vs prev => remaining-time style (bigger remaining => faster).
+                    if (prev_time is not None) and (cur_t < float(prev_time)):
+                        frac = cur_t / tl
+                    else:
+                        # Elapsed-time style (smaller elapsed => faster).
+                        frac = 1.0 - (cur_t / tl)
+                    frac = float(np.clip(frac, 0.0, 1.0))
+                    base += ssb * frac
+                except Exception:
+                    pass
 
-            # Non-success steps: clip normally, but if terminal_bonus <= clip, force strict separation.
-            hi = clip if terminal_bonus > clip else (terminal_bonus - 1e-3)
-            return float(np.clip(r, -clip, hi))
-
-        return float(r)
+        return float(base)
     
     def _reward_without_bfs(
         self,
@@ -313,6 +336,7 @@ class RewardShaper:
         self._step += 1
 
         r = float(raw_reward)
+        prev_time = self._prev_time  # for detecting whether IDX_TIME is elapsed-time or remaining-time
 
         # Vector-based goal distance fallback (if available)
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
@@ -350,6 +374,12 @@ class RewardShaper:
         if vec_obs is not None:
             r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
 
+            # Track time signal for speed-bonus orientation detection (counts up vs down).
+            try:
+                self._prev_time = float(vec_obs[IDX_TIME])
+            except Exception:
+                self._prev_time = prev_time
+
             dmg = float(vec_obs[IDX_CUM_DAMAGE])
             if self._prev_cum_damage is not None:
                 r += float(getattr(self.cfg, "w_damage", 0.0)) * -max(0.0, dmg - self._prev_cum_damage)
@@ -359,22 +389,34 @@ class RewardShaper:
                 r += float(getattr(self.cfg, "w_not_actionable", 0.0)) * -1.0
 
         # -----------------------------------------------------------
-        # [Guarantee: goal entry is the largest per-step reward]
+        # [Clipping + Terminal Bonus (ADD-ON)]
+        #   - First clip the base shaped reward.
+        #   - Then, if goal just happened, add terminal_bonus on top (NOT clipped).
         # -----------------------------------------------------------
-        if getattr(self.cfg, "clip", None):
-            clip = float(getattr(self.cfg, "clip", 0.0))
-            terminal_bonus = float(getattr(self.cfg, "terminal_bonus", 1.0))
-
-            if did_just_succeed:
-                return float(terminal_bonus)
-
-            hi = clip if terminal_bonus > clip else (terminal_bonus - 1e-3)
-            return float(np.clip(r, -clip, hi))
+        clip = float(getattr(self.cfg, "clip", 0.0) or 0.0)
+        base = float(r)
+        if clip > 0.0:
+            base = float(np.clip(base, -clip, clip))
 
         if did_just_succeed:
-            return float(getattr(self.cfg, "terminal_bonus", 1.0))
+            base += float(getattr(self.cfg, "terminal_bonus", 1.0))
 
-        return float(r)
+            # Success speed bonus (ADD-ON, not clipped)
+            ssb = float(getattr(self.cfg, "success_speed_bonus", 0.0) or 0.0)
+            tl = float(getattr(self.cfg, "time_limit", 0.0) or 0.0)
+            if ssb > 0.0 and tl > 0.0 and vec_obs is not None:
+                try:
+                    cur_t = float(vec_obs[IDX_TIME])
+                    if (prev_time is not None) and (cur_t < float(prev_time)):
+                         frac = cur_t / tl
+                    else:
+                        frac = 1.0 - (cur_t / tl)
+                    frac = float(np.clip(frac, 0.0, 1.0))
+                    base += ssb * frac
+                except Exception:
+                    pass
+
+        return float(base)
 
 
 

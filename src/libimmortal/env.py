@@ -20,7 +20,7 @@ class ImmortalSufferingEnv:
         width: int = 720,  # Visualized game screen width
         height: int = 480,  # Visualized game screen height
         verbose: bool = False,  # Whether to print logs
-        no_graphics: bool = True,
+        no_graphics: bool = False,
         timeout_wait: float = 120
     ) -> None:
         self.verbose = verbose

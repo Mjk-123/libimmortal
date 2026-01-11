@@ -80,23 +80,12 @@ def _get_action_space(env):
 # -------------------------
 
 def train(args):
-    import os
-    import sys
-    import time
-    import signal
-    import traceback
-    import faulthandler
-    from datetime import datetime
-
     faulthandler.enable(all_threads=True)
 
     print("============================================================================================")
 
-    # --- graceful stop (NO KeyboardInterrupt on SIGINT/SIGTERM) ---
-    from libimmortal.samples.PPO.utils.signaling import GracefulStop
     stopper = GracefulStop()
     stopper.install()
-    signal.signal(signal.SIGTERM, signal.SIG_DFL)  # Let torchrun terminate ranks cleanly.
 
     ddp.ddp_setup()
     rank = ddp.ddp_rank()
@@ -124,16 +113,7 @@ def train(args):
         # Calling all_reduce here can deadlock if ranks diverge (e.g., some ranks in reset).
         return bool(stopper.should_stop())
     
-    def _ddp_any_flag(local_flag: int) -> bool:
-        local_flag = int(bool(local_flag))
-        if not ddp.ddp_is_enabled() or (not dist.is_initialized()):
-            return bool(local_flag)
-        backend = dist.get_backend()
-        tdev = device if (backend == "nccl" and torch.cuda.is_available()) else torch.device("cpu")
-        t = torch.tensor([local_flag], dtype=torch.int32, device=tdev)
-        dist.all_reduce(t, op=dist.ReduceOp.MAX)
-        return bool(int(t.item()))
-
+    # NOTE: Avoid per-step collectives. They are a common deadlock source on interrupts.
     # -------------------------
     # Unity env control
     # -------------------------
@@ -936,11 +916,13 @@ def train(args):
                     pass
 
                 # Sync post-step fatal across ranks; if any rank failed, stop all ranks together.
-            if _ddp_any_flag(post_fail_local):
+            if post_fail_local:
+                # If any rank hits a fatal error, exit that rank immediately.
+                # torchrun will tear down the other ranks.
                 interrupted = True
                 if ddp.is_main_process():
-                    print(f"[FATAL] post-step failed on at least one rank at step={int(step)} -> stopping all ranks", flush=True)
-                break
+                    print(f"[FATAL] post-step failed on rank={rank} step={int(step)} -> exiting", flush=True)
+                os._exit(1)
 
             # -------------------------
             # PPO update (ALL ranks)
@@ -950,7 +932,7 @@ def train(args):
                     interrupted = True
                     break
 
-                if use_update_barriers:
+                if use_update_barriers and (not stopper.should_stop()):
                      ddp._ddp_barrier(f"pre_update@{int(step)}", ddp_barrier_timeout_s)
                 t0 = time.time()
 
@@ -996,7 +978,7 @@ def train(args):
                     )
 
                 _reset_update_counters()
-                if use_update_barriers:
+                if use_update_barriers and (not stopper.should_stop()):
                     ddp._ddp_barrier(f"post_update@{int(step)}", ddp_barrier_timeout_s)
 
             # Action std decay
@@ -1079,7 +1061,7 @@ def train(args):
                 cur_id_map, cur_vec_obs = next_id_map, next_vec_obs
 
             # Step-level DDP synchronization
-            if ddp_step_sync_every > 0 and (local_step % ddp_step_sync_every == 0):
+            if ddp_step_sync_every > 0 and (local_step % ddp_step_sync_every == 0) and (not stopper.should_stop()):
                 ddp._ddp_barrier(f"step_sync@{int(step)}", ddp_barrier_timeout_s)
 
     except KeyboardInterrupt:
@@ -1228,14 +1210,14 @@ def build_argparser():
 
     # Reward shaping knobs
     p.add_argument("--w_progress", type=float, default=100.0)
-    p.add_argument("--w_time", type=float, default=0.01)
+    p.add_argument("--w_time", type=float, default=0.02)
     p.add_argument("--w_damage", type=float, default=0.1)
     p.add_argument("--w_not_actionable", type=float, default=0.01)
-    p.add_argument("--terminal_bonus", type=float, default=4.0)
-    p.add_argument("--reward_clip", type=float, default=20.0)
+    p.add_argument("--terminal_bonus", type=float, default=6.0)
+    p.add_argument("--reward_clip", type=float, default=10.0)
     p.add_argument("--success_if_raw_reward_ge", type=float, default=1.0)
     p.add_argument("--time_limit", type=float, default=300.0)
-    p.add_argument("--success_speed_bonus", type=float, default=0.5)
+    p.add_argument("--success_speed_bonus", type=float, default=3)
 
     # Debug: dump id_map path (rank0 only, on update steps)
     p.add_argument("--dump_id_map", type=str, default=None)

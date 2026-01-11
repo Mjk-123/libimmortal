@@ -1,6 +1,7 @@
 # src/libimmortal/samples/PPO/utils/signaling.py
 from __future__ import annotations
 
+import os
 import contextlib
 import signal
 import time
@@ -40,6 +41,7 @@ class GracefulStop:
                 # Second signal: request a faster exit.
                 self.force_requested = True
                 self.stop_requested = True
+                os._exit(130)
 
         signal.signal(signal.SIGINT, _handler)
         signal.signal(signal.SIGTERM, _handler)

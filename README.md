@@ -189,4 +189,6 @@ torchrun --standalone --nproc_per_node=[number_of_nodes] ./src/libimmortal/sampl
 ```
 
 3. **use ```KeyboardInterrupt``` to put ```SIGINT``` into process so that pause learning.**
-Then, your checkpoint will be saved in ```./src/libimmortal/samples/PPO/checkpioints```. Do not put ```KeyboardInterrupt``` more than once despite your shell is not interrupted. Just wait. Two or more interruption can disturb saving checkpoint.
+Then, your checkpoint will be saved in ```./src/libimmortal/samples/PPO/checkpioints```. Do not put ```KeyboardInterrupt``` more than once despite your shell is not interrupted. Just wait. Two or more interruption can disturb saving checkpoint. But, do not interrupt while ```ppo_update``` is progressing, or you will encounter deadlock on parallel environment.
+
+4. **See ```ppo.log``` on ```\checkpoints``` directory**

@@ -275,7 +275,7 @@ class ActorCritic(nn.Module):
         return list(torch.split(flat_logits, self.action_nvec, dim=-1))
 
     @torch.no_grad()
-    def act(self, id_map, vec_obs):
+    def act(self, id_map, vec_obs, deterministic: bool = False):
         feat = self.encode(id_map, vec_obs)
         state_value = self.critic_head(feat)  # (B,1)
 
@@ -284,7 +284,8 @@ class ActorCritic(nn.Module):
             action_var = self.action_var.expand_as(action_mean)
             cov_mat = torch.diag_embed(action_var)
             dist = MultivariateNormal(action_mean, cov_mat)
-            action = dist.sample()
+            # NOTE: deterministic uses the mean action (no sampling)
+            action = action_mean if deterministic else dist.sample()
             action_logprob = dist.log_prob(action)
             return action, action_logprob, state_value
 
@@ -292,15 +293,21 @@ class ActorCritic(nn.Module):
 
         if not self.is_multidiscrete:
             dist = Categorical(logits=logits)
-            action = dist.sample()                 # (B,)
-            action_logprob = dist.log_prob(action) # (B,)
+            if deterministic:
+                action = torch.argmax(logits, dim=-1)          # (B,)
+            else:
+                action = dist.sample()                         # (B,)
+            action_logprob = dist.log_prob(action)             # (B,)
             return action, action_logprob, state_value
 
         logits_list = self._split_branch_logits(logits)
         actions, logps = [], []
         for lg in logits_list:
             dist = Categorical(logits=lg)
-            a = dist.sample()          # (B,)
+            if deterministic:
+                a = torch.argmax(lg, dim=-1)                   # (B,)
+            else:
+                a = dist.sample()                              # (B,)
             actions.append(a)
             logps.append(dist.log_prob(a))
 
@@ -538,3 +545,159 @@ class PPO:
         src = self.policy.module if hasattr(self.policy, "module") else self.policy
         self.policy_old.load_state_dict(src.state_dict())
         self.buffer.clear()
+
+
+def add_ppo_args(p):
+    """
+    Shared argparse definitions used by both train.py and submission_runner.py.
+    Keep defaults in one place to avoid mismatches.
+    """
+    # PPO hyperparams
+    g = p.add_argument_group("PPO")
+    g.add_argument("--max_ep_len", type=int, default=1000)
+    g.add_argument("--update_timestep", type=int, default=4000)
+    g.add_argument("--k_epochs", type=int, default=10)
+    g.add_argument("--eps_clip", type=float, default=0.2)
+    g.add_argument("--gamma", type=float, default=0.99)
+    g.add_argument("--lr_actor", type=float, default=1e-4)
+    g.add_argument("--lr_critic", type=float, default=2e-4)
+    g.add_argument("--mini_batch_size", type=int, default=64)
+
+    # Checkpoint loading (for eval/inference scripts)
+    g.add_argument(
+        "--ckpt_path",
+        type=str,
+        default=None,
+        help="Path to checkpoint to load for evaluation/inference.",
+    )
+    g.add_argument(
+        "--prefer_old",
+        action="store_true",
+        default=True,
+        help="Prefer policy_old when checkpoint contains both policy and policy_old. (default: True)",
+    )
+    g.add_argument(
+        "--prefer_new",
+        action="store_true",
+        default=False,
+        help="Prefer policy (new) instead of policy_old when checkpoint contains both.",
+    )
+    return p
+
+def getPPOAgent(
+    args,
+    num_ids: int,
+    vec_dim: int,
+    action_space,
+    device,
+    ckpt_path: str | None = None,
+    prefer_old: bool = True,  # True면 checkpoint에서 policy_old 우선 로드
+):
+    """
+    Build and (optionally) load an ActorCritic agent for inference/eval.
+
+    Returns:
+        agent: ActorCritic (nn.Module) on `device`, set to eval()
+        info: dict(action_dim, action_nvec, has_continuous_action_space)
+    """
+    import numpy as np
+    import torch
+
+    # gym vs gymnasium compatibility
+    try:
+        import gym
+        spaces = gym.spaces
+    except Exception:
+        import gymnasium as gym
+        spaces = gym.spaces
+
+    def _strip_module_prefix(sd: dict) -> dict:
+        # If keys start with "module.", strip it for non-DDP models.
+        if not sd:
+            return sd
+        if all(isinstance(k, str) and k.startswith("module.") for k in sd.keys()):
+            return {k[len("module."):]: v for k, v in sd.items()}
+        return sd
+
+    def _extract_policy_state(ckpt_obj: object) -> dict:
+        """
+        Accepts:
+          - raw state_dict
+          - checkpoint dict containing policy/policy_old (state_dict or nested)
+        """
+        if isinstance(ckpt_obj, dict):
+            # Common patterns
+            # 1) ckpt["policy_old"] is a state_dict
+            # 2) ckpt["policy"] is a state_dict
+            # 3) ckpt["state_dict"] is a state_dict
+            cand_keys = []
+            if prefer_old:
+                cand_keys += ["policy_old", "actor_critic_old", "model_old"]
+                cand_keys += ["policy", "actor_critic", "model"]
+            else:
+                cand_keys += ["policy", "actor_critic", "model"]
+                cand_keys += ["policy_old", "actor_critic_old", "model_old"]
+            cand_keys += ["state_dict", "model_state_dict"]
+
+            for k in cand_keys:
+                if k in ckpt_obj and isinstance(ckpt_obj[k], dict):
+                    sd = ckpt_obj[k]
+                    # Sometimes nested: ckpt["policy"]["state_dict"]
+                    if "state_dict" in sd and isinstance(sd["state_dict"], dict):
+                        sd = sd["state_dict"]
+                    return sd
+
+            # Heuristic: looks like a state_dict already (param tensors)
+            if any(isinstance(v, torch.Tensor) for v in ckpt_obj.values()):
+                return ckpt_obj
+
+        raise ValueError("Unsupported checkpoint format: cannot find a policy state_dict.")
+
+    # Infer action spec
+    if isinstance(action_space, spaces.Box):
+        has_continuous_action_space = True
+        action_dim = int(np.prod(action_space.shape))
+        action_nvec = None
+
+    elif isinstance(action_space, spaces.Discrete):
+        has_continuous_action_space = False
+        action_dim = int(action_space.n)  # logits size n
+        action_nvec = None
+
+    elif isinstance(action_space, spaces.MultiDiscrete):
+        has_continuous_action_space = False
+        action_nvec = action_space.nvec.astype(int).tolist()
+        action_dim = int(len(action_nvec))  # branches count (ActorCritic uses action_nvec anyway)
+
+    else:
+        raise TypeError(f"Unsupported action space: {type(action_space)}")
+
+    # Build ActorCritic agent
+    agent = ActorCritic(
+        num_ids=int(num_ids),
+        vec_dim=int(vec_dim),
+        action_dim=int(action_dim),
+        has_continuous_action_space=bool(has_continuous_action_space),
+        action_std_init=float(getattr(args, "action_std", 0.6)),
+        action_nvec=action_nvec,
+    ).to(device)
+
+    # Optional: load weights
+    if ckpt_path is not None:
+        ckpt_obj = torch.load(ckpt_path, map_location="cpu")
+        sd = _extract_policy_state(ckpt_obj)
+        sd = _strip_module_prefix(sd)
+        missing, unexpected = agent.load_state_dict(sd, strict=False)
+        # If you want strict=True, flip it, but strict=False is safer across small refactors.
+        if getattr(args, "verbose", False):
+            print(f"[Load] ckpt={ckpt_path}")
+            print(f"[Load] missing={len(missing)} unexpected={len(unexpected)}")
+
+    agent.eval()
+
+    info = {
+        "action_dim": action_dim,
+        "action_nvec": action_nvec,
+        "has_continuous_action_space": has_continuous_action_space,
+    }
+    return agent, info
