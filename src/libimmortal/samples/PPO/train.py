@@ -919,7 +919,7 @@ def train(args):
             if post_fail_local:
                 # If any rank hits a fatal error, exit that rank immediately.
                 # torchrun will tear down the other ranks.
-                interrupted = True
+                interrupted = True 
                 if ddp.is_main_process():
                     print(f"[FATAL] post-step failed on rank={rank} step={int(step)} -> exiting", flush=True)
                 os._exit(1)

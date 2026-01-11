@@ -168,7 +168,7 @@ def main():
     parser.add_argument("--width", type=int, default=720)
     parser.add_argument("--height", type=int, default=480)
     parser.add_argument("--verbose", action="store_true")
-    parser.add_argument("--max_steps", type=int, default=18000)
+    parser.add_argument("--max_steps", type=int, default=10000)
 
     # PPO args (your shared args)
     PPO.add_ppo_args(parser)
@@ -317,7 +317,8 @@ def main():
                 print("[DEBUG][WARN] dump failed:", repr(e))
 
         # Requirement (2): terminal if done OR reward >= goal_reward
-        terminal = bool(done) or (float(r) >= goal_reward)
+        # terminal = bool(done) or (float(r) >= goal_reward) 
+        terminal = bool(done) or (float(r) >= goal_reward) or (cur_ep_len >= int(args.max_ep_len)) # By episode
 
         if terminal:
             episode_idx += 1

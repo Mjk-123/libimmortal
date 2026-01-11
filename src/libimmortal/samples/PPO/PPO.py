@@ -688,6 +688,9 @@ def getPPOAgent(
         sd = _extract_policy_state(ckpt_obj)
         sd = _strip_module_prefix(sd)
         missing, unexpected = agent.load_state_dict(sd, strict=False)
+        print("[CKPT] missing:", len(missing), "unexpected:", len(unexpected))
+        print("  missing sample:", missing[:5])
+        print("  unexpected sample:", unexpected[:5])
         # If you want strict=True, flip it, but strict=False is safer across small refactors.
         if getattr(args, "verbose", False):
             print(f"[Load] ckpt={ckpt_path}")
