@@ -1,0 +1,10 @@
+[Resume] loading: /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_950000.pth
+[CKPT] policy missing: 0 unexpected: 0
+[Rollout] horizon=2000 envs_per_rank=2 => T_per_update=4000
+============================================================================================
+Started training at: 2026-01-12 12:44:33
+Final model saved at: /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPOVec_ImmortalSufferingEnv_seed42_964484.pth
+============================================================================================
+Started training at: 2026-01-12 12:44:33
+Finished training at: 2026-01-12 13:00:00
+Total training time: 0:15:27

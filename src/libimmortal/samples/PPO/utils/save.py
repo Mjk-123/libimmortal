@@ -5,8 +5,7 @@ import re
 from typing import Optional, Tuple, Dict, Any
 
 import libimmortal.samples.PPO.utils.ddp as ddp
-
-from reward import RewardConfig, RewardScaler
+from libimmortal.samples.PPO.reward import RewardConfig, RewardScaler
 
 
 # -------------------------

@@ -1,0 +1,29 @@
+[EnvVec] N_per_rank=2 world=4 total_envs=8
+[Obs] num_ids(K)=11 vec_dim=103 map_shape=(90, 160)
+[Act] continuous=False action_dim=8 action_nvec=[2, 2, 2, 2, 2, 2, 2, 2]
+[Rollout] update_timestep=4000 -> horizon=2000 effective_T=4000
+[Resume] loading: /path/to/PPO_ImmortalSufferingEnvVec_seed42_950000.pth
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py", line 1184, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py", line 717, in train
+    obj = torch.load(ckpt_to_load, map_location="cpu")
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 986, in load
+    with _open_file_like(f, 'rb') as opened_file:
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 435, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 416, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: '/path/to/PPO_ImmortalSufferingEnvVec_seed42_950000.pth'
+Traceback (most recent call last):
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py", line 1184, in <module>
+    train(args)
+  File "/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py", line 717, in train
+    obj = torch.load(ckpt_to_load, map_location="cpu")
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 986, in load
+    with _open_file_like(f, 'rb') as opened_file:
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 435, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "/usr/local/lib/python3.10/site-packages/torch/serialization.py", line 416, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: '/path/to/PPO_ImmortalSufferingEnvVec_seed42_950000.pth'

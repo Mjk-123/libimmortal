@@ -1,0 +1,147 @@
+wandb_version: 1
+
+game_path:
+  desc: null
+  value: /root/immortal_suffering/immortal_suffering_linux_build.x86_64
+port:
+  desc: null
+  value: 5005
+port_stride:
+  desc: null
+  value: 400
+env_port_stride:
+  desc: null
+  value: 50
+time_scale:
+  desc: null
+  value: 1.0
+seed:
+  desc: null
+  value: 42
+width:
+  desc: null
+  value: 720
+height:
+  desc: null
+  value: 480
+verbose:
+  desc: null
+  value: false
+no_graphics:
+  desc: null
+  value: false
+unity_timeout_wait:
+  desc: null
+  value: 120
+num_envs_per_rank:
+  desc: null
+  value: 2
+max_steps:
+  desc: null
+  value: 2000000
+max_ep_len:
+  desc: null
+  value: 1000
+update_timestep:
+  desc: null
+  value: 4000
+k_epochs:
+  desc: null
+  value: 10
+eps_clip:
+  desc: null
+  value: 0.2
+gamma:
+  desc: null
+  value: 0.99
+lr_actor:
+  desc: null
+  value: 0.0001
+lr_critic:
+  desc: null
+  value: 0.0002
+mini_batch_size:
+  desc: null
+  value: 64
+gae_lambda:
+  desc: null
+  value: 0.95
+action_std:
+  desc: null
+  value: 0.6
+save_model_freq:
+  desc: null
+  value: 40000
+ppo_log_path:
+  desc: null
+  value: null
+resume:
+  desc: null
+  value: true
+checkpoint:
+  desc: null
+  value: /path/to/PPO_ImmortalSufferingEnvVec_seed42_950000.pth
+w_progress:
+  desc: null
+  value: 100.0
+w_time:
+  desc: null
+  value: 0.02
+w_damage:
+  desc: null
+  value: 0.1
+w_not_actionable:
+  desc: null
+  value: 0.01
+terminal_bonus:
+  desc: null
+  value: 6.0
+reward_clip:
+  desc: null
+  value: 10.0
+success_if_raw_reward_ge:
+  desc: null
+  value: 1.0
+time_limit:
+  desc: null
+  value: 300.0
+success_speed_bonus:
+  desc: null
+  value: 3.0
+reward_scaling:
+  desc: null
+  value: false
+wandb:
+  desc: null
+  value: true
+wandb_project:
+  desc: null
+  value: ppo-immortal
+wandb_name:
+  desc: null
+  value: null
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.12
+    cli_version: 0.17.4
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1768188729
+    t:
+      1:
+      - 1
+      - 55
+      2:
+      - 1
+      - 55
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.10.12
+      5: 0.17.4
+      8:
+      - 5
+      13: linux-x86_64

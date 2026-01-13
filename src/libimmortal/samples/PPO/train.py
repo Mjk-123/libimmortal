@@ -1,10 +1,48 @@
 #!/usr/bin/env python3
+
+"""
+How to run
+
+torchrun --standalone --nproc_per_node=2 ./src/libimmortal/samples/PPO/train.py \
+  --port 17005 --port_stride 200 \
+  --save_model_freq 40000 --wandb \
+  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1088001.pth \
+  --env_seed_mode mix \
+  --env_seed_mix_start 0.14 \
+  --env_seed_mix_end 0.30 \
+  --env_seed_mix_warmup_episodes 300 \
+  --env_seed_mix_schedule linear \
+  --env_seed_base 1234567 \
+  --wandb
+
+Virtual device xvfb
+  
+xvfb-run -s "-screen 0 1024x768x24" torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
+  --port 17005 --port_stride 200 \
+  --save_model_freq 40000 --wandb \
+  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1088001.pth \
+  --env_seed_mode mix \
+  --env_seed_mix_start 0.14 \
+  --env_seed_mix_end 0.30 \
+  --env_seed_mix_warmup_episodes 300 \
+  --env_seed_mix_schedule linear \
+  --env_seed_base 1234567 \
+  --wandb
+
+If you want reward scaling:
+  --reward_scaling
+
+If you want graphics (NOT recommended on headless):
+  --graphics
+"""
+
 import os, sys
+import random
 import time
 import argparse
 from datetime import datetime
 from typing import Optional, Tuple, Dict, Any
-from reward import RewardConfig, RewardShaper, RewardScaler
+from libimmortal.samples.PPO.reward import RewardConfig, RewardShaper, RewardScaler
 
 import gym
 import numpy as np
@@ -12,7 +50,7 @@ import torch
 import torch.distributed as dist
 import signal, faulthandler, traceback
 
-from PPO import PPO
+from libimmortal.samples.PPO.PPO import PPO
 
 import libimmortal.samples.PPO.utils.ddp as ddp
 import libimmortal.samples.PPO.utils.save as save
@@ -57,6 +95,23 @@ from libimmortal.env import ImmortalSufferingEnv
 
 faulthandler.enable(all_threads=True)
 
+def _touch_file(path: str):
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(f"ok {time.time()}\n")
+        return True
+    except Exception:
+        return False
+
+def _wait_for_file(path: str, timeout_s: float, poll_s: float = 0.1) -> bool:
+    t0 = time.time()
+    while (time.time() - t0) < float(timeout_s):
+        if os.path.exists(path):
+            return True
+        time.sleep(float(poll_s))
+    return False
+
 def _infer_done(done_from_env, info) -> bool:
     done = bool(done_from_env)
     if TerminalSteps is None:
@@ -74,6 +129,58 @@ def _get_action_space(env):
         return env.env.action_space
     raise AttributeError("Cannot find action_space on env.")
 
+import math
+
+def p_random_by_episode(args, ep_idx: int) -> float:
+    p0 = float(args.env_seed_mix_start)
+    p1 = float(args.env_seed_mix_end)
+
+    if args.env_seed_mix_schedule == "linear":
+        warm = max(1, int(args.env_seed_mix_warmup_episodes))
+        t = min(1.0, ep_idx / warm)
+        return p0 + (p1 - p0) * t
+    else:  # exp
+        tau = max(1.0, float(args.env_seed_mix_tau))
+        t = 1.0 - math.exp(-ep_idx / tau)
+        return p0 + (p1 - p0) * t
+
+def choose_env_seed(args, ep_idx: int, rank: int) -> Tuple[int, bool, float]:
+    base_seed = int(args.seed)  # args.seed is not None 가정
+    fixed = base_seed + rank
+    mode = args.env_seed_mode
+    if mode == "fixed":
+        return fixed, False, 0.0
+    if mode == "random":
+        s = mix_seed(int(args.env_seed_base), ep_idx, rank)
+        return s, True, 1.0
+    # mix mode
+    p = p_random_by_episode(args, ep_idx)
+    u = random.Random(mix_seed(99991, ep_idx, rank)).random()
+    use_random = (u < p)
+    if use_random:
+        s = mix_seed(int(args.env_seed_base), ep_idx, rank)
+    else:
+        s = fixed
+    return s, use_random, p
+
+def mix_seed(base: int, ep_idx: int, rank: int) -> int:
+    x = (base ^ (ep_idx * 0x9E3779B1) ^ (rank * 0x85EBCA6B)) & 0xFFFFFFFF
+    return int(x % (2**31 - 1))
+
+import socket
+
+def _port_is_free(p: int) -> bool:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind(("127.0.0.1", p))
+        return True
+    except OSError:
+        return False
+    finally:
+        try:
+            s.close()
+        except Exception:
+            pass
 
 # -------------------------
 # Training
@@ -125,39 +232,63 @@ def train(args):
     restart_box = {"id": 0}
     last_port_box = {"port": int(args.port)}
 
+    
     def _compute_port(args_) -> int:
-        return (
+        base = (
             int(args_.port)
             + int(local_rank) * port_stride
             + int(restart_box["id"]) * port_stride * int(world)
         )
 
-    def _make_env():
-        p = _compute_port(args)
-        last_port_box["port"] = p
-        print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p}", flush=True)
+        # ✅ 자기 stride 구간 안에서만 회피 (겹치지 않게!)
+        for off in range(port_stride):
+            p = base + off
+            if _port_is_free(p):
+                return p
 
-        kw = dict(
-            game_path=args.game_path,
-            port=p,
-            time_scale=args.time_scale,
-            seed=(int(args.seed) + rank) if args.seed is not None else None,
-            width=args.width,
-            height=args.height,
-            verbose=args.verbose,
-        )
+        # 여기까지 왔으면, 이 restart_id 구간이 다 막힌 것
+        return base
 
-        # If ImmortalSufferingEnv supports these kwargs, use them; else fallback.
-        try:
-            _env = ImmortalSufferingEnv(
-                **kw,
-                no_graphics=no_graphics,
-                timeout_wait=unity_timeout_wait,
+    def _make_env(seed_override: Optional[int] = None):
+        nonlocal restart_box
+
+        if seed_override is None:
+            seed_override = (int(args.seed) + rank) if args.seed is not None else None
+
+        last_err = None
+        for attempt in range(50):
+            p = _compute_port(args)
+            last_port_box["port"] = p
+            print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p} (try {attempt})", flush=True)
+
+            kw = dict(
+                game_path=args.game_path,
+                port=p,
+                time_scale=args.time_scale,
+                seed=seed_override,
+                width=args.width,
+                height=args.height,
+                verbose=args.verbose,
             )
-        except TypeError:
-            _env = ImmortalSufferingEnv(**kw)
 
-        return _env, p
+            try:
+                try:
+                    _env = ImmortalSufferingEnv(**kw, no_graphics=no_graphics, timeout_wait=unity_timeout_wait)
+                except TypeError:
+                    _env = ImmortalSufferingEnv(**kw)
+                return _env, p
+
+            except Exception as e:
+                last_err = e
+                msg = repr(e)
+                if ("Address already in use" in msg) or ("UnityWorkerInUseException" in msg) or ("worker number 0 is still in use" in msg):
+                    # ✅ 다음 restart_id로 점프해서 포트 대역 자체를 바꿈
+                    restart_box["id"] += 1
+                    stopper.sleep_poll(1.0)
+                    continue
+                raise
+
+        raise RuntimeError(f"[Env] failed to create env after retries. last_err={repr(last_err)}")
 
     def _restart_env(reason: str):
         nonlocal env
@@ -211,13 +342,21 @@ def train(args):
             return 0.0
 
     def _safe_reset():
-        nonlocal env, port, step
+        nonlocal env, port, step, episode_idx
         while True:
-            # Local-only stop flag (no collectives inside reset path).
             stop_requested = bool(stopper.should_stop())
 
-            # Always close + recreate env (no env.reset()).
             try:
+                # (1) seed 선택
+                if args.seed is not None:
+                    s, use_rand, p = choose_env_seed(args, episode_idx, rank)
+                else:
+                    s, use_rand, p = (None, False, 0.0)
+
+                if ddp.is_main_process():
+                    print(f"[Env][reset] ep={episode_idx} p_rand={p:.3f} use_rand={int(use_rand)} seed={s}", flush=True)
+
+                # (2) env close + recreate (seed 반영)
                 t0 = time.time()
                 if env is not None:
                     try:
@@ -226,11 +365,12 @@ def train(args):
                         env.close()
                     except Exception:
                         pass
+                    stopper.sleep_poll(1.0)
 
                 if ddp.is_main_process():
                     print(f"[Env][reset] closed in {time.time()-t0:.3f}s -> creating new env", flush=True)
 
-                env, port = _make_env()
+                env, port = _make_env(seed_override=s)
 
                 if ddp.is_main_process():
                     print(f"[Env][reset] created port={port} -> bootstrapping", flush=True)
@@ -279,8 +419,14 @@ def train(args):
                 raise
 
     # Build initial env
-    env, port = _make_env()
+    # Build initial env (defer to _safe_reset)
+    env = None
+    port = None
     env_tag = "ImmortalSufferingEnv"
+    episode_reward = 0.0
+    episode_raw_reward = 0.0
+    episode_len = 0
+    episode_idx = 0
 
     MAX_STEPS = int(args.max_steps)
 
@@ -603,11 +749,6 @@ def train(args):
         else:
             print("Started training at:", start_time)
             print("============================================================================================")
-
-    episode_reward = 0.0
-    episode_raw_reward = 0.0
-    episode_len = 0
-    episode_idx = 0
 
     cur_id_map = id_map
     cur_vec_obs = vec_obs
@@ -1049,6 +1190,7 @@ def train(args):
                         step=int(step),
                     )
 
+                episode_idx += 1
                 obs = _safe_reset()
                 cur_id_map, cur_vec_obs, _ = _make_map_and_vec_checked(obs)
                 shaper.reset(cur_vec_obs, cur_id_map)
@@ -1056,7 +1198,6 @@ def train(args):
                 episode_reward = 0.0
                 episode_raw_reward = 0.0
                 episode_len = 0
-                episode_idx += 1
             else:
                 cur_id_map, cur_vec_obs = next_id_map, next_vec_obs
 
@@ -1091,69 +1232,147 @@ def train(args):
         raise
 
     finally:
-        # Final save (rank0 only) - atomic + ignore signals
+        # Final save intent (if interrupted/stop requested)
         force_exit = bool(interrupted) or bool(getattr(stopper, "stop_requested", False))
 
-        if ddp.is_main_process():
-            try:
-                final_step = int(step) if int(step) > 0 else int(base_step)
-                final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_step}.pth")
-                if interrupted:
-                    print("[Exit] stop requested -> saving final checkpoint:", final_path)
-                with stopper.ignore_signals():
-                    save.atomic_torch_save(
-                        lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler),
-                        final_path,
-                    )
-                print("Final model saved at:", final_path)
-            except Exception as e:
-                print(f"[Exit][WARN] failed to save final checkpoint: {repr(e)}")
+        # Decide final step/path early (used by flags + logging)
+        try:
+            final_step = int(step) if int(step) > 0 else int(base_step)
+        except Exception:
+            final_step = int(base_step) if "base_step" in locals() else 0
 
-        # On interrupt, closing Unity/DDP/W&B can hang. Do best-effort only.
-        if not force_exit:
+        try:
+            final_path = os.path.join(ckpt_dir, f"{ckpt_prefix}{final_step}.pth")
+        except Exception:
+            # if ckpt_dir/ckpt_prefix not defined somehow
+            final_path = None
+
+        # ---- rendezvous flags (file-based, no deadlock) ----
+        # Keep them in ckpt_dir so you can inspect after crashes.
+        save_flag = None
+        start_flag = None
+        if "ckpt_dir" in locals() and (ckpt_dir is not None) and (final_step is not None):
+            save_flag = os.path.join(ckpt_dir, f".final_save_done_step{final_step}.rank0")
+            start_flag = os.path.join(ckpt_dir, f".final_save_start_step{final_step}.rank0")
+
+        # (A) short soft barrier: align ranks entering finally (optional, never blocks forever)
+        if ddp.ddp_is_enabled():
             try:
-                env.close()
+                ddp._ddp_barrier_soft("enter_finally", timeout_s=5.0)
             except Exception:
                 pass
 
-        if (wandb is not None) and (not force_exit):
+        # (B) rank0 touches "start" flag so other ranks can decide to wait
+        if ddp.is_main_process() and start_flag is not None:
+            _touch_file(start_flag)
+
+        # (C) short soft barrier before saving (optional)
+        if ddp.ddp_is_enabled():
+            try:
+                ddp._ddp_barrier_soft("final_save_start", timeout_s=5.0)
+            except Exception:
+                pass
+
+        # (D) rank0 save (atomic + ignore signals)
+        if ddp.is_main_process():
+            try:
+                if final_path is not None:
+                    if interrupted:
+                        print("[Exit] stop requested -> saving final checkpoint:", final_path, flush=True)
+                    with stopper.ignore_signals():
+                        save.atomic_torch_save(
+                            lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler),
+                            final_path,
+                        )
+                    print("Final model saved at:", final_path, flush=True)
+                else:
+                    print("[Exit][WARN] final_path is None; skipping final checkpoint save", flush=True)
+
+                # touch done flag only if saving did not throw
+                if save_flag is not None:
+                    _touch_file(save_flag)
+
+            except Exception as e:
+                print(f"[Exit][WARN] failed to save final checkpoint: {repr(e)}", flush=True)
+
+        # (E) non-rank0 waits (file-based) so they don't exit early and trigger torchrun teardown too fast
+        if (not ddp.is_main_process()):
+            try:
+                if start_flag is not None:
+                    _wait_for_file(start_flag, timeout_s=5.0)
+                if save_flag is not None:
+                    _wait_for_file(save_flag, timeout_s=60.0)
+            except Exception:
+                pass
+
+        # (F) final soft barrier (optional) - if it works, great; if not, never deadlocks
+        if ddp.ddp_is_enabled():
+            try:
+                ddp._ddp_barrier_soft("final_save_done", timeout_s=30.0)
+            except Exception:
+                pass
+
+        # ---- best-effort cleanup ----
+        # On interrupt, Unity/DDP/W&B can hang. Do best-effort only.
+        if not force_exit:
+            try:
+                if "env" in locals() and env is not None:
+                    env.close()
+            except Exception:
+                pass
+
+        if ("wandb" in locals()) and (wandb is not None) and (not force_exit):
             try:
                 wandb.finish()
             except Exception:
                 pass
 
+        # ---- end-of-run logging (preserve original behavior) ----
         end_time = datetime.now().replace(microsecond=0)
         if ddp.is_main_process():
-            if ppo_logger is not None:
-                ppo_logger.log("=" * 92)
-                ppo_logger.log(f"Started training at: {start_time}")
-                ppo_logger.log(f"Finished training at: {end_time}")
-                ppo_logger.log(f"Total training time: {end_time - start_time}")
-                ppo_logger.log(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
-                ppo_logger.log("=" * 92)
-            else:
-                print("============================================================================================")
-                print("Started training at:", start_time)
-                print("Finished training at:", end_time)
-                print("Total training time:", end_time - start_time)
-                print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
-                print("============================================================================================")
+            try:
+                if "ppo_logger" in locals() and (ppo_logger is not None):
+                    ppo_logger.log("=" * 92)
+                    ppo_logger.log(f"Started training at: {start_time}")
+                    ppo_logger.log(f"Finished training at: {end_time}")
+                    ppo_logger.log(f"Total training time: {end_time - start_time}")
+                    ppo_logger.log(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
+                    ppo_logger.log("=" * 92)
+                else:
+                    print("============================================================================================")
+                    print("Started training at:", start_time)
+                    print("Finished training at:", end_time)
+                    print("Total training time:", end_time - start_time)
+                    try:
+                        print(f"[Env][FINAL] timeouts={timeouts} restarts={restarts} last_port={last_port_box['port']}")
+                    except Exception:
+                        pass
+                    print("============================================================================================")
+            except Exception:
+                # never let logging crash shutdown
+                pass
 
-        if ppo_logger is not None:
-            ppo_logger.close()
+        if "ppo_logger" in locals() and (ppo_logger is not None):
+            try:
+                ppo_logger.close()
+            except Exception:
+                pass
 
-        if not force_exit:
+        # cleanup도 best-effort (force_exit여도 시도는 해보되 실패하면 무시)
+        if ddp.ddp_is_enabled():
             try:
                 ddp.ddp_cleanup()
             except Exception:
                 pass
 
-        # Always ensure torchrun can't hang waiting for a stuck worker.
+        # Always ensure buffers flushed
         try:
             sys.stdout.flush()
             sys.stderr.flush()
         except Exception:
             pass
+
+        # Always ensure torchrun can't hang waiting for a stuck worker.
         if force_exit:
             os._exit(0)
 
@@ -1231,23 +1450,33 @@ def build_argparser():
     p.add_argument("--wandb_name", type=str, default=None)
     p.add_argument("--wandb_log_freq", type=int, default=200)
 
+    # Seed mixing / domain randomization schedule
+    p.add_argument("--env_seed_mode", type=str, default="mix",
+                choices=["fixed", "random", "mix"],
+                help="fixed: always base seed+rank, random: always random, mix: anneal fixed->random per episode/step")
+
+    p.add_argument("--env_seed_base", type=int, default=1234567,
+                help="Base for generating random-looking env seeds (deterministic hash).")
+
+    p.add_argument("--env_seed_mix_start", type=float, default=0.0,
+                help="Initial random probability p0 in mix mode (0~1).")
+
+    p.add_argument("--env_seed_mix_end", type=float, default=1.0,
+                help="Final random probability p1 in mix mode (0~1).")
+
+    p.add_argument("--env_seed_mix_warmup_episodes", type=int, default=50000,
+                help="Warmup length for p_random schedule in mix mode, measured in episodes.")
+
+    p.add_argument("--env_seed_mix_schedule", type=str, default="linear",
+                choices=["linear", "exp"],
+                help="Schedule type for random probability in mix mode.")
+
+    p.add_argument("--env_seed_mix_tau", type=float, default=20000.0,
+                help="Time constant for exp schedule (episodes). Only used when --env_seed_mix_schedule=exp.")
+
     return p
 
 
 if __name__ == "__main__":
     args = build_argparser().parse_args()
     train(args)
-
-"""
-How to run
-
-torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
- --port 5005 --port_stride 200 --save_model_freq 40000 --wandb \
- --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_160000.pth
-
-If you want reward scaling:
-  --reward_scaling
-
-If you want graphics (NOT recommended on headless):
-  --graphics
-"""

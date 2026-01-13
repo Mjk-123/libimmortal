@@ -1,0 +1,35 @@
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Current SDK version is 0.17.4
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Configure stats pid to 3339477
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Loading settings from /root/.config/wandb/settings
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Loading settings from /root/libimmortal/wandb/settings
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'src/libimmortal/samples/PPO/train_vec.py', 'program_abspath': '/root/libimmortal/src/libimmortal/samples/PPO/train_vec.py', 'program': '/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py'}
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_setup.py:_flush():76] Applying login settings: {}
+2026-01-12 11:45:37,234 INFO    MainThread:3339477 [wandb_init.py:_log_setup():529] Logging user logs to /root/libimmortal/wandb/run-20260112_114537-qh8o2gqm/logs/debug.log
+2026-01-12 11:45:37,235 INFO    MainThread:3339477 [wandb_init.py:_log_setup():530] Logging internal logs to /root/libimmortal/wandb/run-20260112_114537-qh8o2gqm/logs/debug-internal.log
+2026-01-12 11:45:37,235 INFO    MainThread:3339477 [wandb_init.py:init():569] calling init triggers
+2026-01-12 11:45:37,235 INFO    MainThread:3339477 [wandb_init.py:init():576] wandb.init called with sweep_config: {}
+config: {'world_size': 4, 'num_envs': 2, 'update_timestep': 4000, 'horizon_per_env': 2000, 'max_steps': 200000, 'seed': 42, 'gamma': 0.99, 'eps_clip': 0.2, 'k_epochs': 10, 'lr_actor': 0.0001, 'lr_critic': 0.0002, 'mini_batch_size': 256, 'max_ep_len': 1000, 'reward_scaling': False, 'w_progress': 100.0, 'w_time': 0.02, 'w_damage': 0.1, 'w_not_actionable': 0.01, 'terminal_bonus': 6.0, 'reward_clip': 10.0, 'success_if_raw_reward_ge': 1.0, 'time_limit': 300.0, 'success_speed_bonus': 3.0, 'no_graphics': False, 'time_scale': 1.0}
+2026-01-12 11:45:37,235 INFO    MainThread:3339477 [wandb_init.py:init():619] starting backend
+2026-01-12 11:45:37,235 INFO    MainThread:3339477 [wandb_init.py:init():623] setting up manager
+2026-01-12 11:45:37,238 INFO    MainThread:3339477 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2026-01-12 11:45:37,241 INFO    MainThread:3339477 [wandb_init.py:init():631] backend started and connected
+2026-01-12 11:45:37,244 INFO    MainThread:3339477 [wandb_init.py:init():720] updated telemetry
+2026-01-12 11:45:37,251 INFO    MainThread:3339477 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2026-01-12 11:45:38,031 INFO    MainThread:3339477 [wandb_run.py:_on_init():2402] communicating current version
+2026-01-12 11:45:38,225 INFO    MainThread:3339477 [wandb_run.py:_on_init():2411] got version response upgrade_message: "wandb version 0.23.1 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2026-01-12 11:45:38,225 INFO    MainThread:3339477 [wandb_init.py:init():804] starting run threads in backend
+2026-01-12 11:45:38,513 INFO    MainThread:3339477 [wandb_run.py:_console_start():2380] atexit reg
+2026-01-12 11:45:38,515 INFO    MainThread:3339477 [wandb_run.py:_redirect():2235] redirect: wrap_raw
+2026-01-12 11:45:38,515 INFO    MainThread:3339477 [wandb_run.py:_redirect():2300] Wrapping output streams.
+2026-01-12 11:45:38,515 INFO    MainThread:3339477 [wandb_run.py:_redirect():2325] Redirects installed.
+2026-01-12 11:45:38,519 INFO    MainThread:3339477 [wandb_init.py:init():847] run started, returning control to user process
+2026-01-12 11:51:28,643 INFO    MainThread:3339477 [wandb_run.py:_finish():2109] finishing run mjkmszr0613-postech/ppo-immortal-vec/qh8o2gqm
+2026-01-12 11:51:28,643 INFO    MainThread:3339477 [wandb_run.py:_atexit_cleanup():2349] got exitcode: 0
+2026-01-12 11:51:28,643 INFO    MainThread:3339477 [wandb_run.py:_restore():2332] restore
+2026-01-12 11:51:28,644 INFO    MainThread:3339477 [wandb_run.py:_restore():2338] restore done
+2026-01-12 11:51:35,965 INFO    MainThread:3339477 [wandb_run.py:_footer_history_summary_info():3991] rendering history
+2026-01-12 11:51:35,966 INFO    MainThread:3339477 [wandb_run.py:_footer_history_summary_info():4023] rendering summary
+2026-01-12 11:51:35,973 INFO    MainThread:3339477 [wandb_run.py:_footer_sync_info():3950] logging synced files

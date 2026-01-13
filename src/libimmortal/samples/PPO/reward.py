@@ -149,17 +149,17 @@ class RewardShaper:
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
         self.virtual_done = False
-
-        self._prev_cum_damage = float(vec_obs[IDX_CUM_DAMAGE]) if vec_obs is not None else None
-        self._prev_time = float(vec_obs[IDX_TIME]) if vec_obs is not None else None
+        ...
         self._prev_bfs_dist = None
         self._prev_goal_phi = None
 
-        # Do NOT blindly clear BFS caches; map/goal are assumed fixed.
-        # We'll rebuild only when missing or shape changed.
+        # ✅ episode마다 지형/goal이 바뀔 수 있으니 캐시 리셋
+        self._cached_goal_xy = None
+        self._cached_dist_map = None
+        self._cached_passable = None
+
         if id_map is not None and bool(getattr(self.cfg, "use_bfs_progress", True)):
             self._ensure_bfs_cache(id_map)
-
             d0 = self._get_bfs_dist(id_map)
             self._prev_bfs_dist = float(d0) if d0 is not None else None
 

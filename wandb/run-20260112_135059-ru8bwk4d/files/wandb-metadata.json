@@ -1,0 +1,221 @@
+{
+    "os": "Linux-6.8.0-62-generic-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2026-01-12T04:51:00.766342",
+    "startedAt": "2026-01-12T04:50:59.548579",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--port",
+        "5005",
+        "--port_stride",
+        "400",
+        "--envs_per_rank",
+        "2",
+        "--env_port_stride",
+        "50",
+        "--update_timestep",
+        "4000",
+        "--max_steps",
+        "2000000",
+        "--save_model_freq",
+        "40000",
+        "--wandb",
+        "--seed",
+        "42",
+        "--resume",
+        "--checkpoint",
+        "/root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_950000.pth"
+    ],
+    "state": "running",
+    "program": "/root/libimmortal/./src/libimmortal/samples/PPO/train_vec.py",
+    "codePathLocal": "src/libimmortal/samples/PPO/train_vec.py",
+    "codePath": "src/libimmortal/samples/PPO/train_vec.py",
+    "git": {
+        "remote": "https://github.com/Mjk-123/libimmortal.git",
+        "commit": "5daad8950903f6623d38f9e6490228915d3a3b70"
+    },
+    "email": "mjkmszr0613@gmail.com",
+    "root": "/root/libimmortal",
+    "host": "e384e2fa0e13",
+    "username": "root",
+    "executable": "/usr/local/bin/python3.10",
+    "cpu_count": 14,
+    "cpu_count_logical": 28,
+    "cpu_freq": {
+        "current": 3606.797178571428,
+        "min": 1200.0,
+        "max": 4414.285714285715
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3813.537,
+            "min": 1200.0,
+            "max": 4500.0
+        },
+        {
+            "current": 3715.701,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3739.218,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3671.041,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3599.972,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3600.039,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3700.64,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3599.966,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3640.361,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3637.914,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3838.701,
+            "min": 1200.0,
+            "max": 4500.0
+        },
+        {
+            "current": 3604.748,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3599.956,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3627.942,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3618.679,
+            "min": 1200.0,
+            "max": 4500.0
+        },
+        {
+            "current": 3633.366,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 4099.99,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3599.99,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3600.01,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3600.048,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3621.343,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3600.008,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3632.32,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3618.977,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3794.283,
+            "min": 1200.0,
+            "max": 4500.0
+        },
+        {
+            "current": 3604.225,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3599.943,
+            "min": 1200.0,
+            "max": 4400.0
+        },
+        {
+            "current": 3615.141,
+            "min": 1200.0,
+            "max": 4400.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 1873.7061920166016,
+            "used": 1101.6803665161133
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 2080 Ti",
+    "gpu_count": 4,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 2080 Ti",
+            "memory_total": 11811160064
+        },
+        {
+            "name": "NVIDIA GeForce RTX 2080 Ti",
+            "memory_total": 11811160064
+        },
+        {
+            "name": "NVIDIA GeForce RTX 2080 Ti",
+            "memory_total": 11811160064
+        },
+        {
+            "name": "NVIDIA GeForce RTX 2080 Ti",
+            "memory_total": 11811160064
+        }
+    ],
+    "memory": {
+        "total": 62.46498107910156
+    }
+}

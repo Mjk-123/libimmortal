@@ -101,6 +101,41 @@ def _ddp_barrier(tag: str, ddp_barrier_timeout_s: float):
              if is_main_process():
                  print(f"[DDP][barrier][{tag}] FAILED (timeout={ddp_barrier_timeout_s}s): {repr(e)}", flush=True)
              raise
+        
+def _ddp_barrier_soft(tag: str, timeout_s: float):
+    if not ddp_is_enabled() or (not dist.is_initialized()):
+        return False
+    try:
+        work = dist.barrier(async_op=True)
+
+        # wait(timeout=) 지원이면 그걸 쓰고
+        try:
+            work.wait(timeout=timeout_s)  # type: ignore[arg-type]
+            return True
+        except TypeError:
+            pass
+
+        # polling
+        if hasattr(work, "is_completed"):
+            t_deadline = time.time() + float(timeout_s)
+            while time.time() < t_deadline:
+                if work.is_completed():  # type: ignore[attr-defined]
+                    return True
+                time.sleep(0.05)
+            if is_main_process():
+                print(f"[DDP][barrier-soft][{tag}] TIMEOUT after {timeout_s}s (continuing)", flush=True)
+            return False
+
+        # oldest fallback (timeout 불가) => 여기서는 아예 blocking barrier를 하면 안 됨
+        if is_main_process():
+            print(f"[DDP][barrier-soft][{tag}] NO TIMEOUT SUPPORT -> skip", flush=True)
+        return False
+
+    except Exception as e:
+        if is_main_process():
+            print(f"[DDP][barrier-soft][{tag}] FAILED: {repr(e)} (continuing)", flush=True)
+        return False
+
 
 def seed_everything(seed: int):
     s = int(seed) + ddp_rank()

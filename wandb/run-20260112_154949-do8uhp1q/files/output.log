@@ -1,0 +1,362 @@
+[Env][reset] ep=1 p_rand=0.001 use_rand=0 seed=42
+[Env][reset] closing... step=951000 port=17006
+[Env][reset] closed in 1.371s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=17006 (try 0)
+[Env][reset] created port=17006 -> bootstrapping
+[Env][reset] bootstrap ok in 7.233s
+[Env][reset] ep=2 p_rand=0.002 use_rand=0 seed=42
+[Env][reset] closing... step=952000 port=17006
+[Env][reset] closed in 1.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=17006 (try 0)
+[Env][reset] created port=17006 -> bootstrapping
+[Env][reset] bootstrap ok in 7.284s
+[Env][reset] ep=3 p_rand=0.003 use_rand=0 seed=42
+[Env][reset] closing... step=953000 port=17006
+[Env][reset] closed in 1.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=17006 (try 0)
+[Env][reset] created port=17006 -> bootstrapping
+[Env][reset] bootstrap ok in 7.245s
+[Env][reset] ep=4 p_rand=0.004 use_rand=0 seed=42
+[Env][reset] closing... step=954000 port=17006
+[Env][reset] closed in 1.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=17006 (try 0)
+[Env][reset] created port=17006 -> bootstrapping
+[Env][reset] bootstrap ok in 7.305s
+[Env][reset] ep=5 p_rand=0.005 use_rand=0 seed=42
+[Env][reset] closing... step=955000 port=17006
+[Env][reset] closed in 1.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=0 port=17006 (try 0)
+[Env][reset] created port=17006 -> bootstrapping
+[Env][reset] bootstrap ok in 7.324s
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=1, restarts=1)
+[Env] restart #1 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:SendInfoToBrain () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1137)
+Unity.MLAgents.Agent:SendInfo () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:1377)
+Unity.MLAgents.Academy:EnvironmentStep () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:585)
+Unity.MLAgents.AcademyFixedUpdateStepper:FixedUpdate () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Academy.cs:43)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+Goal Reached
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+PlayerAgent:OnGoalReached () (at D:/immortal_suffering/Assets/Scripts/PlayerAgent.cs:190)
+UnityEngine.Events.InvokableCall:Invoke () (at /home/bokken/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent:Invoke () (at /home/bokken/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:57)
+ImmortalSuffering.Goal:CompleteGoal () (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:20)
+ImmortalSuffering.Goal:OnTriggerEnter2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:14)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+More observations (106) made than vector observation size (103). The observations will be truncated.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogWarningFormat (string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:220)
+Unity.MLAgents.Sensors.VectorSensor:Write (Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Sensors/VectorSensor.cs:47)
+Unity.MLAgents.GrpcExtensions:GetObservationProto (Unity.MLAgents.Sensors.ISensor,Unity.MLAgents.Sensors.ObservationWriter) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/GrpcExtensions.cs:400)
+Unity.MLAgents.RpcCommunicator:PutObservations (string,Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Communicator/RpcCommunicator.cs:355)
+Unity.MLAgents.Policies.RemotePolicy:RequestDecision (Unity.MLAgents.AgentInfo,System.Collections.Generic.List`1<Unity.MLAgents.Sensors.ISensor>) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Policies/RemotePolicy.cs:46)
+Unity.MLAgents.Agent:NotifyAgentDone (Unity.MLAgents.Agent/DoneReason) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:617)
+Unity.MLAgents.Agent:EndEpisodeAndReset (Unity.MLAgents.Agent/DoneReason) (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:833)
+Unity.MLAgents.Agent:EndEpisode () (at ./Library/PackageCache/com.unity.ml-agents@fdebd49b3a0f/Runtime/Agent.cs:808)
+PlayerAgent:OnGoalReached () (at D:/immortal_suffering/Assets/Scripts/PlayerAgent.cs:191)
+UnityEngine.Events.InvokableCall:Invoke () (at /home/bokken/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent:Invoke () (at /home/bokken/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:57)
+ImmortalSuffering.Goal:CompleteGoal () (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:20)
+ImmortalSuffering.Goal:OnTriggerEnter2D (UnityEngine.Collider2D) (at D:/immortal_suffering/Assets/Prototype/Scripts/Goal.cs:14)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 220)
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+UnityEngine.ComputeBuffer:Dispose (bool) (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:57)
+UnityEngine.ComputeBuffer:Finalize () (at /home/bokken/build/output/unity/unity/Runtime/Export/Shaders/ComputeBuffer.bindings.cs:30)
+(Filename: /home/bokken/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+[Env][step] --- end tail ---
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] ep=5 p_rand=0.005 use_rand=0 seed=42
+[Env][reset] closing... step=955445 port=17605
+[Env][reset] closed in 1.367s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.019s
+[Env][reset] ep=6 p_rand=0.006 use_rand=0 seed=42
+[Env][reset] closing... step=956000 port=17605
+[Env][reset] closed in 1.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.213s
+[Env][reset] ep=7 p_rand=0.007 use_rand=0 seed=42
+[Env][reset] closing... step=957000 port=17605
+[Env][reset] closed in 1.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.299s
+[Env][reset] ep=8 p_rand=0.008 use_rand=0 seed=42
+[Env][reset] closing... step=958000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.141s
+[Env][reset] ep=9 p_rand=0.009 use_rand=0 seed=42
+[Env][reset] closing... step=959000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.153s
+[Env][reset] ep=10 p_rand=0.010 use_rand=0 seed=42
+[Env][reset] closing... step=960000 port=17605
+[Env][reset] closed in 1.418s -> creating new env
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.182s
+[Env][reset] ep=11 p_rand=0.011 use_rand=0 seed=42
+[Env][reset] closing... step=961000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.231s
+[Env][reset] ep=12 p_rand=0.012 use_rand=0 seed=42
+[Env][reset] closing... step=962000 port=17605
+[Env][reset] closed in 1.418s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.145s
+[Env][reset] ep=13 p_rand=0.013 use_rand=0 seed=42
+[Env][reset] closing... step=963000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.190s
+[Env][reset] ep=14 p_rand=0.014 use_rand=0 seed=42
+[Env][reset] closing... step=964000 port=17605
+[Env][reset] closed in 1.572s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.678s
+[Env][reset] ep=15 p_rand=0.015 use_rand=0 seed=42
+[Env][reset] closing... step=965000 port=17605
+[Env][reset] closed in 1.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.235s
+[Env][reset] ep=16 p_rand=0.016 use_rand=0 seed=42
+[Env][reset] closing... step=966000 port=17605
+[Env][reset] closed in 1.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.371s
+[Env][reset] ep=17 p_rand=0.017 use_rand=0 seed=42
+[Env][reset] closing... step=967000 port=17605
+[Env][reset] closed in 1.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.383s
+[Env][reset] ep=18 p_rand=0.018 use_rand=0 seed=42
+[Env][reset] closing... step=968000 port=17605
+[Env][reset] closed in 1.518s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.255s
+[Env][reset] ep=19 p_rand=0.019 use_rand=0 seed=42
+[Env][reset] closing... step=969000 port=17605
+[Env][reset] closed in 1.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.168s
+[Env][reset] ep=20 p_rand=0.020 use_rand=0 seed=42
+[Env][reset] closing... step=970000 port=17605
+[Env][reset] closed in 1.519s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.310s
+[Env][reset] ep=21 p_rand=0.021 use_rand=0 seed=42
+[Env][reset] closing... step=971000 port=17605
+[Env][reset] closed in 1.570s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.337s
+[Env][reset] ep=22 p_rand=0.022 use_rand=0 seed=42
+[Env][reset] closing... step=972000 port=17605
+[Env][reset] closed in 1.517s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.282s
+[Env][reset] ep=23 p_rand=0.023 use_rand=0 seed=42
+[Env][reset] closing... step=973000 port=17605
+[Env][reset] closed in 1.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.102s
+[Env][reset] ep=24 p_rand=0.024 use_rand=0 seed=42
+[Env][reset] closing... step=974000 port=17605
+[Env][reset] closed in 1.416s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.074s
+[Env][reset] ep=25 p_rand=0.025 use_rand=0 seed=42
+[Env][reset] closing... step=975000 port=17605
+[Env][reset] closed in 1.420s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.107s
+[Env][reset] ep=26 p_rand=0.026 use_rand=0 seed=42
+[Env][reset] closing... step=976000 port=17605
+[Env][reset] closed in 1.467s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.233s
+[Env][reset] ep=27 p_rand=0.027 use_rand=0 seed=42
+[Env][reset] closing... step=977000 port=17605
+[Env][reset] closed in 1.468s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.269s
+[Env][reset] ep=28 p_rand=0.028 use_rand=0 seed=42
+[Env][reset] closing... step=978000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 7.328s
+[Env][reset] ep=29 p_rand=0.029 use_rand=0 seed=42
+[Env][reset] closing... step=979000 port=17605
+[Env][reset] closed in 1.417s -> creating new env
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
