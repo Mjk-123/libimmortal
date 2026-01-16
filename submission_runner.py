@@ -1,3 +1,15 @@
+'''
+How to run
+
+python3 submission_runner.py \
+  --ckpt_path /home/mjk123/Desktop/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_2280000.pth \
+  --seed 42 \
+  --max_steps 20000 \
+  --debug_dump_every 500 \
+  --verbose
+
+'''
+
 import time
 import random
 import numpy as np
@@ -321,7 +333,7 @@ def main():
         terminal = bool(done) or (float(r) >= goal_reward) or (cur_ep_len >= int(args.max_ep_len)) # By episode
 
         if terminal:
-            episode_idx += 1
+            episode_idx += 2
             episode_returns.append(float(cur_ep_return))
             episode_lengths.append(int(cur_ep_len))
 

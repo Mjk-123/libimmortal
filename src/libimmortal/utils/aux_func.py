@@ -95,24 +95,61 @@ class ColorMapEncoder:
 
 DEFAULT_ENCODER = ColorMapEncoder.from_enum()
 
-def fix_obs_structure(obs):
-        """
-        (3, 90, 160) 형태이지만 RGB가 섞여있는 데이터를 
-        제대로 된 (3, 90, 160) CHW 구조로 바꿈
-        """
-        # 1. 일렬로 나열된 RGB를 (H, W, 3)으로 제대로 쌓기
-        # 이 과정에서 [8, 19, 49]가 하나의 픽셀 묶음이 됨
-        h, w = 90, 160
-        corrected_hwc = obs.reshape(h, w, 3)
-        
-        # 2. 인코더가 기대하는 (3, H, W) 순서로 축 변경
-        corrected_chw = np.transpose(corrected_hwc, (2, 0, 1))
-        
-        return corrected_chw
+# (y, x0, x1) where platform (2.00) must exist.
+# Note: x1 is inclusive.
+PLATFORM_FORCE_SPANS = [
+    (29,  96, 105),
+    (38,  54,  75),
+    (45,  24,  34),
+    (53,  54,  65),
+    (53, 128, 143),
+    (64,  35,  45),
+    (69,  68, 113),
+]
+
+def force_fix_platform_inplace(id_map: np.ndarray) -> None:
+    """
+    Fast in-place fix.
+    For each span, replace only 0.00 -> 2.00.
+    Supports id_map shape (90,160) or (160,90).
+    """
+    id_map = np.asarray(id_map)
+
+    # normalize to (90,160) indexing [y,x]
+    if id_map.shape == (160, 90):
+        id_map = id_map.T  # view
+
+    if id_map.shape != (90, 160):
+        raise ValueError(f"[platform-fix] unexpected id_map shape: {id_map.shape}")
+
+    # vectorized per-span replacement (no inner python loop over x)
+    for y, x0, x1 in PLATFORM_FORCE_SPANS:
+        seg = id_map[y, x0:x1 + 1]
+        # only overwrite true blanks
+        seg[seg == 0.00] = 2.00
+
+
+def fix_obs_structure(obs, id_map=None):
+    """
+    obs: (90*160*3,) 처럼 납작하게 들어온 RGB를
+         (3, 90, 160) CHW로 복구.
+
+    id_map: (90, 160) 이 같이 들어오면 platform 누락을 하드픽스까지 수행.
+    """
+    h, w = 90, 160
+
+    # 1) (H, W, 3)
+    corrected_hwc = obs.reshape(h, w, 3)
+
+    # 2) (3, H, W)
+    corrected_chw = np.transpose(corrected_hwc, (2, 0, 1))
+    return corrected_chw
 
 def colormap_to_ids_and_onehot(img_chw: np.ndarray):
     img_chw = fix_obs_structure(img_chw)
-    return DEFAULT_ENCODER.encode(img_chw)
+    id_map, onehot = DEFAULT_ENCODER.encode(img_chw)
+    force_fix_platform_inplace(id_map)
+    return id_map, onehot
 
 
 def find_free_tcp_port(host: str = "127.0.0.1") -> int:
