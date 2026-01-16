@@ -3,21 +3,24 @@
 """
 How to run
 
+xvfb-run -a -s "-screen 0 1024x768x24" \
 torchrun --standalone --nproc_per_node=2 ./src/libimmortal/samples/PPO/train.py \
   --port 17005 --port_stride 200 \
+  --max_ep_len 3000 --update_timestep 12000 --max_steps 2500000\
   --save_model_freq 40000 --wandb \
-  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1088001.pth \
+  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1960000.pth \
   --env_seed_mode mix \
-  --env_seed_mix_start 0.14 \
-  --env_seed_mix_end 0.30 \
-  --env_seed_mix_warmup_episodes 300 \
+  --env_seed_mix_start 0.50 \
+  --env_seed_mix_end 0.50 \
+  --env_seed_mix_warmup_episodes 600 \
   --env_seed_mix_schedule linear \
   --env_seed_base 1234567 \
   --wandb
 
-Virtual device xvfb
+Run without xvfb-run: (Not recommended. NVML driver initialization issue occurs.)
   
-xvfb-run -s "-screen 0 1024x768x24" torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
+export DEVICE=:0
+torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
   --port 17005 --port_stride 200 \
   --save_model_freq 40000 --wandb \
   --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1088001.pth \
@@ -39,6 +42,7 @@ If you want graphics (NOT recommended on headless):
 import os, sys
 import random
 import time
+import json
 import argparse
 from datetime import datetime
 from typing import Optional, Tuple, Dict, Any
@@ -103,6 +107,26 @@ def _touch_file(path: str):
         return True
     except Exception:
         return False
+    
+def _write_text_atomic(path: str, text: str) -> bool:
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        tmp = path + f".tmp.{os.getpid()}"
+        with open(tmp, "w", encoding="utf-8") as f:
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+        return True
+    except Exception:
+        return False
+
+def _read_text(path: str) -> Optional[str]:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception:
+        return None
 
 def _wait_for_file(path: str, timeout_s: float, poll_s: float = 0.1) -> bool:
     t0 = time.time()
@@ -216,8 +240,8 @@ def train(args):
 
     # Helper: sync "stop requested" across ranks
     def _ddp_stop_any() -> bool:
-        # IMPORTANT: must be non-collective.
-        # Calling all_reduce here can deadlock if ranks diverge (e.g., some ranks in reset).
+        # Never use collectives here. If any rank diverges (Unity reset/restart),
+        # collectives can deadlock. Local flag only.
         return bool(stopper.should_stop())
     
     # NOTE: Avoid per-step collectives. They are a common deadlock source on interrupts.
@@ -252,11 +276,17 @@ def train(args):
     def _make_env(seed_override: Optional[int] = None):
         nonlocal restart_box
 
+        # If stop requested, never try to create/recreate Unity.
+        if _ddp_stop_any():
+            raise RuntimeError("[Env] stop requested; abort env creation")
+
         if seed_override is None:
             seed_override = (int(args.seed) + rank) if args.seed is not None else None
 
         last_err = None
         for attempt in range(50):
+            if _ddp_stop_any():
+                raise RuntimeError("[Env] stop requested; abort env creation loop")
             p = _compute_port(args)
             last_port_box["port"] = p
             print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p} (try {attempt})", flush=True)
@@ -292,6 +322,8 @@ def train(args):
 
     def _restart_env(reason: str):
         nonlocal env
+        if _ddp_stop_any():
+            raise RuntimeError(f"[Env] stop requested; abort restart (reason={reason})")
         restart_box["id"] += 1
         if restart_box["id"] > max_env_restarts:
             raise RuntimeError(f"[Env] exceeded max_env_restarts={max_env_restarts} (last reason={reason})")
@@ -345,6 +377,9 @@ def train(args):
         nonlocal env, port, step, episode_idx
         while True:
             stop_requested = bool(stopper.should_stop())
+            if stop_requested:
+                # Never enter reset loop when stopping (prevents Unity relaunch storms on shutdown).
+                raise RuntimeError("[Env][reset] stop requested")
 
             try:
                 # (1) seed 선택
@@ -663,14 +698,21 @@ def train(args):
 
     # Resume
     if args.resume:
+        # --------- File-based rendezvous (NO collectives) ----------
+        # Using dist.broadcast_object_list() can deadlock if any rank diverges/crashes
+        # during Unity setup/reset. Use a simple file in ckpt_dir instead.
         ckpt_to_load = args.checkpoint
-        if ckpt_to_load is None and ddp.is_main_process():
-            ckpt_to_load = save._latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
+        rendezvous_dir = ckpt_dir if (ckpt_dir is not None) else "/tmp"
+        ckpt_path_file = os.path.join(rendezvous_dir, f".resume_ckpt_path.rank0")
 
-        if ddp.ddp_is_enabled():
-            obj_list = [ckpt_to_load]
-            dist.broadcast_object_list(obj_list, src=0)
-            ckpt_to_load = obj_list[0]
+        if ddp.is_main_process():
+            if ckpt_to_load is None:
+                ckpt_to_load = save._latest_checkpoint_path(ckpt_dir, prefix=ckpt_prefix)
+            _write_text_atomic(ckpt_path_file, "" if ckpt_to_load is None else str(ckpt_to_load))
+        else:
+            _wait_for_file(ckpt_path_file, timeout_s=120.0)
+            txt = _read_text(ckpt_path_file)
+            ckpt_to_load = (txt.strip() if txt is not None else "") or None
 
         if ckpt_to_load is None:
             raise FileNotFoundError(f"--resume set but no checkpoint found under {ckpt_dir} with prefix {ckpt_prefix}")
@@ -695,7 +737,11 @@ def train(args):
         if ddp.is_main_process():
             print(f"[Resume] base_step(used)={base_step} (loaded_step={loaded_step})")
 
-        ddp._ddp_barrier("resume", ddp_barrier_timeout_s)
+        # Avoid hard barriers here; resume should not deadlock even if a rank is slow.
+        try:
+            ddp._ddp_barrier_soft("resume_soft", timeout_s=10.0)
+        except Exception:
+            pass
 
     # Optional wandb (rank0 only)
     wandb = None
@@ -1068,25 +1114,34 @@ def train(args):
             # -------------------------
             # PPO update (ALL ranks)
             # -------------------------
+
+            # If stopping, skip updates entirely (updates are long and prone to divergence on interrupt).
             if step % update_timestep == 0:
                 if _ddp_stop_any():
                     interrupted = True
                     break
 
+                # Hard barriers around updates are dangerous in this env (ranks can diverge on reset/restart).
+                # Keep them off by default; even when enabled, use only soft barrier.
                 if use_update_barriers and (not stopper.should_stop()):
-                     ddp._ddp_barrier(f"pre_update@{int(step)}", ddp_barrier_timeout_s)
+                    ddp._ddp_barrier_soft(f"pre_update@{int(step)}", timeout_s=5.0)
                 t0 = time.time()
 
+                # Computing last_value must be robust even if next_id_map is None.
                 with torch.no_grad():
-                    if done_for_buffer:
+                    try:
+                        if done_for_buffer or (next_id_map is None) or (next_vec_obs is None):
+                            ppo_agent.buffer.last_value = 0.0
+                        else:
+                            map_t = torch.from_numpy(next_id_map).to(model_device, dtype=torch.long).unsqueeze(0)
+                            vec_t = torch.from_numpy(next_vec_obs).to(model_device, dtype=torch.float32).unsqueeze(0)
+                            po = ddp.get_module(ppo_agent.policy_old)
+                            feat = po.encode(map_t, vec_t)
+                            v = po.critic_head(feat)
+                            ppo_agent.buffer.last_value = float(v.item())
+                    except Exception:
+                        # Never crash only one rank here; fall back to 0.
                         ppo_agent.buffer.last_value = 0.0
-                    else:
-                        map_t = torch.from_numpy(next_id_map).to(model_device, dtype=torch.long).unsqueeze(0)
-                        vec_t = torch.from_numpy(next_vec_obs).to(model_device, dtype=torch.float32).unsqueeze(0)
-                        po = ddp.get_module(ppo_agent.policy_old)
-                        feat = po.encode(map_t, vec_t)
-                        v = po.critic_head(feat)
-                        ppo_agent.buffer.last_value = float(v.item())
 
                 if args.dump_id_map and ddp.is_main_process():
                     np.savetxt(args.dump_id_map, cur_id_map, delimiter=",", fmt="%d")
@@ -1120,7 +1175,7 @@ def train(args):
 
                 _reset_update_counters()
                 if use_update_barriers and (not stopper.should_stop()):
-                    ddp._ddp_barrier(f"post_update@{int(step)}", ddp_barrier_timeout_s)
+                    ddp._ddp_barrier_soft(f"post_update@{int(step)}", timeout_s=5.0)
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):
@@ -1266,19 +1321,15 @@ def train(args):
         if ddp.is_main_process() and start_flag is not None:
             _touch_file(start_flag)
 
-        # (C) short soft barrier before saving (optional)
-        if ddp.ddp_is_enabled():
-            try:
-                ddp._ddp_barrier_soft("final_save_start", timeout_s=5.0)
-            except Exception:
-                pass
-
+        # (C) no barrier required; file flags are enough (barriers can still deadlock on divergent ranks).
         # (D) rank0 save (atomic + ignore signals)
         if ddp.is_main_process():
             try:
                 if final_path is not None:
                     if interrupted:
                         print("[Exit] stop requested -> saving final checkpoint:", final_path, flush=True)
+                    # Critical section: ignore SIGINT/SIGTERM while writing checkpoint.
+                    # Keep it as short as possible.
                     with stopper.ignore_signals():
                         save.atomic_torch_save(
                             lambda: save._make_checkpoint(ppo_agent, final_step, args, cfg, reward_scaler),
@@ -1294,6 +1345,15 @@ def train(args):
 
             except Exception as e:
                 print(f"[Exit][WARN] failed to save final checkpoint: {repr(e)}", flush=True)
+
+        # Rank0 wandb finish AFTER checkpoint (still in shutdown path). Keep best-effort.
+        if ddp.is_main_process():
+            if ("wandb" in locals()) and (wandb is not None):
+                try:
+                    with stopper.ignore_signals():
+                        wandb.finish()
+                except Exception:
+                    pass
 
         # (E) non-rank0 waits (file-based) so they don't exit early and trigger torchrun teardown too fast
         if (not ddp.is_main_process()):
@@ -1313,19 +1373,12 @@ def train(args):
                 pass
 
         # ---- best-effort cleanup ----
-        # On interrupt, Unity/DDP/W&B can hang. Do best-effort only.
-        if not force_exit:
-            try:
-                if "env" in locals() and env is not None:
-                    env.close()
-            except Exception:
-                pass
-
-        if ("wandb" in locals()) and (wandb is not None) and (not force_exit):
-            try:
-                wandb.finish()
-            except Exception:
-                pass
+        # On interrupt, Unity can hang. Close env only best-effort, and NEVER restart it.
+        try:
+            if "env" in locals() and env is not None:
+                env.close()
+        except Exception:
+            pass
 
         # ---- end-of-run logging (preserve original behavior) ----
         end_time = datetime.now().replace(microsecond=0)
@@ -1373,8 +1426,14 @@ def train(args):
             pass
 
         # Always ensure torchrun can't hang waiting for a stuck worker.
+        # Non-rank0 must not exit BEFORE rank0 saves; that's handled via file flags above.
+        # After that, exit quickly.
         if force_exit:
-            os._exit(0)
+            # Prefer sys.exit (lets Python flush), fallback to os._exit if needed.
+            try:
+                raise SystemExit(0)
+            finally:
+                os._exit(0)
 
 
 def build_argparser():
@@ -1402,11 +1461,11 @@ def build_argparser():
     p.add_argument("--player_log_tail", type=int, default=200)
 
     # Runner steps (PER RANK)
-    p.add_argument("--max_steps", type=int, default=2000000)
+    p.add_argument("--max_steps", type=int, default=2500000)
 
     # PPO hyperparams
-    p.add_argument("--max_ep_len", type=int, default=1000)
-    p.add_argument("--update_timestep", type=int, default=4000)
+    p.add_argument("--max_ep_len", type=int, default=1500)
+    p.add_argument("--update_timestep", type=int, default=6000)
     p.add_argument("--k_epochs", type=int, default=10)
     p.add_argument("--eps_clip", type=float, default=0.2)
     p.add_argument("--gamma", type=float, default=0.99)
@@ -1421,7 +1480,7 @@ def build_argparser():
     p.add_argument("--action_std_decay_freq", type=int, default=250000)
 
     # Saving (rank0 only)
-    p.add_argument("--save_model_freq", type=int, default=35000)
+    p.add_argument("--save_model_freq", type=int, default=40000)
 
     # Resume
     p.add_argument("--resume", action="store_true")
@@ -1430,8 +1489,8 @@ def build_argparser():
     # Reward shaping knobs
     p.add_argument("--w_progress", type=float, default=100.0)
     p.add_argument("--w_time", type=float, default=0.02)
-    p.add_argument("--w_damage", type=float, default=0.1)
-    p.add_argument("--w_not_actionable", type=float, default=0.01)
+    p.add_argument("--w_damage", type=float, default=0.0)
+    p.add_argument("--w_not_actionable", type=float, default=0.00)
     p.add_argument("--terminal_bonus", type=float, default=6.0)
     p.add_argument("--reward_clip", type=float, default=10.0)
     p.add_argument("--success_if_raw_reward_ge", type=float, default=1.0)
