@@ -55,6 +55,7 @@ class ImmortalSufferingEnv:
             no_graphics=self.no_graphics,
             timeout_wait=self.timeout_wait,
             side_channels=[self._engine_channel, self._env_parameter_channel],
+            additional_args=["-logFile", "/dev/null"]
         )
 
         if self.verbose:

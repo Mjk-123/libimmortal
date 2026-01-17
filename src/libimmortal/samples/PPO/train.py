@@ -3,19 +3,28 @@
 """
 How to run
 
+rm -f "/root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log"
+rm -f "/root/.config/unity3d/DefaultCompany/Immortal Suffering/Player-prev.log"
+
+ln -s /dev/null "/root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log"
+ln -s /dev/null "/root/.config/unity3d/DefaultCompany/Immortal Suffering/Player-prev.log"
+
+export CUDA_VISIBLE_DEVICES=1,2,3
+export DEVICE=:0
+
 xvfb-run -a -s "-screen 0 1024x768x24" \
-torchrun --standalone --nproc_per_node=2 ./src/libimmortal/samples/PPO/train.py \
+torchrun --standalone --nproc_per_node=3 ./src/libimmortal/samples/PPO/train.py \
   --port 17005 --port_stride 200 \
-  --max_ep_len 3000 --update_timestep 12000 --max_steps 2500000\
-  --save_model_freq 40000 --wandb \
-  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_1960000.pth \
+  --max_ep_len 1500 --update_timestep 6000 --max_steps 3000000\
+  --save_model_freq 50000 --wandb \
+  --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_2280000.pth \
   --env_seed_mode mix \
   --env_seed_mix_start 0.50 \
   --env_seed_mix_end 0.50 \
   --env_seed_mix_warmup_episodes 600 \
   --env_seed_mix_schedule linear \
   --env_seed_base 1234567 \
-  --wandb
+  --wandb \
 
 Run without xvfb-run: (Not recommended. NVML driver initialization issue occurs.)
   
@@ -98,6 +107,42 @@ except Exception:
 from libimmortal.env import ImmortalSufferingEnv
 
 faulthandler.enable(all_threads=True)
+
+# =========================
+# [ADD] Hard stop utilities
+# =========================
+
+_STOP_REQUESTED = False
+
+def _mark_stop_requested(*_args):
+    global _STOP_REQUESTED
+    _STOP_REQUESTED = True
+
+def _stop_requested() -> bool:
+    return bool(_STOP_REQUESTED)
+
+def _hard_exit(code: int = 0):
+    # Don't rely on Python cleanup in DDP+Unity situations.
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except Exception:
+        pass
+    os._exit(int(code))
+
+# Register signals early (best effort)
+try:
+    signal.signal(signal.SIGTERM, _mark_stop_requested)
+except Exception:
+    pass
+try:
+    signal.signal(signal.SIGINT, _mark_stop_requested)
+except Exception:
+    pass
+
+# =========================
+# File writing utilities
+# =========================
 
 def _touch_file(path: str):
     try:
@@ -238,6 +283,10 @@ def train(args):
     use_update_barriers = bool(getattr(args, "ddp_update_barriers", False))       # default: False
 
 
+    # =========================
+    # [CHANGE] stop condition
+    # =========================
+
     # Helper: sync "stop requested" across ranks
     def _ddp_stop_any() -> bool:
         # Never use collectives here. If any rank diverges (Unity reset/restart),
@@ -276,7 +325,6 @@ def train(args):
     def _make_env(seed_override: Optional[int] = None):
         nonlocal restart_box
 
-        # If stop requested, never try to create/recreate Unity.
         if _ddp_stop_any():
             raise RuntimeError("[Env] stop requested; abort env creation")
 
@@ -284,12 +332,19 @@ def train(args):
             seed_override = (int(args.seed) + rank) if args.seed is not None else None
 
         last_err = None
+        backoff_s = 0.5
+
         for attempt in range(50):
             if _ddp_stop_any():
                 raise RuntimeError("[Env] stop requested; abort env creation loop")
+
             p = _compute_port(args)
             last_port_box["port"] = p
-            print(f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} port={p} (try {attempt})", flush=True)
+            print(
+                f"[Env] rank={rank} local_rank={local_rank} restart_id={restart_box['id']} "
+                f"port={p} (try {attempt})",
+                flush=True
+            )
 
             kw = dict(
                 game_path=args.game_path,
@@ -301,24 +356,54 @@ def train(args):
                 verbose=args.verbose,
             )
 
+            _env = None
             try:
                 try:
-                    _env = ImmortalSufferingEnv(**kw, no_graphics=no_graphics, timeout_wait=unity_timeout_wait)
+                    _env = ImmortalSufferingEnv(
+                        **kw, no_graphics=no_graphics, timeout_wait=unity_timeout_wait
+                    )
                 except TypeError:
                     _env = ImmortalSufferingEnv(**kw)
+
                 return _env, p
 
             except Exception as e:
                 last_err = e
                 msg = repr(e)
-                if ("Address already in use" in msg) or ("UnityWorkerInUseException" in msg) or ("worker number 0 is still in use" in msg):
-                    # ✅ 다음 restart_id로 점프해서 포트 대역 자체를 바꿈
-                    restart_box["id"] += 1
-                    stopper.sleep_poll(1.0)
+
+                # ---- best-effort cleanup of partial env ----
+                try:
+                    if _env is not None:
+                        _env.close()
+                except Exception:
+                    pass
+
+                # stop이면 여기서도 즉시 중단
+                if _ddp_stop_any():
+                    raise RuntimeError("[Env] stop requested; abort after env create failure")
+
+                # (A) 포트 충돌: 같은 restart_id에서 포트 찾기 실패 가능
+                if ("Address already in use" in msg) or ("EADDRINUSE" in msg):
+                    # 같은 restart_id 내에서 _compute_port가 off를 돌긴 하는데,
+                    # 여긴 최소 backoff만 주고 계속
+                    stopper.sleep_poll(backoff_s)
+                    backoff_s = min(5.0, backoff_s * 1.3)
                     continue
+
+                # (B) worker/유니티가 꼬여서 "still in use" 계열:
+                # 포트만 바꾸면 해결 안 되는 경우가 많아서 restart_id를 올려서 대역을 바꾸고,
+                # backoff를 더 강하게 준다.
+                if ("UnityWorkerInUseException" in msg) or ("worker number 0 is still in use" in msg):
+                    restart_box["id"] += 1
+                    stopper.sleep_poll(max(1.0, backoff_s))
+                    backoff_s = min(10.0, backoff_s * 1.7)
+                    continue
+
+                # 그 외는 즉시 throw (조용히 재시도하면 고아 프로세스만 늘어남)
                 raise
 
         raise RuntimeError(f"[Env] failed to create env after retries. last_err={repr(last_err)}")
+
 
     def _restart_env(reason: str):
         nonlocal env
@@ -375,83 +460,119 @@ def train(args):
 
     def _safe_reset():
         nonlocal env, port, step, episode_idx
-        while True:
-            stop_requested = bool(stopper.should_stop())
-            if stop_requested:
-                # Never enter reset loop when stopping (prevents Unity relaunch storms on shutdown).
+
+        # reset 폭주 방지용
+        max_reset_attempts = int(getattr(args, "max_reset_attempts", 30))
+        backoff_s = 0.5
+
+        def _stop_now() -> bool:
+            return bool(_ddp_stop_any())
+
+        for reset_attempt in range(max_reset_attempts):
+            if _stop_now():
+                # stop 요청 시 절대 유니티를 다시 띄우지 않는다
                 raise RuntimeError("[Env][reset] stop requested")
 
+            # (1) seed 선택
+            if args.seed is not None:
+                s, use_rand, p_mix = choose_env_seed(args, episode_idx, rank)
+            else:
+                s, use_rand, p_mix = (None, False, 0.0)
+
+            if ddp.is_main_process():
+                print(
+                    f"[Env][reset] attempt={reset_attempt}/{max_reset_attempts} "
+                    f"ep={episode_idx} p_rand={p_mix:.3f} use_rand={int(use_rand)} seed={s}",
+                    flush=True
+                )
+
+            t0 = time.time()
+
+            # (2) 기존 env 닫기 (best-effort)
+            if env is not None:
+                try:
+                    if ddp.is_main_process():
+                        print(f"[Env][reset] closing... step={step} port={last_port_box['port']}", flush=True)
+                    env.close()
+                except Exception:
+                    pass
+                env = None
+                port = None
+
+                # close 직후 즉시 재생성하면 worker가 덜 정리된 경우가 있어서 약간 쉼
+                stopper.sleep_poll(min(1.0, backoff_s))
+
+            if _stop_now():
+                raise RuntimeError("[Env][reset] stop requested (after close)")
+
+            # (3) 새 env 생성
             try:
-                # (1) seed 선택
-                if args.seed is not None:
-                    s, use_rand, p = choose_env_seed(args, episode_idx, rank)
-                else:
-                    s, use_rand, p = (None, False, 0.0)
-
                 if ddp.is_main_process():
-                    print(f"[Env][reset] ep={episode_idx} p_rand={p:.3f} use_rand={int(use_rand)} seed={s}", flush=True)
-
-                # (2) env close + recreate (seed 반영)
-                t0 = time.time()
-                if env is not None:
-                    try:
-                        if ddp.is_main_process():
-                            print(f"[Env][reset] closing... step={step} port={last_port_box['port']}", flush=True)
-                        env.close()
-                    except Exception:
-                        pass
-                    stopper.sleep_poll(1.0)
-
-                if ddp.is_main_process():
-                    print(f"[Env][reset] closed in {time.time()-t0:.3f}s -> creating new env", flush=True)
+                    print(f"[Env][reset] creating new env...", flush=True)
 
                 env, port = _make_env(seed_override=s)
 
                 if ddp.is_main_process():
                     print(f"[Env][reset] created port={port} -> bootstrapping", flush=True)
 
+                # (4) bootstrap (reset 대신 step 1번으로 obs 확보)
                 obs0 = _bootstrap_obs(env)
 
-                # Ensure bootstrap obs is parseable: require vec, and (for policy) require id_map.
-                try:
-                    idm0, vec0, _k0 = utilities._make_map_and_vec(obs0)
-                    if vec0 is None or idm0 is None:
-                        raise RuntimeError(f"bootstrap missing obs: id_map={idm0 is None} vec={vec0 is None}")
-                except Exception as e:
-                    if ddp.is_main_process():
-                        print(f"[Env][reset][WARN] invalid bootstrap obs -> recreate: {repr(e)}", flush=True)
-                    # Recreate env WITH a new restart_id/port.
-                     # Otherwise we may loop forever on the same bad port/state.
-                    restart_box["id"] += 1
-                    if restart_box["id"] > max_env_restarts:
-                       raise RuntimeError(
-                            f"[Env] exceeded max_env_restarts={max_env_restarts} (bootstrap_invalid)"
-                        )
-                    try:
-                        env.close()
-                    except Exception:
-                        pass
-                    stopper.sleep_poll(0.5)
-                    env, port = _make_env()
-                    continue
+                # (5) obs 유효성 체크 (policy가 필요로 하는 vec + id_map 둘 다)
+                idm0, vec0, _k0 = utilities._make_map_and_vec(obs0)
+                if vec0 is None or idm0 is None:
+                    raise RuntimeError(f"bootstrap missing obs: id_map={idm0 is None} vec={vec0 is None}")
 
                 if ddp.is_main_process():
-                    print(f"[Env][reset] bootstrap ok in {time.time()-t0:.3f}s", flush=True)
+                    dt = time.time() - t0
+                    print(f"[Env][reset] bootstrap ok in {dt:.3f}s", flush=True)
 
                 return obs0
 
             except Exception as e:
-                if excs._is_restartable_exc(e) and (not stop_requested):
+                # stop이면 여기서도 즉시 종료 (재시도 금지)
+                if _stop_now():
+                    raise RuntimeError(f"[Env][reset] stop requested while handling exception: {repr(e)}")
+
+                # restartable이면 재생성 시도
+                if excs._is_restartable_exc(e):
                     if ddp.is_main_process():
-                        print(f"[Env][reset] exception={repr(e)} -> recreate", flush=True)
-                    env, port = _restart_env(reason="reset")
+                        print(f"[Env][reset][WARN] restartable exception={repr(e)}", flush=True)
+
+                    # 지금 env가 살아있으면 닫기 (best-effort)
                     try:
-                        return _bootstrap_obs(env)
-                    except Exception as e2:
-                        if excs._is_restartable_exc(e2):
-                            continue
-                        raise
+                        if env is not None:
+                            env.close()
+                    except Exception:
+                        pass
+                    env = None
+                    port = None
+
+                    # bootstrap invalid / worker in use 같은 케이스는 restart_id 올리는 게 유효
+                    restart_box["id"] += 1
+                    if restart_box["id"] > max_env_restarts:
+                        raise RuntimeError(
+                            f"[Env] exceeded max_env_restarts={max_env_restarts} (reset_fail)"
+                        )
+
+                    # Player.log tail 찍기(원하면)
+                    try:
+                        dbg._print_player_log_tail(prefix=f"[Env][reset_fail attempt={reset_attempt}]", n=int(args.player_log_tail))
+                    except Exception:
+                        pass
+
+                    # 백오프 증가 (폭주 방지)
+                    stopper.sleep_poll(backoff_s)
+                    backoff_s = min(10.0, backoff_s * 1.7)
+
+                    # 다음 루프에서 다시 시도
+                    continue
+
+                # restartable이 아니면 즉시 raise (조용한 재시도는 고아 유니티만 늘릴 수 있음)
                 raise
+
+        raise RuntimeError(f"[Env][reset] failed after {max_reset_attempts} attempts")
+
 
     # Build initial env
     # Build initial env (defer to _safe_reset)
@@ -930,8 +1051,9 @@ def train(args):
     try:
         for local_step in range(1, MAX_STEPS + 1):
             if _ddp_stop_any():
-                interrupted = True
-                break
+                if ddp.is_main_process():
+                    print("[STOP] stop requested -> hard exit", flush=True)
+                _hard_exit(0)
 
             step = base_step + local_step
 
@@ -940,8 +1062,9 @@ def train(args):
             # -------------------------
             while True:
                 if _ddp_stop_any():
-                    interrupted = True
-                    break
+                    if ddp.is_main_process():
+                        print("[STOP] stop requested -> hard exit", flush=True)
+                    _hard_exit(0)
 
                 a_cpu, lp_cpu, v_cpu, action_np = _select_action(cur_id_map, cur_vec_obs)
                 action_env = utilities._format_action_for_env(action_np, action_space)
@@ -1118,8 +1241,9 @@ def train(args):
             # If stopping, skip updates entirely (updates are long and prone to divergence on interrupt).
             if step % update_timestep == 0:
                 if _ddp_stop_any():
-                    interrupted = True
-                    break
+                    if ddp.is_main_process():
+                        print("[STOP] stop requested -> hard exit", flush=True)
+                    _hard_exit(0)
 
                 # Hard barriers around updates are dangerous in this env (ranks can diverge on reset/restart).
                 # Keep them off by default; even when enabled, use only soft barrier.
@@ -1429,11 +1553,7 @@ def train(args):
         # Non-rank0 must not exit BEFORE rank0 saves; that's handled via file flags above.
         # After that, exit quickly.
         if force_exit:
-            # Prefer sys.exit (lets Python flush), fallback to os._exit if needed.
-            try:
-                raise SystemExit(0)
-            finally:
-                os._exit(0)
+            _hard_exit(0)
 
 
 def build_argparser():

@@ -1,11 +1,12 @@
 '''
 How to run
 
+xvfb-run -a -s "-screen 0 1024x768x24" \
 python3 submission_runner.py \
-  --ckpt_path /home/mjk123/Desktop/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_2280000.pth \
+  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_2500000.pth \
   --seed 42 \
-  --max_steps 20000 \
-  --debug_dump_every 500 \
+  --max_ep_len 1500
+  --max_steps 15000 \
   --verbose
 
 '''

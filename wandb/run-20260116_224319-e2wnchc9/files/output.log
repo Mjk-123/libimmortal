@@ -1,0 +1,2625 @@
+[Env][reset] attempt=0/30 ep=1 p_rand=0.500 use_rand=1 seed=505786167
+[Env][reset] closing... step=2281500 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.579s
+[Env][reset] attempt=0/30 ep=2 p_rand=0.500 use_rand=1 seed=1014769125
+[Env][reset] closing... step=2283000 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.746s
+[Env][reset] attempt=0/30 ep=3 p_rand=0.500 use_rand=1 seed=1521793941
+[Env][reset] closing... step=2284500 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.485s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2285650.npz
+[Env][reset] attempt=0/30 ep=4 p_rand=0.500 use_rand=1 seed=2026844227
+[Env][reset] closing... step=2285650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.666s
+[Env][reset] attempt=0/30 ep=5 p_rand=0.500 use_rand=1 seed=386381554
+[Env][reset] closing... step=2287150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.636s
+[Env][reset] attempt=0/30 ep=6 p_rand=0.500 use_rand=1 seed=895356066
+[Env][reset] closing... step=2288650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.591s
+[Env][reset] attempt=0/30 ep=7 p_rand=0.500 use_rand=1 seed=1402373456
+[Env][reset] closing... step=2290150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.706s
+[Env][reset] attempt=0/30 ep=8 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2291650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.674s
+[Env][reset] attempt=0/30 ep=9 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2293150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.746s
+[Env][reset] attempt=0/30 ep=10 p_rand=0.500 use_rand=1 seed=775427693
+[Env][reset] closing... step=2294650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.529s
+[Env][reset] attempt=0/30 ep=11 p_rand=0.500 use_rand=1 seed=1282468893
+[Env][reset] closing... step=2296150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.734s
+[Env][reset] attempt=0/30 ep=12 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2297650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.587s
+[Env][reset] attempt=0/30 ep=13 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2299150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.667s
+[34m[1mwandb[39m[22m: [33mWARNING[39m Saving files without folders. If you want to preserve subdirectories pass base_path to wandb.save, i.e. wandb.save("/mnt/folder/file.h5", base_path="/mnt")
+[Env][reset] attempt=0/30 ep=14 p_rand=0.500 use_rand=1 seed=656044330
+[Env][reset] closing... step=2300650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=15 p_rand=0.500 use_rand=1 seed=1163065304
+[Env][reset] closing... step=2302150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.676s
+[Env][reset] attempt=0/30 ep=16 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2303650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.667s
+[Env][reset] attempt=0/30 ep=17 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2305150 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.566s
+[Env][reset] attempt=0/30 ep=18 p_rand=0.500 use_rand=1 seed=536107253
+[Env][reset] closing... step=2306650 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.730s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2307774.npz
+[Env][reset] attempt=0/30 ep=19 p_rand=0.500 use_rand=1 seed=1041030821
+[Env][reset] closing... step=2307774 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.490s
+[Env][reset] attempt=0/30 ep=20 p_rand=0.500 use_rand=1 seed=1548179283
+[Env][reset] closing... step=2309274 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.689s
+[Env][reset] attempt=0/30 ep=21 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2310774 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.694s
+[Env][reset] attempt=0/30 ep=22 p_rand=0.500 use_rand=1 seed=416719794
+[Env][reset] closing... step=2312274 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.679s
+[Env][reset] attempt=0/30 ep=23 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2313774 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.518s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2314315.npz
+[Env][reset] attempt=0/30 ep=24 p_rand=0.500 use_rand=1 seed=1428274720
+[Env][reset] closing... step=2314315 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.612s
+[Env][reset] attempt=0/30 ep=25 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2315815 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.772s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2316352.npz
+[Env][reset] attempt=0/30 ep=26 p_rand=0.500 use_rand=1 seed=296783229
+[Env][reset] closing... step=2316352 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.646s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2317116.npz
+[Env][reset] attempt=0/30 ep=27 p_rand=0.500 use_rand=1 seed=801833773
+[Env][reset] closing... step=2317116 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.420s
+[Env][reset] attempt=0/30 ep=28 p_rand=0.500 use_rand=1 seed=1308858843
+[Env][reset] closing... step=2318616 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.612s
+[Env][reset] attempt=0/30 ep=29 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2320116 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.599s
+[Env][reset] attempt=0/30 ep=30 p_rand=0.500 use_rand=1 seed=177378362
+[Env][reset] closing... step=2321616 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[Env][reset] attempt=0/30 ep=31 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2323116 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.678s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2323654.npz
+[Env][reset] attempt=0/30 ep=32 p_rand=0.500 use_rand=1 seed=1191043240
+[Env][reset] closing... step=2323654 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.710s
+[Env][reset] attempt=0/30 ep=33 p_rand=0.500 use_rand=1 seed=1697937750
+[Env][reset] closing... step=2325154 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.617s
+[Env][reset] attempt=0/30 ep=34 p_rand=0.500 use_rand=1 seed=55377669
+[Env][reset] closing... step=2326654 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.704s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2328123.npz
+[Env][reset] attempt=0/30 ep=35 p_rand=0.500 use_rand=1 seed=562525621
+[Env][reset] closing... step=2328123 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.671s
+[Env][reset] attempt=0/30 ep=36 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2329623 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=37 p_rand=0.500 use_rand=1 seed=1578516499
+[Env][reset] closing... step=2331123 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.811s
+[Env][reset] attempt=0/30 ep=38 p_rand=0.500 use_rand=1 seed=2083440321
+[Env][reset] closing... step=2332623 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.522s
+[Env][reset] attempt=0/30 ep=39 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2334123 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.573s
+[Env][reset] attempt=0/30 ep=40 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2335623 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.727s
+[Env][reset] attempt=0/30 ep=41 p_rand=0.500 use_rand=1 seed=1458613214
+[Env][reset] closing... step=2337123 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.537s
+[Env][reset] attempt=0/30 ep=42 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2338623 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.583s
+[Env][reset] attempt=0/30 ep=43 p_rand=0.500 use_rand=1 seed=323200573
+[Env][reset] closing... step=2340123 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=44 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2341623 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.580s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2342062.npz
+[Env][reset] attempt=0/30 ep=45 p_rand=0.500 use_rand=1 seed=1339208347
+[Env][reset] closing... step=2342062 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.620s
+[Env][reset] attempt=0/30 ep=46 p_rand=0.500 use_rand=1 seed=1843727177
+[Env][reset] closing... step=2343562 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.815s
+[Env][reset] attempt=0/30 ep=47 p_rand=0.500 use_rand=1 seed=205357560
+[Env][reset] closing... step=2345062 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.616s
+[Env][reset] attempt=0/30 ep=48 p_rand=0.500 use_rand=1 seed=712247224
+[Env][reset] closing... step=2346562 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.645s
+[Env][reset] attempt=0/30 ep=49 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2348062 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.671s
+[Env][reset] attempt=0/30 ep=50 p_rand=0.500 use_rand=1 seed=1724322326
+[Env][reset] closing... step=2349562 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.582s
+[Env][reset] attempt=0/30 ep=51 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2351062 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.616s
+[Env][reset] attempt=0/30 ep=52 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2352562 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.675s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2354001.npz
+[Env][reset] attempt=0/30 ep=53 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2354001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=54 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2355501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.627s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2356501.npz
+[Env][reset] attempt=0/30 ep=55 p_rand=0.500 use_rand=1 seed=2113532801
+[Env][reset] closing... step=2356501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.755s
+[Env][reset] attempt=0/30 ep=56 p_rand=0.500 use_rand=1 seed=472926272
+[Env][reset] closing... step=2358001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.592s
+[Env][reset] attempt=0/30 ep=57 p_rand=0.500 use_rand=1 seed=977850094
+[Env][reset] closing... step=2359501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.650s
+[Env][reset] attempt=0/30 ep=58 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2361001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.694s
+[Env][reset] attempt=0/30 ep=59 p_rand=0.500 use_rand=1 seed=1994120524
+[Env][reset] closing... step=2362501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.616s
+[Env][reset] attempt=0/30 ep=60 p_rand=0.500 use_rand=1 seed=353522683
+[Env][reset] closing... step=2364001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.598s
+[Env][reset] attempt=0/30 ep=61 p_rand=0.500 use_rand=1 seed=858073515
+[Env][reset] closing... step=2365501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.646s
+[Env][reset] attempt=0/30 ep=62 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2367001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.677s
+[Env][reset] attempt=0/30 ep=63 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2368501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.612s
+[Env][reset] attempt=0/30 ep=64 p_rand=0.500 use_rand=1 seed=231520968
+[Env][reset] closing... step=2370001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.610s
+[Env][reset] attempt=0/30 ep=65 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2371501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.643s
+[Env][reset] attempt=0/30 ep=66 p_rand=0.500 use_rand=1 seed=1247775014
+[Env][reset] closing... step=2373001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.607s
+[Env][reset] attempt=0/30 ep=67 p_rand=0.500 use_rand=1 seed=1754664916
+[Env][reset] closing... step=2374501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.675s
+[Env][reset] attempt=0/30 ep=68 p_rand=0.500 use_rand=1 seed=112100739
+[Env][reset] closing... step=2376001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.645s
+[Env][reset] attempt=0/30 ep=69 p_rand=0.500 use_rand=1 seed=618732083
+[Env][reset] closing... step=2377501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.661s
+[Env][reset] attempt=0/30 ep=70 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2379001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.597s
+[Env][reset] attempt=0/30 ep=71 p_rand=0.500 use_rand=1 seed=1634735761
+[Env][reset] closing... step=2380501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.672s
+[Env][reset] attempt=0/30 ep=72 p_rand=0.500 use_rand=1 seed=2139680591
+[Env][reset] closing... step=2382001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.668s
+[Env][reset] attempt=0/30 ep=73 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2383501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.743s
+[Env][reset] attempt=0/30 ep=74 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2385001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=75 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2386501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.609s
+[Env][reset] attempt=0/30 ep=76 p_rand=0.500 use_rand=1 seed=2020275724
+[Env][reset] closing... step=2388001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.636s
+[Env][reset] attempt=0/30 ep=77 p_rand=0.500 use_rand=1 seed=381504699
+[Env][reset] closing... step=2389501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.708s
+[Env][reset] attempt=0/30 ep=78 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2391001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.699s
+[Env][reset] attempt=0/30 ep=79 p_rand=0.500 use_rand=1 seed=1393318681
+[Env][reset] closing... step=2392501 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.659s
+[Env][reset] attempt=0/30 ep=80 p_rand=0.500 use_rand=1 seed=1900335575
+[Env][reset] closing... step=2394001 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.655s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2395081.npz
+[Env][reset] attempt=0/30 ep=81 p_rand=0.500 use_rand=1 seed=262100870
+[Env][reset] closing... step=2395081 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.468s
+[Env][reset] attempt=0/30 ep=82 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2396581 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.774s
+[Env][reset] attempt=0/30 ep=83 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2398081 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.531s
+[Env][step] exception=UnityTimeOutException('The Unity environment took too long to respond. Make sure that :\n\t The environment does not need user interaction to launch\n\t The Agents\' Behavior Parameters > Behavior Type is set to "Default"\n\t The environment and the Python interface have compatible versions.\n\t If you\'re running on a headless server without graphics support, turn off display by either passing --no-graphics option or build your Unity executable as server build.') -> restart (timeouts=1, restarts=1)
+[Env] restart #1 reason=step
+[WARNING] Environment timed out shutting down. Killing...
+[Env][step] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[Env][step] --- tail -n 200 ---
+[Env][step] --- end tail ---
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] attempt=0/30 ep=83 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2398464 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.954s
+[Env][reset] attempt=0/30 ep=84 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2399581 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.609s
+[Env][reset] attempt=0/30 ep=85 p_rand=0.500 use_rand=1 seed=142192963
+[Env][reset] closing... step=2401081 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.679s
+[Env][reset] attempt=0/30 ep=86 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2402581 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.851s
+[Env][reset] attempt=0/30 ep=87 p_rand=0.500 use_rand=1 seed=1153994145
+[Env][reset] closing... step=2404081 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.641s
+[Env][reset] attempt=0/30 ep=88 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2405581 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.666s
+[Env][reset] attempt=0/30 ep=89 p_rand=0.500 use_rand=1 seed=22779918
+[Env][reset] closing... step=2407081 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.674s
+[Env][reset] attempt=0/30 ep=90 p_rand=0.500 use_rand=1 seed=529669822
+[Env][reset] closing... step=2408581 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.562s
+[Env][reset] attempt=0/30 ep=91 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2410081 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.839s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2411559.npz
+[Env][reset] attempt=0/30 ep=92 p_rand=0.500 use_rand=1 seed=1543335196
+[Env][reset] closing... step=2411559 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.655s
+[Env][reset] attempt=0/30 ep=93 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2413059 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.562s
+[Env][reset] attempt=0/30 ep=94 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2414559 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.679s
+[Env][reset] attempt=0/30 ep=95 p_rand=0.500 use_rand=1 seed=914685481
+[Env][reset] closing... step=2416059 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.633s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2417066.npz
+[Env][reset] attempt=0/30 ep=96 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2417066 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.672s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2417555.npz
+[Env][reset] attempt=0/30 ep=97 p_rand=0.500 use_rand=1 seed=1930939031
+[Env][reset] closing... step=2417555 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.646s
+[Env][reset] attempt=0/30 ep=98 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2419055 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.699s
+[Env][reset] attempt=0/30 ep=99 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2420555 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.692s
+[Env][reset] attempt=0/30 ep=100 p_rand=0.500 use_rand=1 seed=1303994276
+[Env][reset] closing... step=2422055 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.746s
+[Env][reset] attempt=0/30 ep=101 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2423555 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.728s
+[Env][reset] attempt=0/30 ep=102 p_rand=0.500 use_rand=1 seed=168339969
+[Env][reset] closing... step=2425055 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.672s
+[Env][reset] attempt=0/30 ep=103 p_rand=0.500 use_rand=1 seed=675487921
+[Env][reset] closing... step=2426555 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.721s
+[Env][reset] attempt=0/30 ep=104 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2428055 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.658s
+[Env][reset] attempt=0/30 ep=105 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2429555 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.627s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2430532.npz
+[Env][reset] attempt=0/30 ep=106 p_rand=0.500 use_rand=1 seed=48936398
+[Env][reset] closing... step=2430532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.659s
+[Env][reset] attempt=0/30 ep=107 p_rand=0.500 use_rand=1 seed=557648508
+[Env][reset] closing... step=2432032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.791s
+[Env][reset] attempt=0/30 ep=108 p_rand=0.500 use_rand=1 seed=1064665132
+[Env][reset] closing... step=2433532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.626s
+[Env][reset] attempt=0/30 ep=109 p_rand=0.500 use_rand=1 seed=1569457882
+[Env][reset] closing... step=2435032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.614s
+[Env][reset] attempt=0/30 ep=110 p_rand=0.500 use_rand=1 seed=2076482698
+[Env][reset] closing... step=2436532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.620s
+[Env][reset] attempt=0/30 ep=111 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2438032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.560s
+[Env][reset] attempt=0/30 ep=112 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2439532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.669s
+[Env][reset] attempt=0/30 ep=113 p_rand=0.500 use_rand=1 seed=1450074535
+[Env][reset] closing... step=2441032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.657s
+[Env][reset] attempt=0/30 ep=114 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2442532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.710s
+[Env][reset] attempt=0/30 ep=115 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2444032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.700s
+[Env][reset] attempt=0/30 ep=116 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2445532 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.574s
+[Env][reset] attempt=0/30 ep=117 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2447032 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.682s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2447711.npz
+[Env][reset] attempt=0/30 ep=118 p_rand=0.500 use_rand=1 seed=1837154578
+[Env][reset] closing... step=2447711 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.391s
+[Env][reset] attempt=0/30 ep=119 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2449211 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=120 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2450711 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.606s
+[Env][reset] attempt=0/30 ep=121 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2452211 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.790s
+[Env][reset] attempt=0/30 ep=122 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2453711 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[Env][reset] attempt=0/30 ep=123 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2455211 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.566s
+[Env][reset] attempt=0/30 ep=124 p_rand=0.500 use_rand=1 seed=583804732
+[Env][reset] closing... step=2456711 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.728s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2457910.npz
+[Env][reset] attempt=0/30 ep=125 p_rand=0.500 use_rand=1 seed=1090829802
+[Env][reset] closing... step=2457910 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.482s
+[Env][reset] attempt=0/30 ep=126 p_rand=0.500 use_rand=1 seed=1600074650
+[Env][reset] closing... step=2459410 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.576s
+[Env][reset] attempt=0/30 ep=127 p_rand=0.500 use_rand=1 seed=2107082824
+[Env][reset] closing... step=2460910 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.603s
+[Env][reset] attempt=0/30 ep=128 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2462410 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.730s
+[Env][reset] attempt=0/30 ep=129 p_rand=0.500 use_rand=1 seed=971408567
+[Env][reset] closing... step=2463910 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=130 p_rand=0.500 use_rand=1 seed=1480138085
+[Env][reset] closing... step=2465410 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=131 p_rand=0.500 use_rand=1 seed=1987154709
+[Env][reset] closing... step=2466910 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.676s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2467321.npz
+[Env][reset] attempt=0/30 ep=132 p_rand=0.500 use_rand=1 seed=344484292
+[Env][reset] closing... step=2467321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.582s
+[Env][reset] attempt=0/30 ep=133 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2468821 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=134 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2470321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.556s
+[Env][reset] attempt=0/30 ep=135 p_rand=0.500 use_rand=1 seed=1867774672
+[Env][reset] closing... step=2471821 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.624s
+[Env][reset] attempt=0/30 ep=136 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2473321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.851s
+[Env][reset] attempt=0/30 ep=137 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2474821 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.684s
+[Env][reset] attempt=0/30 ep=138 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2476321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=139 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2477821 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.814s
+[Env][reset] attempt=0/30 ep=140 p_rand=0.500 use_rand=1 seed=105142860
+[Env][reset] closing... step=2479321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.753s
+[Env][reset] attempt=0/30 ep=141 p_rand=0.500 use_rand=1 seed=614256890
+[Env][reset] closing... step=2480821 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.674s
+[Env][reset] attempt=0/30 ep=142 p_rand=0.500 use_rand=1 seed=1121408682
+[Env][reset] closing... step=2482321 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.733s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2482949.npz
+[Env][reset] attempt=0/30 ep=143 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2482949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.637s
+[Env][reset] attempt=0/30 ep=144 p_rand=0.500 use_rand=1 seed=2133239064
+[Env][reset] closing... step=2484449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.626s
+[Env][reset] attempt=0/30 ep=145 p_rand=0.500 use_rand=1 seed=494484423
+[Env][reset] closing... step=2485949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=146 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2487449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.673s
+[Env][reset] attempt=0/30 ep=147 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2488949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=148 p_rand=0.500 use_rand=1 seed=2013301971
+[Env][reset] closing... step=2490449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.624s
+[Env][reset] attempt=0/30 ep=149 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2491949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.625s
+[Env][reset] attempt=0/30 ep=150 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2493449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.639s
+[Env][reset] attempt=0/30 ep=151 p_rand=0.500 use_rand=1 seed=1386877408
+[Env][reset] closing... step=2494949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.682s
+[Env][reset] attempt=0/30 ep=152 p_rand=0.500 use_rand=1 seed=1893898144
+[Env][reset] closing... step=2496449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.711s
+[Env][reset] attempt=0/30 ep=153 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2497949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.705s
+[Env][reset] attempt=0/30 ep=154 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2499449 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.707s
+[Env][reset] attempt=0/30 ep=155 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2500949 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.610s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2501338.npz
+[Env][reset] attempt=0/30 ep=156 p_rand=0.500 use_rand=1 seed=1776087387
+[Env][reset] closing... step=2501338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.580s
+[Env][reset] attempt=0/30 ep=157 p_rand=0.500 use_rand=1 seed=135755530
+[Env][reset] closing... step=2502838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.654s
+[Env][reset] attempt=0/30 ep=158 p_rand=0.500 use_rand=1 seed=640667066
+[Env][reset] closing... step=2504338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.713s
+[Env][reset] attempt=0/30 ep=159 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2505838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.725s
+[Env][reset] attempt=0/30 ep=160 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2507338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.736s
+[Env][reset] attempt=0/30 ep=161 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2508838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.686s
+[Env][reset] attempt=0/30 ep=162 p_rand=0.500 use_rand=1 seed=520737925
+[Env][reset] closing... step=2510338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.665s
+[Env][reset] attempt=0/30 ep=163 p_rand=0.500 use_rand=1 seed=1027648821
+[Env][reset] closing... step=2511838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.689s
+[Env][reset] attempt=0/30 ep=164 p_rand=0.500 use_rand=1 seed=1536893923
+[Env][reset] closing... step=2513338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.693s
+[Env][reset] attempt=0/30 ep=165 p_rand=0.500 use_rand=1 seed=2043918739
+[Env][reset] closing... step=2514838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=166 p_rand=0.500 use_rand=1 seed=401227330
+[Env][reset] closing... step=2516338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.645s
+[Env][reset] attempt=0/30 ep=167 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2517838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.701s
+[Env][reset] attempt=0/30 ep=168 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2519338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.597s
+[Env][reset] attempt=0/30 ep=169 p_rand=0.500 use_rand=1 seed=1921876830
+[Env][reset] closing... step=2520838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.740s
+[Env][reset] attempt=0/30 ep=170 p_rand=0.500 use_rand=1 seed=281286925
+[Env][reset] closing... step=2522338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.705s
+[Env][reset] attempt=0/30 ep=171 p_rand=0.500 use_rand=1 seed=790405053
+[Env][reset] closing... step=2523838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.769s
+[Env][reset] attempt=0/30 ep=172 p_rand=0.500 use_rand=1 seed=1297552491
+[Env][reset] closing... step=2525338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.587s
+[Env][reset] attempt=0/30 ep=173 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2526838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.641s
+[Env][reset] attempt=0/30 ep=174 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2528338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.585s
+[Env][reset] attempt=0/30 ep=175 p_rand=0.500 use_rand=1 seed=671021432
+[Env][reset] closing... step=2529838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.703s
+[Env][reset] attempt=0/30 ep=176 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2531338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.617s
+[Env][reset] attempt=0/30 ep=177 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2532838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.771s
+[Env][reset] attempt=0/30 ep=178 p_rand=0.500 use_rand=1 seed=41962389
+[Env][reset] closing... step=2534338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.679s
+[Env][reset] attempt=0/30 ep=179 p_rand=0.500 use_rand=1 seed=551075909
+[Env][reset] closing... step=2535838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.661s
+[Env][reset] attempt=0/30 ep=180 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2537338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.674s
+[Env][reset] attempt=0/30 ep=181 p_rand=0.500 use_rand=1 seed=1563155619
+[Env][reset] closing... step=2538838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=182 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2540338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.791s
+[Env][reset] attempt=0/30 ep=183 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2541838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.662s
+[Env][reset] attempt=0/30 ep=184 p_rand=0.500 use_rand=1 seed=936223168
+[Env][reset] closing... step=2543338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.724s
+[Env][reset] attempt=0/30 ep=185 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2544838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.637s
+[Env][reset] attempt=0/30 ep=186 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2546338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.701s
+[Env][reset] attempt=0/30 ep=187 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2547838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.631s
+[Env][reset] attempt=0/30 ep=188 p_rand=0.500 use_rand=1 seed=816810875
+[Env][reset] closing... step=2549338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.656s
+[Env][reset] attempt=0/30 ep=189 p_rand=0.500 use_rand=1 seed=1323696427
+[Env][reset] closing... step=2550838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.668s
+[Env][reset] attempt=0/30 ep=190 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2552338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.615s
+[Env][reset] attempt=0/30 ep=191 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2553838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.696s
+[Env][reset] attempt=0/30 ep=192 p_rand=0.500 use_rand=1 seed=696881736
+[Env][reset] closing... step=2555338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=193 p_rand=0.500 use_rand=1 seed=1203792118
+[Env][reset] closing... step=2556838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.675s
+[Env][reset] attempt=0/30 ep=194 p_rand=0.500 use_rand=1 seed=1712909990
+[Env][reset] closing... step=2558338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.601s
+[Env][reset] attempt=0/30 ep=195 p_rand=0.500 use_rand=1 seed=72574805
+[Env][reset] closing... step=2559838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.696s
+[Env][reset] attempt=0/30 ep=196 p_rand=0.500 use_rand=1 seed=577502467
+[Env][reset] closing... step=2561338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.632s
+[Env][reset] attempt=0/30 ep=197 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2562838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.646s
+[Env][reset] attempt=0/30 ep=198 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2564338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.733s
+[Env][reset] attempt=0/30 ep=199 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2565838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.694s
+[Env][reset] attempt=0/30 ep=200 p_rand=0.500 use_rand=1 seed=457557200
+[Env][reset] closing... step=2567338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.559s
+[Env][reset] attempt=0/30 ep=201 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2568838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.708s
+[Env][reset] attempt=0/30 ep=202 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2570338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.674s
+[Env][reset] attempt=0/30 ep=203 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2571838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.725s
+[Env][reset] attempt=0/30 ep=204 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2573338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.736s
+[Env][reset] attempt=0/30 ep=205 p_rand=0.500 use_rand=1 seed=847160379
+[Env][reset] closing... step=2574838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.598s
+[Env][reset] attempt=0/30 ep=206 p_rand=0.500 use_rand=1 seed=1353792233
+[Env][reset] closing... step=2576338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.622s
+[Env][reset] attempt=0/30 ep=207 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2577838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.537s
+[Env][reset] attempt=0/30 ep=208 p_rand=0.500 use_rand=1 seed=218106200
+[Env][reset] closing... step=2579338 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.611s
+[Env][reset] attempt=0/30 ep=209 p_rand=0.500 use_rand=1 seed=727224070
+[Env][reset] closing... step=2580838 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.693s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2582068.npz
+[Env][reset] attempt=0/30 ep=210 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2582068 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.532s
+[Env][reset] attempt=0/30 ep=211 p_rand=0.500 use_rand=1 seed=1739299428
+[Env][reset] closing... step=2583568 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.647s
+[Env][reset] attempt=0/30 ep=212 p_rand=0.500 use_rand=1 seed=98701331
+[Env][reset] closing... step=2585068 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.722s
+[Env][reset] attempt=0/30 ep=213 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2586568 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.824s
+[Env][reset] attempt=0/30 ep=214 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2588068 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.631s
+[Env][reset] attempt=0/30 ep=215 p_rand=0.500 use_rand=1 seed=1619387681
+[Env][reset] closing... step=2589568 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.659s
+[Env][reset] attempt=0/30 ep=216 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2591068 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.637s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2592488.npz
+[Env][reset] attempt=0/30 ep=217 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2592488 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.601s
+[Env][reset] attempt=0/30 ep=218 p_rand=0.500 use_rand=1 seed=992966206
+[Env][reset] closing... step=2593988 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.692s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2594401.npz
+[Env][reset] attempt=0/30 ep=219 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2594401 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.589s
+[Env][reset] attempt=0/30 ep=220 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2595901 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.711s
+[Env][reset] attempt=0/30 ep=221 p_rand=0.500 use_rand=1 seed=368499531
+[Env][reset] closing... step=2597401 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.684s
+[Env][reset] attempt=0/30 ep=222 p_rand=0.500 use_rand=1 seed=873026041
+[Env][reset] closing... step=2598901 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.558s
+[Env][reset] attempt=0/30 ep=223 p_rand=0.500 use_rand=1 seed=1380046761
+[Env][reset] closing... step=2600401 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.553s
+[Env][reset] attempt=0/30 ep=224 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2601901 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.645s
+[Env][reset] attempt=0/30 ep=225 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2603401 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.577s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2603873.npz
+[Env][reset] attempt=0/30 ep=226 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2603873 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.619s
+[Env][reset] attempt=0/30 ep=227 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2605373 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.755s
+[Env][reset] attempt=0/30 ep=228 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2606873 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.656s
+[Env][reset] attempt=0/30 ep=229 p_rand=0.500 use_rand=1 seed=126684627
+[Env][reset] closing... step=2608373 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.664s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2609700.npz
+[Env][reset] attempt=0/30 ep=230 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2609700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.604s
+[Env][reset] attempt=0/30 ep=231 p_rand=0.500 use_rand=1 seed=1142691889
+[Env][reset] closing... step=2611200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.643s
+[Env][reset] attempt=0/30 ep=232 p_rand=0.500 use_rand=1 seed=1649712879
+[Env][reset] closing... step=2612700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=233 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2614200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.689s
+[Env][reset] attempt=0/30 ep=234 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2615700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.640s
+[Env][reset] attempt=0/30 ep=235 p_rand=0.500 use_rand=1 seed=1023304700
+[Env][reset] closing... step=2617200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.697s
+[Env][reset] attempt=0/30 ep=236 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2618700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.628s
+[Env][reset] attempt=0/30 ep=237 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2620200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.715s
+[Env][reset] attempt=0/30 ep=238 p_rand=0.500 use_rand=1 seed=394392585
+[Env][reset] closing... step=2621700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.628s
+[Env][reset] attempt=0/30 ep=239 p_rand=0.500 use_rand=1 seed=903367353
+[Env][reset] closing... step=2623200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.673s
+[Env][reset] attempt=0/30 ep=240 p_rand=0.500 use_rand=1 seed=1410384759
+[Env][reset] closing... step=2624700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.606s
+[Env][reset] attempt=0/30 ep=241 p_rand=0.500 use_rand=1 seed=1915443495
+[Env][reset] closing... step=2626200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.612s
+[Env][reset] attempt=0/30 ep=242 p_rand=0.500 use_rand=1 seed=274980822
+[Env][reset] closing... step=2627700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.600s
+[Env][reset] attempt=0/30 ep=243 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2629200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.595s
+[Env][reset] attempt=0/30 ep=244 p_rand=0.500 use_rand=1 seed=1288514100
+[Env][reset] closing... step=2630700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=245 p_rand=0.500 use_rand=1 seed=1795530978
+[Env][reset] closing... step=2632200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.618s
+[Env][reset] attempt=0/30 ep=246 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2633700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.580s
+[Env][reset] attempt=0/30 ep=247 p_rand=0.500 use_rand=1 seed=664059713
+[Env][reset] closing... step=2635200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.605s
+[Env][reset] attempt=0/30 ep=248 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2636700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[Env][reset] attempt=0/30 ep=249 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2638200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.673s
+[Env][reset] attempt=0/30 ep=250 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2639700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.721s
+[Env][reset] attempt=0/30 ep=251 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2641200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.656s
+[Env][reset] attempt=0/30 ep=252 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2642700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.678s
+[Env][reset] attempt=0/30 ep=253 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2644200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.669s
+[Env][reset] attempt=0/30 ep=254 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2645700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=255 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2647200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.595s
+[Env][reset] attempt=0/30 ep=256 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2648700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.573s
+[Env][reset] attempt=0/30 ep=257 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2650200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.696s
+[Env][reset] attempt=0/30 ep=258 p_rand=0.500 use_rand=1 seed=1945793253
+[Env][reset] closing... step=2651700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.804s
+[Env][reset] attempt=0/30 ep=259 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2653200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.605s
+[Env][reset] attempt=0/30 ep=260 p_rand=0.500 use_rand=1 seed=809845060
+[Env][reset] closing... step=2654700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.640s
+[Env][reset] attempt=0/30 ep=261 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2656200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.588s
+[Env][reset] attempt=0/30 ep=262 p_rand=0.500 use_rand=1 seed=1825856930
+[Env][reset] closing... step=2657700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.632s
+[Env][reset] attempt=0/30 ep=263 p_rand=0.500 use_rand=1 seed=183292497
+[Env][reset] closing... step=2659200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.691s
+[Env][reset] attempt=0/30 ep=264 p_rand=0.500 use_rand=1 seed=690464783
+[Env][reset] closing... step=2660700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.577s
+[Env][reset] attempt=0/30 ep=265 p_rand=0.500 use_rand=1 seed=1199451839
+[Env][reset] closing... step=2662200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.615s
+[Env][reset] attempt=0/30 ep=266 p_rand=0.500 use_rand=1 seed=1706469229
+[Env][reset] closing... step=2663700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=267 p_rand=0.500 use_rand=1 seed=63520028
+[Env][reset] closing... step=2665200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.604s
+[Env][reset] attempt=0/30 ep=268 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2666700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.645s
+[Env][reset] attempt=0/30 ep=269 p_rand=0.500 use_rand=1 seed=1079511162
+[Env][reset] closing... step=2668200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.618s
+[Env][reset] attempt=0/30 ep=270 p_rand=0.500 use_rand=1 seed=1586531882
+[Env][reset] closing... step=2669700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.691s
+[Env][reset] attempt=0/30 ep=271 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2671200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=272 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2672700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=273 p_rand=0.500 use_rand=1 seed=960107335
+[Env][reset] closing... step=2674200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.558s
+[Env][reset] attempt=0/30 ep=274 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2675700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.670s
+[Env][reset] attempt=0/30 ep=275 p_rand=0.500 use_rand=1 seed=1971679141
+[Env][reset] closing... step=2677200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.543s
+[Env][reset] attempt=0/30 ep=276 p_rand=0.500 use_rand=1 seed=333309012
+[Env][reset] closing... step=2678700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.570s
+[Env][reset] attempt=0/30 ep=277 p_rand=0.500 use_rand=1 seed=840202754
+[Env][reset] closing... step=2680200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.655s
+[Env][reset] attempt=0/30 ep=278 p_rand=0.500 use_rand=1 seed=1345122482
+[Env][reset] closing... step=2681700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.564s
+[Env][reset] attempt=0/30 ep=279 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2683200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.593s
+[Env][reset] attempt=0/30 ep=280 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2684700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.660s
+[Env][reset] attempt=0/30 ep=281 p_rand=0.500 use_rand=1 seed=720782799
+[Env][reset] closing... step=2686200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.627s
+[Env][reset] attempt=0/30 ep=282 p_rand=0.500 use_rand=1 seed=1225710205
+[Env][reset] closing... step=2687700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=283 p_rand=0.500 use_rand=1 seed=1732333613
+[Env][reset] closing... step=2689200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.587s
+[Env][reset] attempt=0/30 ep=284 p_rand=0.500 use_rand=1 seed=93968092
+[Env][reset] closing... step=2690700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.716s
+[Env][reset] attempt=0/30 ep=285 p_rand=0.500 use_rand=1 seed=600878218
+[Env][reset] closing... step=2692200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.576s
+[Env][reset] attempt=0/30 ep=286 p_rand=0.500 use_rand=1 seed=1105929530
+[Env][reset] closing... step=2693700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.617s
+[Env][reset] attempt=0/30 ep=287 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2695200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.583s
+[Env][reset] attempt=0/30 ep=288 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2696700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.659s
+[Env][reset] attempt=0/30 ep=289 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2698200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.702s
+[Env][reset] attempt=0/30 ep=290 p_rand=0.500 use_rand=1 seed=985992197
+[Env][reset] closing... step=2699700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.637s
+[Env][reset] attempt=0/30 ep=291 p_rand=0.500 use_rand=1 seed=1495106229
+[Env][reset] closing... step=2701200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.597s
+[Env][reset] attempt=0/30 ep=292 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2702700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.559s
+[Env][reset] attempt=0/30 ep=293 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2704200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.662s
+[Env][reset] attempt=0/30 ep=294 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2705700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.672s
+[Env][reset] attempt=0/30 ep=295 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2707200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.560s
+[Env][reset] attempt=0/30 ep=296 p_rand=0.500 use_rand=1 seed=1882612272
+[Env][reset] closing... step=2708700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.684s
+[Env][reset] attempt=0/30 ep=297 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2710200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.574s
+[Env][reset] attempt=0/30 ep=298 p_rand=0.500 use_rand=1 seed=746684045
+[Env][reset] closing... step=2711700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.621s
+[Env][reset] attempt=0/30 ep=299 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2713200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.631s
+[Env][reset] attempt=0/30 ep=300 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2714700 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.592s
+[Env][reset] attempt=0/30 ep=301 p_rand=0.500 use_rand=1 seed=120112026
+[Env][reset] closing... step=2716200 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.639s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2716658.npz
+[Env][reset] attempt=0/30 ep=302 p_rand=0.500 use_rand=1 seed=627267658
+[Env][reset] closing... step=2716658 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.511s
+[Env][reset] attempt=0/30 ep=303 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2718158 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.579s
+[Env][reset] attempt=0/30 ep=304 p_rand=0.500 use_rand=1 seed=1643271352
+[Env][reset] closing... step=2719658 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.626s
+[Env][reset] attempt=0/30 ep=305 p_rand=0.500 use_rand=1 seed=339303
+[Env][reset] closing... step=2721158 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.587s
+[Env][reset] attempt=0/30 ep=306 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2722658 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.608s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2723273.npz
+[Env][reset] attempt=0/30 ep=307 p_rand=0.500 use_rand=1 seed=1016347077
+[Env][reset] closing... step=2723273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.723s
+[Env][reset] attempt=0/30 ep=308 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2724773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.605s
+[Env][reset] attempt=0/30 ep=309 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2726273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.623s
+[Env][reset] attempt=0/30 ep=310 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2727773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.699s
+[Env][reset] attempt=0/30 ep=311 p_rand=0.500 use_rand=1 seed=896925824
+[Env][reset] closing... step=2729273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=312 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2730773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.637s
+[Env][reset] attempt=0/30 ep=313 p_rand=0.500 use_rand=1 seed=1908482030
+[Env][reset] closing... step=2732273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.688s
+[Env][reset] attempt=0/30 ep=314 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2733773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.600s
+[Env][reset] attempt=0/30 ep=315 p_rand=0.500 use_rand=1 seed=777022029
+[Env][reset] closing... step=2735273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.760s
+[Env][reset] attempt=0/30 ep=316 p_rand=0.500 use_rand=1 seed=1281941755
+[Env][reset] closing... step=2736773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=317 p_rand=0.500 use_rand=1 seed=1789093547
+[Env][reset] closing... step=2738273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.591s
+[Env][reset] attempt=0/30 ep=318 p_rand=0.500 use_rand=1 seed=150732634
+[Env][reset] closing... step=2739773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.613s
+[Env][reset] attempt=0/30 ep=319 p_rand=0.500 use_rand=1 seed=657618184
+[Env][reset] closing... step=2741273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.652s
+[Env][reset] attempt=0/30 ep=320 p_rand=0.500 use_rand=1 seed=1162529736
+[Env][reset] closing... step=2742773 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.678s
+[Env][reset] attempt=0/30 ep=321 p_rand=0.500 use_rand=1 seed=1671250038
+[Env][reset] closing... step=2744273 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.561s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2744777.npz
+[Env][reset] attempt=0/30 ep=322 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2744777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.702s
+[Env][reset] attempt=0/30 ep=323 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2746277 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=324 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2747777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.620s
+[Env][reset] attempt=0/30 ep=325 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2749277 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.709s
+[Env][reset] attempt=0/30 ep=326 p_rand=0.500 use_rand=1 seed=2058756577
+[Env][reset] closing... step=2750777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.595s
+[Env][reset] attempt=0/30 ep=327 p_rand=0.500 use_rand=1 seed=416196496
+[Env][reset] closing... step=2752277 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.753s
+[Env][reset] attempt=0/30 ep=328 p_rand=0.500 use_rand=1 seed=922827856
+[Env][reset] closing... step=2753777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.660s
+[Env][reset] attempt=0/30 ep=329 p_rand=0.500 use_rand=1 seed=1431941886
+[Env][reset] closing... step=2755277 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.615s
+[Env][reset] attempt=0/30 ep=330 p_rand=0.500 use_rand=1 seed=1938819246
+[Env][reset] closing... step=2756777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.822s
+[Env][reset] attempt=0/30 ep=331 p_rand=0.500 use_rand=1 seed=296255837
+[Env][reset] closing... step=2758277 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.708s
+[Env][reset] attempt=0/30 ep=332 p_rand=0.500 use_rand=1 seed=803407627
+[Env][reset] closing... step=2759777 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2760809.npz
+[Env][reset] attempt=0/30 ep=333 p_rand=0.500 use_rand=1 seed=1312529851
+[Env][reset] closing... step=2760809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.580s
+[Env][reset] attempt=0/30 ep=334 p_rand=0.500 use_rand=1 seed=1819415145
+[Env][reset] closing... step=2762309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.668s
+[Env][reset] attempt=0/30 ep=335 p_rand=0.500 use_rand=1 seed=176875544
+[Env][reset] closing... step=2763809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=336 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2765309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.653s
+[Env][reset] attempt=0/30 ep=337 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2766809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.617s
+[Env][reset] attempt=0/30 ep=338 p_rand=0.500 use_rand=1 seed=1697414454
+[Env][reset] closing... step=2768309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.641s
+[Env][reset] attempt=0/30 ep=339 p_rand=0.500 use_rand=1 seed=56947685
+[Env][reset] closing... step=2769809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.723s
+[Env][reset] attempt=0/30 ep=340 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2771309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.681s
+[Env][reset] attempt=0/30 ep=341 p_rand=0.500 use_rand=1 seed=1073204803
+[Env][reset] closing... step=2772809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.704s
+[Env][reset] attempt=0/30 ep=342 p_rand=0.500 use_rand=1 seed=1577993457
+[Env][reset] closing... step=2774309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.629s
+[Env][reset] attempt=0/30 ep=343 p_rand=0.500 use_rand=1 seed=2085018273
+[Env][reset] closing... step=2775809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.661s
+[Env][reset] attempt=0/30 ep=344 p_rand=0.500 use_rand=1 seed=446255968
+[Env][reset] closing... step=2777309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.657s
+[Env][reset] attempt=0/30 ep=345 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2778809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.692s
+[Env][reset] attempt=0/30 ep=346 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2780309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=347 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2781809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.659s
+[Env][reset] attempt=0/30 ep=348 p_rand=0.500 use_rand=1 seed=326875675
+[Env][reset] closing... step=2783309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.624s
+[Env][reset] attempt=0/30 ep=349 p_rand=0.500 use_rand=1 seed=833761483
+[Env][reset] closing... step=2784809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.715s
+[Env][reset] attempt=0/30 ep=350 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2786309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.588s
+[Env][reset] attempt=0/30 ep=351 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2787809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.623s
+[Env][reset] attempt=0/30 ep=352 p_rand=0.500 use_rand=1 seed=206931432
+[Env][reset] closing... step=2789309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.661s
+[Env][reset] attempt=0/30 ep=353 p_rand=0.500 use_rand=1 seed=711728022
+[Env][reset] closing... step=2790809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.549s
+[Env][reset] attempt=0/30 ep=354 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2792309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.662s
+[Env][reset] attempt=0/30 ep=355 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2793809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.592s
+[Env][reset] attempt=0/30 ep=356 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2795309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[Env][reset] attempt=0/30 ep=357 p_rand=0.500 use_rand=1 seed=592340307
+[Env][reset] closing... step=2796809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.640s
+[Env][reset] attempt=0/30 ep=358 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2798309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.571s
+[Env][reset] attempt=0/30 ep=359 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2799809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.721s
+[Env][reset] attempt=0/30 ep=360 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2801309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.596s
+[Env][reset] attempt=0/30 ep=361 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2802809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.654s
+[Env][reset] attempt=0/30 ep=362 p_rand=0.500 use_rand=1 seed=979419854
+[Env][reset] closing... step=2804309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.647s
+[Env][reset] attempt=0/30 ep=363 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2805809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.595s
+[Env][reset] attempt=0/30 ep=364 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2807309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.551s
+[Env][reset] attempt=0/30 ep=365 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2808809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=366 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2810309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.670s
+[Env][reset] attempt=0/30 ep=367 p_rand=0.500 use_rand=1 seed=1368760889
+[Env][reset] closing... step=2811809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.680s
+[Env][reset] attempt=0/30 ep=368 p_rand=0.500 use_rand=1 seed=1873557751
+[Env][reset] closing... step=2813309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=369 p_rand=0.500 use_rand=1 seed=233094822
+[Env][reset] closing... step=2814809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.617s
+[Env][reset] attempt=0/30 ep=370 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2816309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=371 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2817809 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.593s
+[Env][reset] attempt=0/30 ep=372 p_rand=0.500 use_rand=1 seed=1754137524
+[Env][reset] closing... step=2819309 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.531s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2820612.npz
+[Env][reset] attempt=0/30 ep=373 p_rand=0.500 use_rand=1 seed=113678435
+[Env][reset] closing... step=2820612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.739s
+[Env][reset] attempt=0/30 ep=374 p_rand=0.500 use_rand=1 seed=622403089
+[Env][reset] closing... step=2822112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.638s
+[Env][reset] attempt=0/30 ep=375 p_rand=0.500 use_rand=1 seed=1129419969
+[Env][reset] closing... step=2823612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.579s
+[Env][reset] attempt=0/30 ep=376 p_rand=0.500 use_rand=1 seed=1634233727
+[Env][reset] closing... step=2825112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.607s
+[Env][reset] attempt=0/30 ep=377 p_rand=0.500 use_rand=1 seed=2141250351
+[Env][reset] closing... step=2826612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.530s
+[Env][reset] attempt=0/30 ep=378 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2828112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.635s
+[Env][reset] attempt=0/30 ep=379 p_rand=0.500 use_rand=1 seed=1010040716
+[Env][reset] closing... step=2829612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.654s
+[Env][reset] attempt=0/30 ep=380 p_rand=0.500 use_rand=1 seed=1514828860
+[Env][reset] closing... step=2831112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.619s
+[Env][reset] attempt=0/30 ep=381 p_rand=0.500 use_rand=1 seed=2021837546
+[Env][reset] closing... step=2832612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.548s
+[Env][reset] attempt=0/30 ep=382 p_rand=0.500 use_rand=1 seed=383074457
+[Env][reset] closing... step=2834112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.607s
+[Env][reset] attempt=0/30 ep=383 p_rand=0.500 use_rand=1 seed=888002889
+[Env][reset] closing... step=2835612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.649s
+[Env][reset] attempt=0/30 ep=384 p_rand=0.500 use_rand=1 seed=1394892551
+[Env][reset] closing... step=2837112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.501s
+[Env][reset] attempt=0/30 ep=385 p_rand=0.500 use_rand=1 seed=1904006583
+[Env][reset] closing... step=2838612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.604s
+[Env][reset] attempt=0/30 ep=386 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2840112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.529s
+[Env][reset] attempt=0/30 ep=387 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2841612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.577s
+[Env][reset] attempt=0/30 ep=388 p_rand=0.500 use_rand=1 seed=1275504324
+[Env][reset] closing... step=2843112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.559s
+[Env][reset] attempt=0/30 ep=389 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2844612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.634s
+[Env][reset] attempt=0/30 ep=390 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2846112 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.561s
+[Env][reset] attempt=0/30 ep=391 p_rand=0.500 use_rand=1 seed=648547281
+[Env][reset] closing... step=2847612 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2848518.npz
+[Env][reset] attempt=0/30 ep=392 p_rand=0.500 use_rand=1 seed=1155563919
+[Env][reset] closing... step=2848518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.549s
+[Env][reset] attempt=0/30 ep=393 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2850018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.657s
+[Env][reset] attempt=0/30 ep=394 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2851518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.592s
+[Env][reset] attempt=0/30 ep=395 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2853018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=396 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2854518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.584s
+[Env][reset] attempt=0/30 ep=397 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2856018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.594s
+[Env][reset] attempt=0/30 ep=398 p_rand=0.500 use_rand=1 seed=2049828778
+[Env][reset] closing... step=2857518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.647s
+[Env][reset] attempt=0/30 ep=399 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2859018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.633s
+[Env][reset] attempt=0/30 ep=400 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2860518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.583s
+[Env][reset] attempt=0/30 ep=401 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2862018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.623s
+[Env][reset] attempt=0/30 ep=402 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2863518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.572s
+[Env][reset] attempt=0/30 ep=403 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2865018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.607s
+[Env][reset] attempt=0/30 ep=404 p_rand=0.500 use_rand=1 seed=798940628
+[Env][reset] closing... step=2866518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.600s
+[Env][reset] attempt=0/30 ep=405 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2868018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.624s
+[Env][reset] attempt=0/30 ep=406 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2869518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.619s
+[Env][reset] attempt=0/30 ep=407 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2871018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.678s
+[Env][reset] attempt=0/30 ep=408 p_rand=0.500 use_rand=1 seed=679158943
+[Env][reset] closing... step=2872518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.625s
+[Env][reset] attempt=0/30 ep=409 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2874018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.588s
+[Env][reset] attempt=0/30 ep=410 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2875518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.586s
+[Env][reset] attempt=0/30 ep=411 p_rand=0.500 use_rand=1 seed=50497964
+[Env][reset] closing... step=2877018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.555s
+[Env][reset] attempt=0/30 ep=412 p_rand=0.500 use_rand=1 seed=559222364
+[Env][reset] closing... step=2878518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.566s
+[Env][reset] attempt=0/30 ep=413 p_rand=0.500 use_rand=1 seed=1064141834
+[Env][reset] closing... step=2880018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.614s
+[Env][reset] attempt=0/30 ep=414 p_rand=0.500 use_rand=1 seed=1571035834
+[Env][reset] closing... step=2881518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.611s
+[Env][reset] attempt=0/30 ep=415 p_rand=0.500 use_rand=1 seed=2080150376
+[Env][reset] closing... step=2883018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.558s
+[Env][reset] attempt=0/30 ep=416 p_rand=0.500 use_rand=1 seed=439839015
+[Env][reset] closing... step=2884518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.644s
+[Env][reset] attempt=0/30 ep=417 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2886018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.634s
+[Env][reset] attempt=0/30 ep=418 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2887518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.603s
+[Env][reset] attempt=0/30 ep=419 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2889018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.590s
+[Env][reset] attempt=0/30 ep=420 p_rand=0.500 use_rand=1 seed=319910116
+[Env][reset] closing... step=2890518 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.666s
+[Env][reset] attempt=0/30 ep=421 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2892018 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.700s
+[DBG] dumped goal to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/goal_rank0_step2893280.npz
+[Env][reset] attempt=0/30 ep=422 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2893280 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.548s
+[Env][reset] attempt=0/30 ep=423 p_rand=0.500 use_rand=1 seed=1840825840
+[Env][reset] closing... step=2894780 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.554s
+[Env][reset] attempt=0/30 ep=424 p_rand=0.500 use_rand=1 seed=200498095
+[Env][reset] closing... step=2896280 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.538s
+[Env][reset] attempt=0/30 ep=425 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2897780 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.580s
+[Env][reset] attempt=0/30 ep=426 p_rand=0.500 use_rand=1 seed=1212306957
+[Env][reset] closing... step=2899280 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.590s
+[Env][reset] attempt=0/30 ep=427 p_rand=0.500 use_rand=1 seed=1721052349
+[Env][reset] closing... step=2900780 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.600s
+[Env][reset] attempt=0/30 ep=428 p_rand=0.500 use_rand=1 seed=78488940
+[Env][reset] closing... step=2902280 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.623s
+[Env][reset] attempt=0/30 ep=429 p_rand=0.500 use_rand=0 seed=42
+[Env][reset] closing... step=2903780 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
+[Env][reset] bootstrap ok in 6.654s
+[Env][reset] attempt=0/30 ep=430 p_rand=0.500 use_rand=1 seed=1094496714
+[Env][reset] closing... step=2905280 port=17605
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=1 port=17605 (try 0)
+[Env][reset] created port=17605 -> bootstrapping
