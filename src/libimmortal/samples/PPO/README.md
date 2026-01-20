@@ -63,7 +63,7 @@ torchrun --standalone --nproc_per_node=3 ./src/libimmortal/samples/PPO/train.py 
 
 ```
 xvfb-run -a -s "-screen 0 1024x768x24" \
-torchrun --standalone --nproc_per_node=3 ./src/libimmortal/samples/PPO/train.py \
+torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
   --port 17005 --port_stride 200 \
   --max_ep_len 1500 --update_timestep 6000 --max_steps 1250000\
   --save_model_freq 50000 --wandb \
