@@ -7,6 +7,7 @@ python3 submission_runner.py \
   --seed 42 \
   --max_ep_len 1500
   --max_steps 15000 \
+  --debug_dump_every 100 \
   --verbose
 
 '''

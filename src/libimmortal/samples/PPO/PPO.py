@@ -43,36 +43,42 @@ class RolloutBuffer:
 
 
 class ResBlock2D(nn.Module):
-    """Basic 2D residual block with optional downsampling."""
-    def __init__(self, in_ch: int, out_ch: int, stride: int = 1):
+    """Light 2D residual block with normalization."""
+    def __init__(self, in_ch: int, out_ch: int, stride: int = 1, groups: int = 1):
         super().__init__()
-        self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=stride, padding=1)
-        self.conv2 = nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1)
+        # GroupNorm(1, C) ~= LayerNorm over channels for conv features
+        self.norm1 = nn.GroupNorm(num_groups=groups, num_channels=out_ch)
+        self.norm2 = nn.GroupNorm(num_groups=groups, num_channels=out_ch)
+        self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=False)
         self.act = nn.ReLU()
 
         if stride != 1 or in_ch != out_ch:
-            self.skip = nn.Conv2d(in_ch, out_ch, kernel_size=1, stride=stride)
+            self.skip = nn.Conv2d(in_ch, out_ch, kernel_size=1, stride=stride, bias=False)
         else:
             self.skip = nn.Identity()
 
     def forward(self, x):
-        y = self.act(self.conv1(x))
-        y = self.conv2(y)
+        y = self.act(self.norm1(self.conv1(x)))
+        y = self.norm2(self.conv2(y))
         return self.act(y + self.skip(x))
 
 
 class ResMLPBlock(nn.Module):
-    """Residual MLP block: x -> Linear(d,d) -> ReLU -> Linear(d,d) + x -> ReLU."""
+    """Residual MLP block with LayerNorm."""
     def __init__(self, d: int):
         super().__init__()
+        self.ln1 = nn.LayerNorm(d)
+        self.ln2 = nn.LayerNorm(d)
         self.fc1 = nn.Linear(d, d)
         self.fc2 = nn.Linear(d, d)
         self.act = nn.ReLU()
 
     def forward(self, x):
-        y = self.act(self.fc1(x))
-        y = self.fc2(y)
+        y = self.act(self.fc1(self.ln1(x)))
+        y = self.fc2(self.ln2(y))
         return self.act(x + y)
+
 
 class SpatialAttnPool2d(nn.Module):
     """Attention pooling: (B,C,H,W) -> (B,C)."""
@@ -168,31 +174,31 @@ class ActorCritic(nn.Module):
         # --- ID embedding ---
         self.id_embed = nn.Embedding(num_embeddings=num_ids, embedding_dim=emb_dim)
 
-        # --- Map encoder ---
+        # --- Map encoder (LIGHT) ---
         self.map_stem = nn.Sequential(
-            nn.Conv2d(emb_dim, 64, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(emb_dim, 32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.GroupNorm(1, 32),
             nn.ReLU(),
         )
 
+        # Downsample only once (stride=2) and keep channels modest
         self.map_backbone = nn.Sequential(
-            ResBlock2D(64, 64, stride=1),
-            ResBlock2D(64, 64, stride=1),
-
-            ResBlock2D(64, 128, stride=2),
-            ResBlock2D(128, 128, stride=1),
-
-            ResBlock2D(128, 256, stride=2),
-            ResBlock2D(256, 256, stride=1),
+            ResBlock2D(32, 32, stride=1, groups=1),
+            ResBlock2D(32, 64, stride=2, groups=1),   # single downsample
+            ResBlock2D(64, 64, stride=1, groups=1),
+            ResBlock2D(64, 64, stride=1, groups=1),
         )
 
-        self.map_pool = SpatialAttnPool2d(256)
+        self.map_pool = SpatialAttnPool2d(64)
         self.map_proj = nn.Sequential(
-            nn.Linear(256, map_feat_dim),
+            nn.LayerNorm(64),
+            nn.Linear(64, map_feat_dim),
             nn.ReLU(),
         )
 
         # --- Vector encoder ---
         self.vec_proj = nn.Sequential(
+            nn.LayerNorm(vec_dim),
             nn.Linear(vec_dim, vec_feat_dim),
             nn.ReLU(),
         )
@@ -204,6 +210,7 @@ class ActorCritic(nn.Module):
         # --- Fusion trunk ---
         fusion_in = map_feat_dim + vec_feat_dim
         self.fusion = nn.Sequential(
+            nn.LayerNorm(fusion_in),
             nn.Linear(fusion_in, fused_dim),
             nn.ReLU(),
             *[ResMLPBlock(fused_dim) for _ in range(fusion_blocks)],
@@ -224,26 +231,23 @@ class ActorCritic(nn.Module):
                 torch.full((action_dim,), float(action_std_init) * float(action_std_init)),
             )
         else:
-            if self.is_multidiscrete:
-                # Flat logits for all branches, later split by action_nvec
-                self.actor_head = nn.Sequential(
-                    nn.Linear(fused_dim, fused_dim),
-                    nn.ReLU(),
-                    nn.Linear(fused_dim, self.sum_action_dims),
-                )
-            else:
-                # Single Discrete(n): logits of size action_dim
-                self.actor_head = nn.Sequential(
-                    nn.Linear(fused_dim, fused_dim),
-                    nn.ReLU(),
-                    nn.Linear(fused_dim, self.action_dim),
-                )
+            actor_out = self.sum_action_dims if self.is_multidiscrete else self.action_dim
+            self.actor_head = nn.Sequential(
+                nn.Linear(fused_dim, fused_dim),
+                nn.ReLU(),
+                nn.Linear(fused_dim, actor_out),
+            )
 
         self.critic_head = nn.Sequential(
+            nn.LayerNorm(fused_dim),
             nn.Linear(fused_dim, fused_dim),
             nn.ReLU(),
-            nn.Linear(fused_dim, 1),
+            nn.LayerNorm(fused_dim),
+            nn.Linear(fused_dim, fused_dim // 2),
+            nn.ReLU(),
+            nn.Linear(fused_dim // 2, 1),
         )
+
 
     def encode(self, id_map, vec_obs):
         if id_map.dim() == 2:
@@ -449,6 +453,20 @@ class PPO:
         self.MseLoss = nn.MSELoss()
 
     def update(self, gae_lambda: float = 0.95):
+        '''
+        Freezing test
+        '''
+        T = len(self.buffer.rewards)
+        print(f"PPO enters T = {T}", flush=True)
+
+        assert T == len(self.buffer.is_terminals)
+        assert T == len(self.buffer.map_states)
+        assert T == len(self.buffer.vec_states)
+        assert T == len(self.buffer.actions)
+        assert T == len(self.buffer.logprobs)
+        assert T == len(self.buffer.state_values)
+        assert T <= 7000, f"T too large: {T} (buffer not cleared / rollout not bounded?)"
+
         # 1) Build tensors on CPU
         rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32)          # (T,)
         dones = torch.tensor(self.buffer.is_terminals, dtype=torch.float32)       # (T,)

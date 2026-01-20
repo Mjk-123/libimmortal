@@ -104,7 +104,7 @@ PLATFORM_FORCE_SPANS = [
     (53,  54,  65),
     (53, 128, 143),
     (64,  35,  45),
-    (69,  68, 113),
+    (68,  68, 113),
 ]
 
 def force_fix_platform_inplace(id_map: np.ndarray) -> None:

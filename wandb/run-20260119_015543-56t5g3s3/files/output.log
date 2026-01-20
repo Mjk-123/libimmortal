@@ -1,0 +1,35 @@
+[Env][reset] attempt=0/30 ep=1 p_rand=0.000 use_rand=0 seed=42
+[Env][reset] closing... step=1500 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.652s
+[Env][reset] attempt=0/30 ep=2 p_rand=0.000 use_rand=0 seed=42
+[Env][reset] closing... step=3000 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.743s
+[Env][reset] attempt=0/30 ep=3 p_rand=0.000 use_rand=0 seed=42
+[Env][reset] closing... step=4500 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.632s
+[Env][reset] attempt=0/30 ep=4 p_rand=0.000 use_rand=0 seed=42
+[Env][reset] closing... step=6000 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[Env][reset] created port=17005 -> bootstrapping
+[Env][reset] bootstrap ok in 6.684s
+[Env][reset] attempt=0/30 ep=5 p_rand=0.000 use_rand=0 seed=42
+[Env][reset] closing... step=7500 port=17005
+[Env][reset] creating new env...
+[Env] rank=0 local_rank=0 restart_id=0 port=17005 (try 0)
+[FATAL] rank=0 wrote /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/fatal_rank0_step7500.log
+[DBG] dumped fatal_outer to /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/debug_traces/fatal_outer_rank0_step7500.npz
+[FATAL] exception=RuntimeError("[Env][reset] stop requested while handling exception: RuntimeError('[Env] stop requested; abort after env create failure')")
+[FATAL] Player.log: /root/.config/unity3d/DefaultCompany/Immortal Suffering/Player.log
+[FATAL] --- tail -n 200 ---
+[FATAL] --- end tail ---
+Final model saved at: /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_7500.pth

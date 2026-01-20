@@ -41,17 +41,19 @@ class GracefulStop:
                 # Second signal: request a faster exit.
                 self.force_requested = True
                 self.stop_requested = True
-                os._exit(130)
+                # IMPORTANT:
+                # Do NOT hard-exit in a signal handler. Let the main loop/watchdog
+                # decide how to terminate so we can attempt DDP/env cleanup.
+                # (Hard exit is still available as a last resort elsewhere.)
+                return
 
         signal.signal(signal.SIGINT, _handler)
         signal.signal(signal.SIGTERM, _handler)
 
-        # Avoid some syscalls raising InterruptedError due to signals (best-effort).
-        try:
-            signal.siginterrupt(signal.SIGINT, False)
-            signal.siginterrupt(signal.SIGTERM, False)
-        except Exception:
-            pass
+        # IMPORTANT:
+        # Leave siginterrupt at default behavior so blocking syscalls are more
+        # likely to be interrupted by SIGINT/SIGTERM (helps "Ctrl+C won't stop").
+        # If you have a very specific EINTR issue, handle it locally where it occurs.
 
         self._installed = True
 
@@ -88,6 +90,9 @@ class GracefulStop:
 
     def should_stop(self) -> bool:
         return bool(self.stop_requested)
+    
+    def should_force(self) -> bool:
+        return bool(self.force_requested)
 
     def sleep_poll(self, seconds: float, poll_hz: float = 20.0) -> None:
         """

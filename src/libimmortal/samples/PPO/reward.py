@@ -37,10 +37,33 @@ DEFAULT_BLOCKED_IDS = [WALL_ID]
 # If PLATFORM is also solid in the minimap, uncomment:
 # DEFAULT_BLOCKED_IDS = [WALL_ID, ENC.name2id["PLATFORM"]]
 
+# -----------------------------------------------------------------------------
+# Reward shaper
+# -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# Reward config
+# Stage curriculum (GLOBAL CONSTANTS)
 # -----------------------------------------------------------------------------
+# BFS_min thresholds (normalized BFS distance, smaller = closer to goal)
+# Stages:
+#   stage0: (1.0, 0.7]
+#   stage1: (0.7, 0.4]
+#   stage2: (0.4, 0.2]
+#   stage3: (0.2, 0.1]
+#   stage4: (0.1, 0.0]
+
+STAGE_THRESHOLDS: List[float] = [0.7, 0.4, 0.2, 0.1]  # boundaries for stages 1..4
+
+# One-time bonuses paid when a stage is reached for the first time in the episode.
+# NOTE: You can tune these freely; they should be on the same scale as terminal_bonus (e.g., 5~9 total success).
+# Index: stage0..stage4
+STAGE_BONUSES: List[float] = [0.0, 0.5, 1.0, 1.5, 1.5]
+
+# Multipliers applied to w_progress based on current stage (derived from bfs_min).
+# Index: stage0..stage4
+PROGRESS_STAGE_MULTS: List[float] = [1.0, 1.2, 1.5, 2.0, 2.5]
+
+
 @dataclass
 class RewardConfig:
     w_progress: float = 1.0
@@ -48,7 +71,7 @@ class RewardConfig:
     w_damage: float = 0.0
     w_not_actionable: float = 0.0
     terminal_bonus: float = 5.0
-    clip: Optional[float] = None
+    reward_clip: Optional[float] = None  # NOTE: name matches your argparse/config
 
     # Success heuristics / bonus
     success_if_raw_reward_ge: Optional[float] = None
@@ -63,6 +86,13 @@ class RewardConfig:
     # Optional: map shape if you want to override defaults
     map_h: int = 90
     map_w: int = 160
+
+    # NEW: clamp only the progress contribution to avoid advantage spikes
+    progress_clip: Optional[float] = None
+
+    # NEW: allow overriding stage tuning via config (optional)
+    stage_bonuses: Optional[List[float]] = None
+    progress_stage_mults: Optional[List[float]] = None
 
 
 # -----------------------------------------------------------------------------
@@ -108,6 +138,11 @@ class RewardShaper:
 
         self.virtual_done = False
 
+        # NEW: stage tracking (based on episode best bfs_min)
+        self._bfs_min: Optional[float] = None
+        self._stage: int = 0
+        self._stage_paid_mask: int = 0  # bitmask per stage
+
         # Debug
         self.dbg_has_bfs = False
         self.dbg_bfs_dist: Optional[float] = None          # normalized [0,1]
@@ -115,6 +150,77 @@ class RewardShaper:
         self.dbg_closer = False
         self.dbg_farther = False
         self.dbg_is_success = False
+
+        # NEW debug
+        self.dbg_bfs_min: Optional[float] = None
+        self.dbg_stage: int = 0
+        self.dbg_stage_hit: int = -1  # which stage bonus paid this step (-1 none)
+
+    # ---------------------------
+    # Stage helpers
+    # ---------------------------
+    def _compute_stage_from_bfs_min(self, bfs_min: Optional[float]) -> int:
+        """
+        Stage index increases as bfs_min decreases.
+        Uses global thresholds:
+          stage0: bfs_min > 0.7
+          stage1: 0.7 >= bfs_min > 0.4
+          stage2: 0.4 >= bfs_min > 0.2
+          stage3: 0.2 >= bfs_min > 0.1
+          stage4: bfs_min <= 0.1
+        """
+        if bfs_min is None:
+            return 0
+        x = float(bfs_min)
+        # Note: thresholds are descending
+        if x <= STAGE_THRESHOLDS[3]:
+            return 4
+        if x <= STAGE_THRESHOLDS[2]:
+            return 3
+        if x <= STAGE_THRESHOLDS[1]:
+            return 2
+        if x <= STAGE_THRESHOLDS[0]:
+            return 1
+        return 0
+
+    def _stage_bonuses(self) -> List[float]:
+        bonuses = getattr(self.cfg, "stage_bonuses", None)
+        if bonuses is None:
+            return STAGE_BONUSES
+        bonuses = list(bonuses)
+        if len(bonuses) < 5:
+            # pad defensively
+            bonuses = bonuses + [0.0] * (5 - len(bonuses))
+        return [float(x) for x in bonuses[:5]]
+
+    def _progress_stage_mults(self) -> List[float]:
+        mults = getattr(self.cfg, "progress_stage_mults", None)
+        if mults is None:
+            return PROGRESS_STAGE_MULTS
+        mults = list(mults)
+        if len(mults) < 5:
+            mults = mults + [1.0] * (5 - len(mults))
+        return [float(x) for x in mults[:5]]
+
+    def _maybe_pay_stage_bonus(self, stage: int) -> float:
+        """
+        Pay a one-time bonus when reaching a stage for the first time in the episode.
+        Controlled by STAGE_BONUSES or cfg.stage_bonuses.
+        """
+        bonuses = self._stage_bonuses()
+        if stage < 0 or stage >= len(bonuses):
+            return 0.0
+        b = float(bonuses[stage])
+        if b == 0.0:
+            return 0.0
+
+        bit = (1 << int(stage))
+        if (self._stage_paid_mask & bit) != 0:
+            return 0.0
+
+        self._stage_paid_mask |= bit
+        self.dbg_stage_hit = int(stage)
+        return float(b)
 
     def _ensure_bfs_cache(self, id_map: np.ndarray) -> None:
         """
@@ -149,9 +255,20 @@ class RewardShaper:
     def reset(self, vec_obs: np.ndarray, id_map: Optional[np.ndarray] = None):
         self._step = 0
         self.virtual_done = False
-        ...
+
+        # Make sure episode-local deltas don't leak
+        self._prev_cum_damage = None
+        self._prev_time = None
         self._prev_bfs_dist = None
         self._prev_goal_phi = None
+
+        # NEW: stage trackers
+        self._bfs_min = None
+        self._stage = 0
+        self._stage_paid_mask = 0
+        self.dbg_bfs_min = None
+        self.dbg_stage = 0
+        self.dbg_stage_hit = -1
 
         # ✅ episode마다 지형/goal이 바뀔 수 있으니 캐시 리셋
         self._cached_goal_xy = None
@@ -163,9 +280,16 @@ class RewardShaper:
             d0 = self._get_bfs_dist(id_map)
             self._prev_bfs_dist = float(d0) if d0 is not None else None
 
+            # NEW: init bfs_min/stage
+            if d0 is not None:
+                self._bfs_min = float(d0)
+                self._stage = self._compute_stage_from_bfs_min(self._bfs_min)
+                self.dbg_bfs_min = float(self._bfs_min)
+                self.dbg_stage = int(self._stage)
+
             # Initialize bounded potential to avoid a large first-step delta
             if self._prev_bfs_dist is not None:
-                alpha = 30.0  # larger => more emphasis near the goal, still bounded in (0,1]
+                alpha = 30.0
                 self._prev_goal_phi = float(np.exp(-alpha * float(self._prev_bfs_dist)))
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
@@ -199,39 +323,42 @@ class RewardShaper:
         info: Optional[Dict[str, Any]] = None,
     ) -> float:
         # If map observation is missing, skip BFS-based terms.
-        # Keep training stable by falling back to vec-based distance or no progress term.
         if id_map is None:
-            # No BFS info available when map is missing.
             self.dbg_has_bfs = False
             self.dbg_bfs_dist = None
             self.dbg_bfs_delta = None
-            # IMPORTANT: do not raise; just compute reward without BFS.
             return self._reward_without_bfs(raw_reward, vec_obs, done, info)
-        
+
         info = info or {}
         self._step += 1
         r = float(raw_reward)
         prev_time = self._prev_time  # for detecting whether IDX_TIME is elapsed-time or remaining-time
 
+        # reset per-step debug
+        self.dbg_stage_hit = -1
+
         # 1) Distance signals
         prev_d_bfs = self._prev_bfs_dist
-        d_bfs = self._get_bfs_dist(id_map) if (bool(getattr(self.cfg, "use_bfs_progress", True)) and id_map is not None) else None
+        d_bfs = self._get_bfs_dist(id_map) if bool(getattr(self.cfg, "use_bfs_progress", True)) else None
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
         # 2) Unified success condition
-        # BFS-based (within ~1.5 tiles) OR vector-based (< 0.6) OR raw_reward>=1.0
-        is_success = (float(raw_reward) >= 1.0) or (
+        success_if_raw = getattr(self.cfg, "success_if_raw_reward_ge", None)
+        if success_if_raw is None:
+            success_if_raw = 1.0
+
+        is_success = (float(raw_reward) >= float(success_if_raw)) or (
             (d_bfs is not None and d_bfs <= (1.5 / self.max_dist)) or (raw_goal_dist < 0.6)
         )
 
-        # Debug stats for trainer-side logging
+        # Debug stats
         self.dbg_has_bfs = (d_bfs is not None)
         self.dbg_bfs_dist = float(d_bfs) if d_bfs is not None else None
         if (prev_d_bfs is not None) and (d_bfs is not None):
-            dd = float(prev_d_bfs - d_bfs)
-            self.dbg_bfs_delta = dd
-            self.dbg_closer = (dd > 0.0)
-            self.dbg_farther = (dd < 0.0)
+            dd_dbg = float(prev_d_bfs - d_bfs)
+            self.dbg_bfs_delta = dd_dbg
+            self.dbg_closer = (dd_dbg > 0.0)
+            self.dbg_farther = (dd_dbg < 0.0)
         else:
             self.dbg_bfs_delta = None
             self.dbg_closer = False
@@ -239,12 +366,41 @@ class RewardShaper:
         self.dbg_is_success = bool(is_success)
 
         # -----------------------------------------------------------
+        # NEW: update bfs_min + stage, pay one-time stage bonus
+        # -----------------------------------------------------------
+        if d_bfs is not None:
+            if self._bfs_min is None:
+                self._bfs_min = float(d_bfs)
+            else:
+                self._bfs_min = float(min(self._bfs_min, float(d_bfs)))
+
+            self._stage = self._compute_stage_from_bfs_min(self._bfs_min)
+            self.dbg_bfs_min = float(self._bfs_min)
+            self.dbg_stage = int(self._stage)
+
+            r += self._maybe_pay_stage_bonus(self._stage)
+
+        # -----------------------------------------------------------
         # [Progress & Magnet Reward]
         # -----------------------------------------------------------
         if d_bfs is not None:
             # A) Linear progress (SIGNED; no max(0, ...) farming)
             if self._prev_bfs_dist is not None:
-                r += float(getattr(self.cfg, "w_progress", 0.0)) * (self._prev_bfs_dist - d_bfs)
+                w_prog = float(getattr(self.cfg, "w_progress", 0.0))
+                mults = self._progress_stage_mults()
+                w_eff = w_prog * float(mults[self._stage])
+
+                dd = float(self._prev_bfs_dist - d_bfs)
+                prog = float(w_eff * dd)
+
+                # NEW: clamp progress contribution only (pre global clip)
+                prog_clip = getattr(self.cfg, "progress_clip", None)
+                if prog_clip is not None:
+                    pc = float(prog_clip)
+                    if pc > 0.0:
+                        prog = float(np.clip(prog, -pc, pc))
+
+                r += prog
 
             # B) Bounded "magnet" shaping: delta of exp(-alpha*d)
             alpha = 30.0
@@ -262,7 +418,6 @@ class RewardShaper:
         # -----------------------------------------------------------
         did_just_succeed = False
         if is_success and (not self.virtual_done):
-            # Pay terminal reward only once per episode
             self.virtual_done = True
             did_just_succeed = True
 
@@ -272,7 +427,8 @@ class RewardShaper:
         if vec_obs is not None:
             # Time penalty (constant per step)
             r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
-            # Track time signal for speed-bonus orientation detection (counts up vs down).
+
+            # Track time signal for speed-bonus orientation detection.
             try:
                 self._prev_time = float(vec_obs[IDX_TIME])
             except Exception:
@@ -293,16 +449,17 @@ class RewardShaper:
         #   - First clip the base shaped reward.
         #   - Then, if goal just happened, add terminal_bonus on top (NOT clipped).
         # -----------------------------------------------------------
-        clip = float(getattr(self.cfg, "clip", 0.0) or 0.0)
+        clip = getattr(self.cfg, "reward_clip", None)
         base = float(r)
-        if clip > 0.0:
-            base = float(np.clip(base, -clip, clip))
+        if clip is not None:
+            c = float(clip)
+            if c > 0.0:
+                base = float(np.clip(base, -c, c))
 
         if did_just_succeed:
             base += float(getattr(self.cfg, "terminal_bonus", 1.0))
-            # Success speed bonus (ADD-ON, not clipped):
-            # - Uses cfg.time_limit for normalization.
-            # - Auto-detects whether IDX_TIME counts up (elapsed) or down (remaining).
+
+            # Success speed bonus (ADD-ON, not clipped)
             ssb = float(getattr(self.cfg, "success_speed_bonus", 0.0) or 0.0)
             tl = float(getattr(self.cfg, "time_limit", 0.0) or 0.0)
             if ssb > 0.0 and tl > 0.0 and vec_obs is not None:
@@ -320,7 +477,7 @@ class RewardShaper:
                     pass
 
         return float(base)
-    
+
     def _reward_without_bfs(
         self,
         raw_reward: float,
@@ -336,13 +493,15 @@ class RewardShaper:
         self._step += 1
 
         r = float(raw_reward)
-        prev_time = self._prev_time  # for detecting whether IDX_TIME is elapsed-time or remaining-time
+        prev_time = self._prev_time
 
-        # Vector-based goal distance fallback (if available)
         raw_goal_dist = float(vec_obs[IDX_GOAL_DIST]) if vec_obs is not None else 999.0
 
-        # Same success condition as __call__ but without BFS term
-        is_success = (r >= 1.0) or (raw_goal_dist < 0.6)
+        success_if_raw = getattr(self.cfg, "success_if_raw_reward_ge", None)
+        if success_if_raw is None:
+            success_if_raw = 1.0
+
+        is_success = (r >= float(success_if_raw)) or (raw_goal_dist < 0.6)
 
         # Debug flags (no BFS available)
         self.dbg_has_bfs = False
@@ -352,29 +511,22 @@ class RewardShaper:
         self.dbg_farther = False
         self.dbg_is_success = bool(is_success)
 
-        # Break BFS continuity so we don't compute deltas using stale values later.
+        # Break BFS continuity
         self._prev_bfs_dist = None
         self._prev_goal_phi = None
 
-        # Terminal-on-missing-map often happens; ensure we don't carry damage deltas across episode boundary.
         if done:
             self._prev_cum_damage = None
 
-        # -----------------------------------------------------------
-        # [Terminal Logic]
-        # -----------------------------------------------------------
+        # Terminal
         did_just_succeed = False
         if is_success and (not self.virtual_done):
             self.virtual_done = True
             did_just_succeed = True
 
-        # -----------------------------------------------------------
-        # [Penalty Terms]
-        # -----------------------------------------------------------
+        # Penalties
         if vec_obs is not None:
             r += float(getattr(self.cfg, "w_time", 0.0)) * -1.0
-
-            # Track time signal for speed-bonus orientation detection (counts up vs down).
             try:
                 self._prev_time = float(vec_obs[IDX_TIME])
             except Exception:
@@ -388,27 +540,24 @@ class RewardShaper:
             if float(vec_obs[IDX_IS_ACTIONABLE]) < 0.5:
                 r += float(getattr(self.cfg, "w_not_actionable", 0.0)) * -1.0
 
-        # -----------------------------------------------------------
-        # [Clipping + Terminal Bonus (ADD-ON)]
-        #   - First clip the base shaped reward.
-        #   - Then, if goal just happened, add terminal_bonus on top (NOT clipped).
-        # -----------------------------------------------------------
-        clip = float(getattr(self.cfg, "clip", 0.0) or 0.0)
+        # Global clip + terminal add-on
+        clip = getattr(self.cfg, "reward_clip", None)
         base = float(r)
-        if clip > 0.0:
-            base = float(np.clip(base, -clip, clip))
+        if clip is not None:
+            c = float(clip)
+            if c > 0.0:
+                base = float(np.clip(base, -c, c))
 
         if did_just_succeed:
             base += float(getattr(self.cfg, "terminal_bonus", 1.0))
 
-            # Success speed bonus (ADD-ON, not clipped)
             ssb = float(getattr(self.cfg, "success_speed_bonus", 0.0) or 0.0)
             tl = float(getattr(self.cfg, "time_limit", 0.0) or 0.0)
             if ssb > 0.0 and tl > 0.0 and vec_obs is not None:
                 try:
                     cur_t = float(vec_obs[IDX_TIME])
                     if (prev_time is not None) and (cur_t < float(prev_time)):
-                         frac = cur_t / tl
+                        frac = cur_t / tl
                     else:
                         frac = 1.0 - (cur_t / tl)
                     frac = float(np.clip(frac, 0.0, 1.0))
@@ -417,7 +566,6 @@ class RewardShaper:
                     pass
 
         return float(base)
-
 
 
 
