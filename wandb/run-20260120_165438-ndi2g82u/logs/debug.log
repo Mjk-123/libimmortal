@@ -26,3 +26,10 @@ config: {'env_tag': 'ImmortalSufferingEnv', 'max_steps': 1250000, 'max_ep_len': 
 2026-01-20 16:54:39,868 INFO    MainThread:92832 [wandb_run.py:_redirect():2300] Wrapping output streams.
 2026-01-20 16:54:39,868 INFO    MainThread:92832 [wandb_run.py:_redirect():2325] Redirects installed.
 2026-01-20 16:54:39,871 INFO    MainThread:92832 [wandb_init.py:init():847] run started, returning control to user process
+2026-01-21 13:20:19,933 INFO    MainThread:92832 [wandb_run.py:_finish():2109] finishing run mjkmszr0613-postech/ppo-immortal/ndi2g82u
+2026-01-21 13:20:19,933 INFO    MainThread:92832 [wandb_run.py:_atexit_cleanup():2349] got exitcode: 0
+2026-01-21 13:20:19,934 INFO    MainThread:92832 [wandb_run.py:_restore():2332] restore
+2026-01-21 13:20:19,934 INFO    MainThread:92832 [wandb_run.py:_restore():2338] restore done
+2026-01-21 13:20:29,827 INFO    MainThread:92832 [wandb_run.py:_footer_history_summary_info():3991] rendering history
+2026-01-21 13:20:29,833 INFO    MainThread:92832 [wandb_run.py:_footer_history_summary_info():4023] rendering summary
+2026-01-21 13:20:29,849 INFO    MainThread:92832 [wandb_run.py:_footer_sync_info():3950] logging synced files

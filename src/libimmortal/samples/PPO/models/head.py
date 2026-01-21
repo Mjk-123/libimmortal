@@ -43,3 +43,30 @@ class CriticHead(nn.Module):
     def forward(self, state_vec: torch.Tensor) -> torch.Tensor:
         return self.net(state_vec)  # [B,1]
 
+
+class DeepCriticHead(nn.Module):
+    def __init__(self, in_dim: int, hidden_dim: int = 256, num_layers: int = 3):
+        super().__init__()
+        
+        layers = []
+        layers.append(nn.Linear(in_dim, hidden_dim))
+        layers.append(nn.LayerNorm(hidden_dim))
+        layers.append(nn.GELU())
+        
+        for _ in range(num_layers - 2):
+            layers.append(nn.Linear(hidden_dim, hidden_dim))
+            layers.append(nn.GELU())
+            
+        layers.append(nn.Linear(hidden_dim, 1))
+        
+        self.net = nn.Sequential(*layers)
+        self.apply(self._init_weights)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            nn.init.orthogonal_(m.weight, gain=1.414)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0.0)
+
+    def forward(self, state_vec: torch.Tensor) -> torch.Tensor:
+        return self.net(state_vec)

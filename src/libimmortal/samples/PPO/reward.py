@@ -52,16 +52,16 @@ DEFAULT_BLOCKED_IDS = [WALL_ID]
 #   stage3: (0.2, 0.1]
 #   stage4: (0.1, 0.0]
 
-STAGE_THRESHOLDS: List[float] = [0.7, 0.4, 0.2, 0.1]  # boundaries for stages 1..4
+STAGE_THRESHOLDS: List[float] = [0.7, 0.4, 0.2, 0.15, 0.1]  # boundaries for stages 1..4
 
 # One-time bonuses paid when a stage is reached for the first time in the episode.
 # NOTE: You can tune these freely; they should be on the same scale as terminal_bonus (e.g., 5~9 total success).
 # Index: stage0..stage4
-STAGE_BONUSES: List[float] = [0.0, 0.5, 1.0, 1.5, 1.5]
+STAGE_BONUSES: List[float] = [0.0, 0.5, 0.5, 1.5, 1.5, 1.0]
 
 # Multipliers applied to w_progress based on current stage (derived from bfs_min).
 # Index: stage0..stage4
-PROGRESS_STAGE_MULTS: List[float] = [1.0, 1.2, 1.5, 2.0, 2.5]
+PROGRESS_STAGE_MULTS: List[float] = [1.0, 1.2, 1.5, 2.0, 2.4, 2.8]
 
 
 @dataclass

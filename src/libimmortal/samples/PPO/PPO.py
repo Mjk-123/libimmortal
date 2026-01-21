@@ -49,9 +49,205 @@ class RolloutBuffer:
 PPO implementation
 '''
 
-ActorCriticCls = simple.ActorCritic
-# ActorCriticCls = necto.ActorCritic
+class PPO(nn.Module):
+    """
+    New-model-only PPO wrapper.
 
+    - policy: ActorCritic (shared backbone + actor_head + critic_head)
+    - policy_old: snapshot for sampling
+    - optimizer: two param groups (backbone+actor) vs (critic)
+    - update(): 기존 로직 최대한 유지 (단, self.policy(...) 대신 self.policy.evaluate(...) 호출)
+    """
+    def __init__(
+        self,
+        *,
+        num_ids: int,
+        action_nvec: list[int],
+        lr_actor: float,
+        lr_critic: float,
+        gamma: float,
+        K_epochs: int,
+        eps_clip: float,
+        mini_batch_size: int = 128,
+        device: torch.device | None = None,
+
+        # model kwargs (optional)
+        model_dim: int = 256,
+        enemy_state_vocab: int = 32,
+        enemy_state_emb: int = 16,
+    ):
+        super().__init__()
+
+        self.gamma = float(gamma)
+        self.eps_clip = float(eps_clip)
+        self.K_epochs = int(K_epochs)
+        self.mini_batch_size = int(mini_batch_size)
+
+        self.action_nvec = list(action_nvec)
+        self.device = device if device is not None else _default_device()
+
+        # rollout buffer
+        self.buffer = RolloutBuffer()
+
+        # models
+        self.policy = necto.ActorCritic(
+            num_ids=int(num_ids),
+            action_nvec=self.action_nvec,
+            model_dim=int(model_dim),
+            enemy_state_vocab=int(enemy_state_vocab),
+            enemy_state_emb=int(enemy_state_emb),
+        ).to(self.device)
+
+        self.policy_old = necto.ActorCritic(
+            num_ids=int(num_ids),
+            action_nvec=self.action_nvec,
+            model_dim=int(model_dim),
+            enemy_state_vocab=int(enemy_state_vocab),
+            enemy_state_emb=int(enemy_state_emb),
+        ).to(self.device)
+
+        self.policy_old.load_state_dict(self.policy.state_dict())
+
+        # optimizer param groups: shared(backbone+actor) vs critic
+        shared_and_actor = []
+        critic_only = []
+
+        shared_and_actor += list(self.policy.backbone.parameters())
+        shared_and_actor += list(self.policy.actor_head.parameters())
+        critic_only += list(self.policy.critic_head.parameters())
+
+        self.optimizer = torch.optim.Adam(
+            [{"params": shared_and_actor, "lr": float(lr_actor)},
+             {"params": critic_only, "lr": float(lr_critic)}]
+        )
+
+        self.MseLoss = nn.MSELoss()
+
+    @torch.no_grad()
+    def select_action(self, map_np: np.ndarray, vec_np: np.ndarray):
+        """
+        Convenience sampler for your existing _select_action flow.
+        Returns torch tensors on CPU and numpy action.
+        """
+        map_t = torch.from_numpy(np.asarray(map_np)).to(self.device, dtype=torch.long).unsqueeze(0)       # (1,90,160)
+        vec_t = torch.from_numpy(np.asarray(vec_np)).to(self.device, dtype=torch.float32).unsqueeze(0)    # (1,103)
+
+        action_t, logp_t, value_t = self.policy_old.act(map_t, vec_t)
+
+        a_cpu = action_t.squeeze(0).detach().cpu()
+        lp_cpu = logp_t.squeeze(0).detach().cpu()
+        v_cpu = value_t.squeeze(0).detach().cpu()
+        action_np = a_cpu.numpy()
+        return a_cpu, lp_cpu, v_cpu, action_np
+
+    def update(self, gae_lambda: float = 0.95):
+        """
+        기존 PPO update 로직 유지.
+        단: self.policy(mb_map, mb_vec, mb_actions) 대신
+            self.policy.evaluate(mb_map, mb_vec, mb_actions) 사용.
+        """
+        T = len(self.buffer.rewards)
+        print(f"PPO enters T = {T}", flush=True)
+
+        assert T == len(self.buffer.is_terminals)
+        assert T == len(self.buffer.map_states)
+        assert T == len(self.buffer.vec_states)
+        assert T == len(self.buffer.actions)
+        assert T == len(self.buffer.logprobs)
+        assert T == len(self.buffer.state_values)
+        assert T <= 7000, f"T too large: {T} (buffer not cleared / rollout not bounded?)"
+
+        # 1) Build tensors on CPU
+        rewards = torch.tensor(self.buffer.rewards, dtype=torch.float32)            # (T,)
+        dones   = torch.tensor(self.buffer.is_terminals, dtype=torch.float32)       # (T,)
+
+        values = torch.stack(self.buffer.state_values, dim=0).detach().cpu().view(-1)  # (T,)
+        last_value = torch.tensor([float(getattr(self.buffer, "last_value", 0.0))], dtype=torch.float32)  # (1,)
+        next_values = torch.cat([values[1:], last_value], dim=0)  # (T,)
+
+        # 2) GAE
+        advantages = torch.zeros_like(rewards)
+        gae = 0.0
+        for t in reversed(range(rewards.size(0))):
+            mask = 1.0 - dones[t]
+            delta = rewards[t] + self.gamma * next_values[t] * mask - values[t]
+            gae = delta + self.gamma * gae_lambda * mask * gae
+            advantages[t] = gae
+
+        # 3) Returns
+        returns = advantages + values
+
+        # 4) Normalize advantages
+        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-7)
+
+        # 5) Rollout tensors
+        old_map = torch.from_numpy(np.stack(self.buffer.map_states, axis=0)).long()     # (T,90,160) CPU
+        old_vec = torch.from_numpy(np.stack(self.buffer.vec_states, axis=0)).float()   # (T,103) CPU
+
+        old_actions = torch.stack(self.buffer.actions, dim=0).detach().cpu()
+        old_logprobs = torch.stack(self.buffer.logprobs, dim=0).detach().cpu().view(-1)  # (T,)
+
+        # Keep MultiDiscrete shape (B, branches)
+        num_branches = len(self.action_nvec)
+        old_actions = old_actions.long()
+        if old_actions.dim() == 3 and old_actions.size(1) == 1:
+            old_actions = old_actions.squeeze(1)
+        if old_actions.dim() == 1:
+            assert old_actions.numel() % num_branches == 0
+            old_actions = old_actions.view(-1, num_branches)
+        assert old_actions.dim() == 2 and old_actions.size(1) == num_branches
+
+        T = rewards.shape[0]
+        mb = int(self.mini_batch_size)
+
+        old_values = values  # (T,)
+        vf_clip = self.eps_clip
+        vf_coef = 0.5
+        ent_coef = 0.01
+
+        for _ in range(self.K_epochs):
+            idxs = torch.randperm(T)
+
+            for start in range(0, T, mb):
+                mb_idx = idxs[start:start + mb]
+
+                mb_map = old_map[mb_idx].to(self.device, non_blocking=True)
+                mb_vec = old_vec[mb_idx].to(self.device, non_blocking=True)
+                mb_actions = old_actions[mb_idx].to(self.device, non_blocking=True)
+                mb_old_logp = old_logprobs[mb_idx].to(self.device, non_blocking=True)
+
+                mb_returns = returns[mb_idx].to(self.device, non_blocking=True)
+                mb_adv = advantages[mb_idx].to(self.device, non_blocking=True)
+                mb_old_values = old_values[mb_idx].to(self.device, non_blocking=True)
+
+                # ---- 여기만 새 모델에 맞게 변경: evaluate() 호출 ----
+                logprobs, state_values, dist_entropy = self.policy.evaluate(mb_map, mb_vec, mb_actions)
+                state_values = state_values.view(-1)  # (B,)
+
+                ratios = torch.exp(logprobs - mb_old_logp.detach())
+                surr1 = ratios * mb_adv
+                surr2 = torch.clamp(ratios, 1 - self.eps_clip, 1 + self.eps_clip) * mb_adv
+
+                v_pred = state_values
+                v_pred_clipped = mb_old_values + torch.clamp(v_pred - mb_old_values, -vf_clip, vf_clip)
+
+                loss_v1 = (v_pred - mb_returns).pow(2)
+                loss_v2 = (v_pred_clipped - mb_returns).pow(2)
+                loss_critic = torch.max(loss_v1, loss_v2)
+
+                loss = -torch.min(surr1, surr2) + vf_coef * loss_critic - ent_coef * dist_entropy
+
+                self.optimizer.zero_grad(set_to_none=True)
+                loss.mean().backward()
+                torch.nn.utils.clip_grad_norm_(self.policy.parameters(), 0.5)
+                self.optimizer.step()
+
+        # sync old policy
+        src = self.policy.module if hasattr(self.policy, "module") else self.policy
+        self.policy_old.load_state_dict(src.state_dict())
+        self.buffer.clear()
+
+'''
 class PPO:
     def __init__(
         self,
@@ -80,15 +276,15 @@ class PPO:
             self.action_std = action_std_init
 
         self.buffer = RolloutBuffer()
-
-        self.policy = ActorCriticCls(
+        
+        self.policy = simple.ActorCriticCls(
             num_ids=num_ids, vec_dim=vec_dim, action_dim=action_dim,
             has_continuous_action_space=has_continuous_action_space,
             action_std_init=action_std_init,
             action_nvec=action_nvec
         ).to(self.device)
 
-        self.policy_old = ActorCriticCls(
+        self.policy_old = simple.ActorCriticCls(
             num_ids=num_ids, vec_dim=vec_dim, action_dim=action_dim,
             has_continuous_action_space=has_continuous_action_space,
             action_std_init=action_std_init,
@@ -120,9 +316,6 @@ class PPO:
         self.MseLoss = nn.MSELoss()
 
     def update(self, gae_lambda: float = 0.95):
-        '''
-        Freezing test
-        '''
         T = len(self.buffer.rewards)
         print(f"PPO enters T = {T}", flush=True)
 
@@ -354,7 +547,7 @@ def getPPOAgent(
         raise TypeError(f"Unsupported action space: {type(action_space)}")
 
     # Build ActorCritic agent
-    agent = ActorCriticCls(
+    agent = simple.ActorCriticCls(
         num_ids=int(num_ids),
         vec_dim=int(vec_dim),
         action_dim=int(action_dim),
@@ -385,3 +578,4 @@ def getPPOAgent(
         "has_continuous_action_space": has_continuous_action_space,
     }
     return agent, info
+'''

@@ -628,6 +628,8 @@ def train(args):
     action_space = _get_action_space(env)
     has_continuous_action_space = isinstance(action_space, gym.spaces.Box)
 
+    action_nvec = None
+
     if isinstance(action_space, gym.spaces.Box):
         action_dim = int(np.prod(action_space.shape))
         action_nvec = None
@@ -694,6 +696,21 @@ def train(args):
 
     # PPO agent
     ppo_agent = PPO(
+        num_ids=num_ids,
+        action_nvec=action_nvec,
+        lr_actor=lr_actor,
+        lr_critic=lr_critic,
+        gamma=gamma,
+        K_epochs=K_epochs,
+        eps_clip=eps_clip,
+        mini_batch_size=mini_batch_size,
+        device=device,
+        model_dim=256,
+        enemy_state_vocab=32,
+        enemy_state_emb=16,
+    )
+    '''
+    ppo_agent = PPO(
         num_ids, expected_vec_dim, action_dim,
         lr_actor, lr_critic,
         gamma, K_epochs, eps_clip,
@@ -702,6 +719,7 @@ def train(args):
         mini_batch_size=mini_batch_size,
         action_nvec=action_nvec,
     )
+    '''
 
     if hasattr(ppo_agent, "policy"):
         ddp.get_module(ppo_agent.policy).to(device)
@@ -812,7 +830,7 @@ def train(args):
         ppo_logger = PPOFileLogger(log_path, also_stdout=False)
         ppo_logger.log(f"[Init] PPO log file: {log_path}")
 
-    ckpt_prefix = f"PPO_{env_tag}_seed{int(args.seed) if args.seed is not None else 0}_"
+    ckpt_prefix = f"Necto_{env_tag}_seed{int(args.seed) if args.seed is not None else 0}_"
     if ddp.is_main_process():
         print("checkpoint dir:", ckpt_dir)
 

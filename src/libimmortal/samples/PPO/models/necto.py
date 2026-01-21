@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.distributions import Categorical
 
 from libimmortal.samples.PPO.models.backbone import DualStreamBidirBackbone
-from libimmortal.samples.PPO.models.head import MultiDiscreteActorHead, CriticHead
+from libimmortal.samples.PPO.models.head import MultiDiscreteActorHead, CriticHead, DeepCriticHead
 
 
 class ActorCritic(nn.Module):
@@ -38,7 +38,8 @@ class ActorCritic(nn.Module):
         )
 
         self.actor_head = MultiDiscreteActorHead(model_dim, self.action_nvec, hidden=256)
-        self.critic_head = CriticHead(model_dim, hidden=256)
+        # self.critic_head = CriticHead(model_dim, hidden=256)
+        self.critic_head = DeepCriticHead(model_dim, hidden_dim=256, num_layers=4)
 
     @torch.no_grad()
     def act(self, id_map: torch.Tensor, vec: torch.Tensor):
@@ -74,8 +75,8 @@ class ActorCritic(nn.Module):
 
     def evaluate(self, id_map: torch.Tensor, vec: torch.Tensor, action: torch.Tensor):
         """
-        PPO update에서 사용:
-        action: [B, dims] long (저장해둔 action)
+        For PPO update:
+        action: [B, dims] long (saved action)
         returns:
           logp: [B]
           value: [B]
