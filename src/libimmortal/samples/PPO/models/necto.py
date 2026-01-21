@@ -29,17 +29,18 @@ class ActorCritic(nn.Module):
             model_dim=model_dim,
             id_emb_dim=64,
             patch_hw=(9,10),
-            map_layers=3,
-            ent_layers=2,
+            map_layers=5,
+            ent_layers=3,
             heads=8,
             dropout=0.0,
             enemy_state_vocab=enemy_state_vocab,
             enemy_state_emb=enemy_state_emb,
+            cross_layers=2,
         )
 
         self.actor_head = MultiDiscreteActorHead(model_dim, self.action_nvec, hidden=256)
         # self.critic_head = CriticHead(model_dim, hidden=256)
-        self.critic_head = DeepCriticHead(model_dim, hidden_dim=256, num_layers=4)
+        self.critic_head = DeepCriticHead(model_dim, hidden_dim=256, num_layers=6)
 
     @torch.no_grad()
     def act(self, id_map: torch.Tensor, vec: torch.Tensor):

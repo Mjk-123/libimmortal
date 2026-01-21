@@ -188,6 +188,7 @@ class DualStreamBidirBackbone(nn.Module):
         dropout: float = 0.0,
         enemy_state_vocab: int = 32,
         enemy_state_emb: int = 16,
+        cross_layers: int = 1,
     ):
         super().__init__()
         self.map_tok = MapTokenizer(
@@ -214,8 +215,16 @@ class DualStreamBidirBackbone(nn.Module):
         ])
 
         # bidirectional cross attention (1 round)
-        self.ent_to_map = CrossAttn(model_dim, heads=heads, dropout=dropout)
-        self.map_to_ent = CrossAttn(model_dim, heads=heads, dropout=dropout)
+        assert cross_layers >= 1
+        self.cross_layers = int(cross_layers)
+        self.ent_to_map = nn.ModuleList([
+            CrossAttn(model_dim, heads=heads, dropout=dropout)
+            for _ in range(self.cross_layers)
+        ])
+        self.map_to_ent = nn.ModuleList([
+            CrossAttn(model_dim, heads=heads, dropout=dropout)
+            for _ in range(self.cross_layers)
+        ])
 
         # readout: state token (learnable query)
         self.state_q = nn.Parameter(torch.zeros(1, 1, model_dim))
@@ -238,9 +247,10 @@ class DualStreamBidirBackbone(nn.Module):
         for blk in self.ent_enc:
             ent_tokens = blk(ent_tokens)
 
-        # fusion (bidir cross-attn)
-        ent_tokens = self.ent_to_map(ent_tokens, map_tokens)
-        map_tokens = self.map_to_ent(map_tokens, ent_tokens)
+        # fusion (bidir cross-attn) -- multi rounds
+        for i in range(self.cross_layers):
+            map_tokens = self.ent_to_map[i](map_tokens, ent_tokens) # q = ent, kv = map, [B,160,D]
+            ent_tokens = self.map_to_ent[i](ent_tokens, map_tokens) # q = map, kv = ent, [B,11,D]
 
         # readout
         kv = torch.cat([ent_tokens, map_tokens], dim=1)       # [B,171,D]
