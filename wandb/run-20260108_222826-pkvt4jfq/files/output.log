@@ -1,4 +1,0 @@
-Started training at: 2026-01-08 22:28:27
-============================================================================================
-[Interrupted] saving checkpoint before exit...
-Final model saved at: /root/libimmortal/src/libimmortal/samples/PPO/utils/checkpoints/PPO_ImmortalSufferingEnv_seed42_160221.pth

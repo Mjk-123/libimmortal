@@ -1,8 +1,0 @@
-Started training at: 2026-01-12 11:45:34
-============================================================================================
-[EP_END] upd=1 t=999 env=0 raw=0.000 shaped=-0.030 len=1000 ret=-6.650
-[EP_END] upd=1 t=1999 env=0 raw=0.000 shaped=-0.020 len=1000 ret=-13.970
-[PPO][begin] upd=1 T=4000 terminals=4 (0.10%) reward(mean/std/min/max)=-0.016/1.175/-10.000/+10.000 goal_hits=0 (0.00%) shaper_clip_hits=9 (0.22%) scaler_clip_hits=0 (0.00%)
-[PPO][end]   upd=1 step=4000 update_seconds=294.459 steps/s≈54.3
-[EP_END] upd=2 t=999 env=0 raw=0.000 shaped=-0.020 len=1000 ret=-7.200
-[Exit] Final model saved at: /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPOVEC_ImmortalSufferingEnv_seed42_4000_FINAL.pth

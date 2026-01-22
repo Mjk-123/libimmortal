@@ -1,1 +1,0 @@
-{"train/reward": 0.0, "train/done": 0, "train/episode_reward_running": 0.0, "train/episode_len_running": 400, "_timestamp": 1767448580.868636, "_runtime": 313.6194829940796, "_step": 6400, "episode/reward": 0.0, "episode/len": 1000, "episode/index": 5, "train/updated": 1, "_wandb": {"runtime": 382}}
