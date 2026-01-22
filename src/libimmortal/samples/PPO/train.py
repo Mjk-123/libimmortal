@@ -830,7 +830,7 @@ def train(args):
         ppo_logger = PPOFileLogger(log_path, also_stdout=False)
         ppo_logger.log(f"[Init] PPO log file: {log_path}")
 
-    ckpt_prefix = f"Necto2_{env_tag}_seed{int(args.seed) if args.seed is not None else 0}_"
+    ckpt_prefix = f"Necto2_{env_tag}_seed_mix_{int(args.seed) if args.seed is not None else 0}_"
     if ddp.is_main_process():
         print("checkpoint dir:", ckpt_dir)
 

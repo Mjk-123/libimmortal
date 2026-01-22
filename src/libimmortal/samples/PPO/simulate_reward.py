@@ -84,7 +84,7 @@ def compute_rewards_vectorized(
         rewards += float(cfg.w_progress) * (norm_start - norm_end)
 
         # B) Magnet shaping: max(0, exp(-a*d_end) - exp(-a*d_start))
-        alpha = 30.0
+        alpha = 15.0
         phi_prev = np.exp(-alpha * norm_start)
         phi_curr = np.exp(-alpha * norm_end)
         rewards += float(cfg.w_acceleration) * np.maximum(0.0, phi_curr - phi_prev)

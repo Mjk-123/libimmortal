@@ -289,7 +289,7 @@ class RewardShaper:
 
             # Initialize bounded potential to avoid a large first-step delta
             if self._prev_bfs_dist is not None:
-                alpha = 30.0
+                alpha = 15.0
                 self._prev_goal_phi = float(np.exp(-alpha * float(self._prev_bfs_dist)))
 
     def _get_bfs_dist(self, id_map: np.ndarray) -> Optional[float]:
