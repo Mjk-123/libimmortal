@@ -34,7 +34,7 @@ import libimmortal.samples.PPO.utils.utilities as utilities
 import libimmortal.samples.PPO.utils.excs as excs
 from libimmortal.samples.PPO.utils.ppolog import PPOFileLogger
 
-from libimmortal.samples.PPO.utils.signaling import GracefulStop
+from libimmortal.samples.PPO.utils.signaling import GracefulStop, StopFlag
 
 try:
     faulthandler.register(signal.SIGUSR1, all_threads=True)
@@ -221,6 +221,18 @@ def _port_is_free(p: int) -> bool:
 # Training
 # -------------------------
 
+def barrier_or_stop(tag: str, timeout_s: float):
+    """
+    PPO update 경계 전용.
+    - barrier 성공 → return
+    - barrier 실패 → 전 rank abort
+    """
+    if not ddp._ddp_barrier_or_die(tag, timeout_s):
+        if ddp.is_main_process():
+            print(f"[DDP][FATAL] barrier failed at {tag}", flush=True)
+        ddp._ddp_abort_all(124)
+
+
 def train(args):
     faulthandler.enable(all_threads=True)
 
@@ -248,6 +260,9 @@ def train(args):
     # IMPORTANT: pre/post-update barriers are optional; keeping them always-on can deadlock if ranks diverge.
     use_update_barriers = bool(getattr(args, "ddp_update_barriers", False))       # default: False
 
+    ckpt_dir = save._checkpoint_dir()
+    os.makedirs(ckpt_dir, exist_ok=True)
+    stop_flag = StopFlag(ckpt_dir, name=".STOP")
 
     # =========================
     # [CHANGE] stop condition
@@ -264,7 +279,14 @@ def train(args):
     _force_t0: Optional[float] = None
 
     def _ddp_stop_any() -> bool:
-        return bool(stopper.should_stop())
+        # local request OR global stop flag
+        if _stop_requested() or stopper.should_stop():
+            # best-effort: broadcast to other ranks without collectives
+            stop_flag.request()
+            return True
+        if stop_flag.is_requested():
+            return True
+        return False
 
     def _ddp_force_any() -> bool:
         return bool(getattr(stopper, "should_force", lambda: False)())
@@ -327,7 +349,7 @@ def train(args):
         nonlocal restart_box
 
         if _ddp_stop_any():
-            raise RuntimeError("[Env] stop requested; abort env creation")
+            raise _StopTraining(0)
 
         if seed_override is None:
             seed_override = (int(args.seed) + rank) if args.seed is not None else None
@@ -337,7 +359,7 @@ def train(args):
 
         for attempt in range(50):
             if _ddp_stop_any():
-                raise RuntimeError("[Env] stop requested; abort env creation loop")
+                raise _StopTraining(0)
 
             p = _compute_port(args)
             last_port_box["port"] = p
@@ -381,7 +403,7 @@ def train(args):
 
                 # stop이면 여기서도 즉시 중단
                 if _ddp_stop_any():
-                    raise RuntimeError("[Env] stop requested; abort after env create failure")
+                    raise _StopTraining(0)
 
                 # (A) 포트 충돌: 같은 restart_id에서 포트 찾기 실패 가능
                 if ("Address already in use" in msg) or ("EADDRINUSE" in msg):
@@ -409,7 +431,7 @@ def train(args):
     def _restart_env(reason: str):
         nonlocal env
         if _ddp_stop_any():
-            raise RuntimeError(f"[Env] stop requested; abort restart (reason={reason})")
+            raise _StopTraining(0)
         restart_box["id"] += 1
         if restart_box["id"] > max_env_restarts:
             raise RuntimeError(f"[Env] exceeded max_env_restarts={max_env_restarts} (last reason={reason})")
@@ -471,8 +493,7 @@ def train(args):
 
         for reset_attempt in range(max_reset_attempts):
             if _stop_now():
-                # stop 요청 시 절대 유니티를 다시 띄우지 않는다
-                raise RuntimeError("[Env][reset] stop requested")
+                raise _StopTraining(0)
 
             # (1) seed 선택
             if args.seed is not None:
@@ -504,7 +525,7 @@ def train(args):
                 stopper.sleep_poll(min(1.0, backoff_s))
 
             if _stop_now():
-                raise RuntimeError("[Env][reset] stop requested (after close)")
+                raise _StopTraining(0)
 
             # (3) 새 env 생성
             try:
@@ -533,7 +554,7 @@ def train(args):
             except Exception as e:
                 # stop이면 여기서도 즉시 종료 (재시도 금지)
                 if _stop_now():
-                    raise RuntimeError(f"[Env][reset] stop requested while handling exception: {repr(e)}")
+                    raise _StopTraining(0)
 
                 # restartable이면 재생성 시도
                 if excs._is_restartable_exc(e):
@@ -708,6 +729,7 @@ def train(args):
         model_dim=256,
         enemy_state_vocab=32,
         enemy_state_emb=16,
+        freeze_backbone=args.freeze_backbone,
     )
     '''
     ppo_agent = PPO(
@@ -1249,7 +1271,7 @@ def train(args):
                 interrupted = True 
                 if ddp.is_main_process():
                     print(f"[FATAL] post-step failed on rank={rank} step={int(step)} -> exiting", flush=True)
-                os._exit(1)
+                raise _StopTraining(1)
 
             # -------------------------
             # PPO update (ALL ranks)
@@ -1258,11 +1280,8 @@ def train(args):
             # If stopping, skip updates entirely (updates are long and prone to divergence on interrupt).
             if step % update_timestep == 0:
                 _check_stop_or_raise("pre_update")
-
-                # Hard barriers around updates are dangerous in this env (ranks can diverge on reset/restart).
-                # Keep them off by default; even when enabled, use only soft barrier.
-                if use_update_barriers and (not stopper.should_stop()):
-                    ddp._ddp_barrier_soft(f"pre_update@{int(step)}", timeout_s=5.0)
+                if use_update_barriers:
+                    barrier_or_stop(f"ppo_enter@{int(step)}", timeout_s=1200.0)
                 t0 = time.time()
 
                 # Computing last_value must be robust even if next_id_map is None.
@@ -1311,8 +1330,11 @@ def train(args):
                         step=int(step),
                     )
                 _reset_update_counters()
-                if use_update_barriers and (not stopper.should_stop()):
-                    ddp._ddp_barrier_soft(f"post_update@{int(step)}", timeout_s=5.0)
+                if _ddp_stop_any():
+                    raise _StopTraining(0)
+
+                if use_update_barriers:
+                    barrier_or_stop(f"ppo_exit@{int(step)}", timeout_s=1200.0)
 
             # Action std decay
             if has_continuous_action_space and (step % action_std_decay_freq == 0):
@@ -1400,7 +1422,7 @@ def train(args):
                 cur_id_map, cur_vec_obs = next_id_map, next_vec_obs
 
             # Step-level DDP synchronization
-            if ddp_step_sync_every > 0 and (local_step % ddp_step_sync_every == 0) and (not stopper.should_stop()):
+            if ddp_step_sync_every > 0 and (local_step % ddp_step_sync_every == 0) and (not _ddp_stop_any()):
                 ddp._ddp_barrier(f"step_sync@{int(step)}", ddp_barrier_timeout_s)
 
     except _StopTraining:

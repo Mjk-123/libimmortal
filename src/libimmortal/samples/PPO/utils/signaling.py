@@ -5,6 +5,7 @@ import os
 import contextlib
 import signal
 import time
+import pathlib
 from dataclasses import dataclass
 from typing import Callable, Dict, Optional, Tuple
 
@@ -106,3 +107,34 @@ class GracefulStop:
             if self.should_stop():
                 return
             time.sleep(min(dt, t_end - time.time()))
+
+class StopFlag:
+    """
+    Out-of-band stop broadcast using filesystem.
+    - Any rank can raise stop locally (SIGINT/SIGTERM -> stopper.should_stop()).
+    - Additionally, a shared file is used so all ranks can observe a global stop
+      WITHOUT any torch.distributed collectives.
+    """
+    def __init__(self, dir_path: str, name: str = ".STOP"):
+        self.dir = pathlib.Path(dir_path)
+        self.path = self.dir / name
+
+    def request(self):
+        try:
+            self.dir.mkdir(parents=True, exist_ok=True)
+            # atomic-ish: create or replace
+            tmp = self.path.with_suffix(f".tmp.{os.getpid()}")
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(f"stop {time.time()} pid={os.getpid()}\n")
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp, self.path)
+        except Exception:
+            # best-effort: stop should still work locally
+            pass
+
+    def is_requested(self) -> bool:
+        try:
+            return self.path.exists()
+        except Exception:
+            return False

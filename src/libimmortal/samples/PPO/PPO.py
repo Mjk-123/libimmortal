@@ -75,6 +75,7 @@ class PPO(nn.Module):
         model_dim: int = 256,
         enemy_state_vocab: int = 32,
         enemy_state_emb: int = 16,
+        freeze_backbone: bool = False,
     ):
         super().__init__()
 
@@ -108,20 +109,54 @@ class PPO(nn.Module):
 
         self.policy_old.load_state_dict(self.policy.state_dict())
 
-        # optimizer param groups: shared(backbone+actor) vs critic
-        shared_and_actor = []
-        critic_only = []
+        # -----------------------------------------------------------
+        # 1. Backbone Freeze Logic
+        # -----------------------------------------------------------
+        if freeze_backbone:
+            # Freeze backbone: requires_grad = False
+            for param in self.policy.backbone.parameters():
+                param.requires_grad = False
+            for param in self.policy_old.backbone.parameters():
+                param.requires_grad = False
+            
+            print("[PPO] Backbone frozen. Only Heads will be trained.", flush=True)
 
-        shared_and_actor += list(self.policy.backbone.parameters())
-        shared_and_actor += list(self.policy.actor_head.parameters())
-        critic_only += list(self.policy.critic_head.parameters())
+        # -----------------------------------------------------------
+        # 2. Parameter Grouping (for Optimizer)
+        # -----------------------------------------------------------
+        if freeze_backbone:
+            # Freeze backbone: Backbone을 리스트에서 제외 (메모리/연산 절약)
+            shared_and_actor = list(self.policy.actor_head.parameters())
+        else:
+            # Unfreeze Backbone: Backbone + Actor Head
+            shared_and_actor = list(self.policy.backbone.parameters()) + \
+                               list(self.policy.actor_head.parameters())
 
+        # critic_only: Critic Head
+        critic_only = list(self.policy.critic_head.parameters())
+
+        # -----------------------------------------------------------
+        # 3. Optimizer Setup
+        # -----------------------------------------------------------
         self.optimizer = torch.optim.Adam(
-            [{"params": shared_and_actor, "lr": float(lr_actor)},
-             {"params": critic_only, "lr": float(lr_critic)}]
+            [
+                {"params": shared_and_actor, "lr": float(lr_actor)},
+                {"params": critic_only, "lr": float(lr_critic)}
+            ]
         )
 
         self.MseLoss = nn.MSELoss()
+
+        # -----------------------------------------------------------
+        # 4. Debug Info
+        # -----------------------------------------------------------
+        total_params = sum(p.numel() for p in self.policy.parameters())
+        trainable_params = sum(p.numel() for p in self.policy.parameters() if p.requires_grad)
+        
+        print(f"[PPO Init] Total Params: {total_params:,}", flush=True)
+        print(f"[PPO Init] Trainable Params: {trainable_params:,}", flush=True)
+        if freeze_backbone:
+            print(f" -> Backbone params excluded from optimizer to save memory.", flush=True)
 
     @torch.no_grad()
     def select_action(self, map_np: np.ndarray, vec_np: np.ndarray):
@@ -424,7 +459,8 @@ class PPO:
         self.policy_old.load_state_dict(src.state_dict())
         self.buffer.clear()
 
-
+'''
+        
 def add_ppo_args(p):
     """
     Shared argparse definitions used by both train.py and submission_runner.py.
@@ -461,6 +497,7 @@ def add_ppo_args(p):
         help="Prefer policy (new) instead of policy_old when checkpoint contains both.",
     )
     return p
+    
 
 def getPPOAgent(
     args,
@@ -547,6 +584,7 @@ def getPPOAgent(
         raise TypeError(f"Unsupported action space: {type(action_space)}")
 
     # Build ActorCritic agent
+    '''
     agent = simple.ActorCriticCls(
         num_ids=int(num_ids),
         vec_dim=int(vec_dim),
@@ -554,6 +592,19 @@ def getPPOAgent(
         has_continuous_action_space=bool(has_continuous_action_space),
         action_std_init=float(getattr(args, "action_std", 0.6)),
         action_nvec=action_nvec,
+    ).to(device)
+    '''
+
+    model_dim = 256
+    enemy_state_vocab = 32
+    enemy_state_emb = 16
+
+    agent = necto.ActorCritic(
+        num_ids=int(num_ids),
+        action_nvec=action_nvec,
+        model_dim=int(model_dim),
+        enemy_state_vocab=int(enemy_state_vocab),
+        enemy_state_emb=int(enemy_state_emb),
     ).to(device)
 
     # Optional: load weights
@@ -578,4 +629,3 @@ def getPPOAgent(
         "has_continuous_action_space": has_continuous_action_space,
     }
     return agent, info
-'''

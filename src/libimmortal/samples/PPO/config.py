@@ -96,5 +96,8 @@ def build_argparser():
 
     p.add_argument("--env_seed_mix_tau", type=float, default=20000.0,
                 help="Time constant for exp schedule (episodes). Only used when --env_seed_mix_schedule=exp.")
+    
+    p.add_argument("--freeze_backbone", action="store_true", default=False,
+                help="Freeze backbone network weights and only train heads.")
 
     return p

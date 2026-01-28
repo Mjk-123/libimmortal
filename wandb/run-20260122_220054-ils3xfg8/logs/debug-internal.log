@@ -1,0 +1,13 @@
+{"time":"2026-01-22T22:00:54.846350919+09:00","level":"INFO","msg":"stream: starting","core version":"0.24.0"}
+{"time":"2026-01-22T22:00:55.242250597+09:00","level":"INFO","msg":"stream: created new stream","id":"ils3xfg8"}
+{"time":"2026-01-22T22:00:55.244653386+09:00","level":"INFO","msg":"handler: started","stream_id":"ils3xfg8"}
+{"time":"2026-01-22T22:00:55.245019385+09:00","level":"INFO","msg":"stream: started","id":"ils3xfg8"}
+{"time":"2026-01-22T22:00:55.245041511+09:00","level":"INFO","msg":"writer: started","stream_id":"ils3xfg8"}
+{"time":"2026-01-22T22:00:55.245057078+09:00","level":"INFO","msg":"sender: started","stream_id":"ils3xfg8"}
+{"time":"2026-01-23T09:17:26.414840717+09:00","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/mjkmszr0613-postech/ppo-immortal/ils3xfg8/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2026-01-23T12:31:30.046714102+09:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-01-23T12:31:30.29522057+09:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2026-01-23T12:31:30.30751448+09:00","level":"INFO","msg":"stream: closing","id":"ils3xfg8"}
+{"time":"2026-01-23T12:31:30.30791621+09:00","level":"INFO","msg":"handler: closed","stream_id":"ils3xfg8"}
+{"time":"2026-01-23T12:31:30.308262871+09:00","level":"INFO","msg":"sender: closed","stream_id":"ils3xfg8"}
+{"time":"2026-01-23T12:31:30.308288786+09:00","level":"INFO","msg":"stream: closed","id":"ils3xfg8"}

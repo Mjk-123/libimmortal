@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import sys
 import os, time
 from typing import Any
 
@@ -134,6 +135,32 @@ def _ddp_barrier_soft(tag: str, timeout_s: float):
     except Exception as e:
         if is_main_process():
             print(f"[DDP][barrier-soft][{tag}] FAILED: {repr(e)} (continuing)", flush=True)
+        return False
+
+def _ddp_abort_all(exit_code: int = 124):
+    # torchrun/elastic가 나머지 랭크도 정리하도록 강제 종료
+    try:
+        sys.stdout.flush(); sys.stderr.flush()
+    except Exception:
+        pass
+    os._exit(int(exit_code))
+
+def _ddp_barrier_or_die(tag: str, timeout_s: float):
+    if not ddp_is_enabled() or (not dist.is_initialized()):
+        return True
+    try:
+        work = dist.barrier(async_op=True)
+        t_deadline = time.time() + float(timeout_s)
+        while time.time() < t_deadline:
+            if hasattr(work, "is_completed") and work.is_completed():
+                return True
+            time.sleep(0.05)
+        if is_main_process():
+            print(f"[DDP][barrier][{tag}] TIMEOUT after {timeout_s}s -> abort", flush=True)
+        return False
+    except Exception as e:
+        if is_main_process():
+            print(f"[DDP][barrier][{tag}] FAILED: {repr(e)} -> abort", flush=True)
         return False
 
 

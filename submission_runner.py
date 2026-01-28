@@ -3,12 +3,19 @@ How to run
 
 xvfb-run -a -s "-screen 0 1024x768x24" \
 python3 submission_runner.py \
-  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/PPO_ImmortalSufferingEnv_seed42_2500000.pth \
+  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_seed_mix_42_2400000.pth \
   --seed 42 \
   --max_ep_len 1500
   --max_steps 15000 \
   --debug_dump_every 100 \
   --verbose
+
+xvfb-run -a -s "-screen 0 1024x768x24" \
+python3 submission_runner.py \
+  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_seed_mix_42_2400000.pth \
+  --seed 42 \
+  --max_ep_len 1500
+  --max_steps 15000 \
 
 '''
 
@@ -182,7 +189,7 @@ def main():
     parser.add_argument("--width", type=int, default=720)
     parser.add_argument("--height", type=int, default=480)
     parser.add_argument("--verbose", action="store_true")
-    parser.add_argument("--max_steps", type=int, default=10000)
+    parser.add_argument("--max_steps", type=int, default=15000)
 
     # PPO args (your shared args)
     PPO.add_ppo_args(parser)

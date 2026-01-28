@@ -1,0 +1,159 @@
+_wandb:
+    value:
+        cli_version: 0.24.0
+        e:
+            l1z87lojjpo82a4xbdgvdcug1928k904:
+                args:
+                    - --port
+                    - "17005"
+                    - --port_stride
+                    - "200"
+                    - --max_ep_len
+                    - "1500"
+                    - --update_timestep
+                    - "6000"
+                    - --max_steps
+                    - "750000"
+                    - --save_model_freq
+                    - "50000"
+                    - --wandb
+                    - --resume
+                    - --checkpoint
+                    - /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_seed_mix_42_1050000.pth
+                    - --env_seed_mode
+                    - mix
+                    - --env_seed_mix_start
+                    - "0.30"
+                    - --env_seed_mix_end
+                    - "0.50"
+                    - --env_seed_mix_warmup_episodes
+                    - "500"
+                    - --env_seed_mix_schedule
+                    - linear
+                    - --env_seed_base
+                    - "1234567"
+                codePath: src/libimmortal/samples/PPO/train.py
+                codePathLocal: src/libimmortal/samples/PPO/train.py
+                cpu_count: 14
+                cpu_count_logical: 28
+                cudaVersion: "12.4"
+                disk:
+                    /:
+                        total: "2011876704256"
+                        used: "1055004635136"
+                email: mjkmszr0613@gmail.com
+                executable: /usr/local/bin/python3.10
+                git:
+                    commit: a8a12c024a154920e7375c5e0ac41d6ea355bb84
+                    remote: https://github.com/Mjk-123/libimmortal.git
+                gpu: NVIDIA GeForce RTX 2080 Ti
+                gpu_count: 4
+                gpu_nvidia:
+                    - architecture: Turing
+                      cudaCores: 4352
+                      memoryTotal: "11811160064"
+                      name: NVIDIA GeForce RTX 2080 Ti
+                      uuid: GPU-35001d68-8af0-b7a9-889a-31a454eb2c08
+                    - architecture: Turing
+                      cudaCores: 4352
+                      memoryTotal: "11811160064"
+                      name: NVIDIA GeForce RTX 2080 Ti
+                      uuid: GPU-fe92eb9a-645b-7b76-949a-ec7f9a1bb8a8
+                    - architecture: Turing
+                      cudaCores: 4352
+                      memoryTotal: "11811160064"
+                      name: NVIDIA GeForce RTX 2080 Ti
+                      uuid: GPU-4a3d3d9e-898c-d504-402a-b12563a97c7e
+                    - architecture: Turing
+                      cudaCores: 4352
+                      memoryTotal: "11811160064"
+                      name: NVIDIA GeForce RTX 2080 Ti
+                      uuid: GPU-e47f069d-24d1-f50e-beaa-a81536fcdcc1
+                host: 305fb38129e1
+                memory:
+                    total: "67071262720"
+                os: Linux-6.8.0-62-generic-x86_64-with-glibc2.35
+                program: /root/libimmortal/./src/libimmortal/samples/PPO/train.py
+                python: CPython 3.10.12
+                root: /root/libimmortal
+                startedAt: "2026-01-22T13:00:54.516179Z"
+                writerId: l1z87lojjpo82a4xbdgvdcug1928k904
+        m: []
+        python_version: 3.10.12
+        t:
+            "1":
+                - 1
+            "2":
+                - 1
+            "3":
+                - 2
+                - 3
+                - 13
+                - 16
+                - 61
+            "4": 3.10.12
+            "5": 0.24.0
+            "12": 0.24.0
+            "13": linux-x86_64
+K_epochs:
+    value: 10
+action_std:
+    value: 0.6
+action_std_decay_freq:
+    value: 250000
+action_std_decay_rate:
+    value: 0.05
+base_step:
+    value: 1050000
+ddp_world_size:
+    value: 4
+env_tag:
+    value: ImmortalSufferingEnv
+eps_clip:
+    value: 0.2
+gamma:
+    value: 0.99
+lr_actor:
+    value: 0.0001
+lr_critic:
+    value: 0.0002
+max_env_restarts:
+    value: 20
+max_ep_len:
+    value: 1500
+max_steps:
+    value: 750000
+min_action_std:
+    value: 0.1
+mini_batch_size:
+    value: 64
+no_graphics:
+    value: false
+port_stride:
+    value: 200
+reward_clip:
+    value: 15
+reward_scaling:
+    value: false
+save_model_freq:
+    value: 50000
+scaler_clip:
+    value: 5
+seed:
+    value: 42
+terminal_bonus:
+    value: 4
+unity_timeout_wait:
+    value: 120
+update_timestep:
+    value: 6000
+w_acc:
+    value: 1
+w_damage:
+    value: 0.05
+w_not_actionable:
+    value: 0.05
+w_progress:
+    value: 100
+w_time:
+    value: 0.02

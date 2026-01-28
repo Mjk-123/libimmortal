@@ -14,16 +14,48 @@ class MultiDiscreteActorHead(nn.Module):
         self.action_nvec = list(action_nvec)
         self.total = int(sum(self.action_nvec))
 
+        '''
+        # Old self.net: simple MLP
         self.net = nn.Sequential(
             nn.LayerNorm(in_dim),
             nn.Linear(in_dim, hidden),
             nn.GELU(),
             nn.Linear(hidden, self.total),
         )
+        '''
+
+        self.block1 = nn.Sequential(
+            nn.LayerNorm(in_dim),
+            nn.Linear(in_dim, hidden),
+            nn.GELU(),
+        )
+
+        self.block2 = nn.Sequential(
+            nn.LayerNorm(hidden),
+            nn.Linear(hidden, hidden),
+            nn.GELU(),
+            nn.Linear(hidden, hidden),
+            nn.GELU(),
+            nn.Linear(hidden, self.total),
+        )
+
+        self._init_block2_weights()
+
+    def _init_block2_weights(self):
+        for m in self.block2.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0.0)
+            elif isinstance(m, nn.LayerNorm):
+                nn.init.constant_(m.weight, 1.0)
+                nn.init.constant_(m.bias, 0.0)
 
     def forward(self, state_vec: torch.Tensor) -> torch.Tensor:
         # [B, total_logits]
-        return self.net(state_vec)
+        x = self.block1(state_vec)
+        logits = self.block2(x)
+        return logits
 
     def split_logits(self, flat_logits: torch.Tensor) -> list[torch.Tensor]:
         # flat_logits: [B, total]
