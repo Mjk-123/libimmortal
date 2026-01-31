@@ -20,8 +20,12 @@ class ImmortalSufferingEnv:
         width: int = 720,  # Visualized game screen width
         height: int = 480,  # Visualized game screen height
         verbose: bool = False,  # Whether to print logs
+        no_graphics: bool = False,
+        timeout_wait: float = 120
     ) -> None:
         self.verbose = verbose
+        self.no_graphics = no_graphics
+        self.timeout_wait = timeout_wait
         self._create_env(game_path, port, time_scale, seed, width, height)
 
     def _create_env(
@@ -48,8 +52,10 @@ class ImmortalSufferingEnv:
         self._unity_env = UnityEnvironment(
             file_name=game_path,
             base_port=port,
-            no_graphics=False,
+            no_graphics=self.no_graphics,
+            timeout_wait=self.timeout_wait,
             side_channels=[self._engine_channel, self._env_parameter_channel],
+            additional_args=["-logFile", "/dev/null"]
         )
 
         if self.verbose:
@@ -114,7 +120,7 @@ def main():
         "--game_path",
         type=str,
         required=False,
-        default=r"D:\build\Immortal Suffering.exe",
+        default=r"/root/immortal_suffering/immortal_suffering_linux_build.x86_64",
         help="Path to the Unity executable",
     )
     parser.add_argument(

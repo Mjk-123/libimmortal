@@ -95,9 +95,61 @@ class ColorMapEncoder:
 
 DEFAULT_ENCODER = ColorMapEncoder.from_enum()
 
+# (y, x0, x1) where platform (2.00) must exist.
+# Note: x1 is inclusive.
+PLATFORM_FORCE_SPANS = [
+    (29,  96, 105),
+    (38,  54,  75),
+    (45,  24,  34),
+    (53,  54,  65),
+    (53, 128, 143),
+    (64,  35,  45),
+    (68,  68, 113),
+]
+
+def force_fix_platform_inplace(id_map: np.ndarray) -> None:
+    """
+    Fast in-place fix.
+    For each span, replace only 0.00 -> 2.00.
+    Supports id_map shape (90,160) or (160,90).
+    """
+    id_map = np.asarray(id_map)
+
+    # normalize to (90,160) indexing [y,x]
+    if id_map.shape == (160, 90):
+        id_map = id_map.T  # view
+
+    if id_map.shape != (90, 160):
+        raise ValueError(f"[platform-fix] unexpected id_map shape: {id_map.shape}")
+
+    # vectorized per-span replacement (no inner python loop over x)
+    for y, x0, x1 in PLATFORM_FORCE_SPANS:
+        seg = id_map[y, x0:x1 + 1]
+        # only overwrite true blanks
+        seg[seg == 0.00] = 2.00
+
+
+def fix_obs_structure(obs, id_map=None):
+    """
+    obs: (90*160*3,) 처럼 납작하게 들어온 RGB를
+         (3, 90, 160) CHW로 복구.
+
+    id_map: (90, 160) 이 같이 들어오면 platform 누락을 하드픽스까지 수행.
+    """
+    h, w = 90, 160
+
+    # 1) (H, W, 3)
+    corrected_hwc = obs.reshape(h, w, 3)
+
+    # 2) (3, H, W)
+    corrected_chw = np.transpose(corrected_hwc, (2, 0, 1))
+    return corrected_chw
 
 def colormap_to_ids_and_onehot(img_chw: np.ndarray):
-    return DEFAULT_ENCODER.encode(img_chw)
+    img_chw = fix_obs_structure(img_chw)
+    id_map, onehot = DEFAULT_ENCODER.encode(img_chw)
+    force_fix_platform_inplace(id_map)
+    return id_map, onehot
 
 
 def find_free_tcp_port(host: str = "127.0.0.1") -> int:

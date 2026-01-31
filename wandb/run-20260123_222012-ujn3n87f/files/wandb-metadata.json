@@ -1,0 +1,91 @@
+{
+  "os": "Linux-6.8.0-62-generic-x86_64-with-glibc2.35",
+  "python": "CPython 3.10.12",
+  "startedAt": "2026-01-23T13:20:12.836680Z",
+  "args": [
+    "--port",
+    "17005",
+    "--port_stride",
+    "200",
+    "--max_ep_len",
+    "1500",
+    "--update_timestep",
+    "6000",
+    "--max_steps",
+    "750000",
+    "--save_model_freq",
+    "50000",
+    "--wandb",
+    "--resume",
+    "--checkpoint",
+    "/root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_seed_mix_42_1750000.pth",
+    "--env_seed_mode",
+    "mix",
+    "--env_seed_mix_start",
+    "0.50",
+    "--env_seed_mix_end",
+    "0.50",
+    "--env_seed_mix_warmup_episodes",
+    "500",
+    "--env_seed_mix_schedule",
+    "linear",
+    "--env_seed_base",
+    "1234567"
+  ],
+  "program": "/root/libimmortal/./src/libimmortal/samples/PPO/train.py",
+  "codePath": "src/libimmortal/samples/PPO/train.py",
+  "codePathLocal": "src/libimmortal/samples/PPO/train.py",
+  "git": {
+    "remote": "https://github.com/Mjk-123/libimmortal.git",
+    "commit": "a8a12c024a154920e7375c5e0ac41d6ea355bb84"
+  },
+  "email": "mjkmszr0613@gmail.com",
+  "root": "/root/libimmortal",
+  "host": "305fb38129e1",
+  "executable": "/usr/local/bin/python3.10",
+  "cpu_count": 14,
+  "cpu_count_logical": 28,
+  "gpu": "NVIDIA GeForce RTX 2080 Ti",
+  "gpu_count": 4,
+  "disk": {
+    "/": {
+      "total": "2011876704256",
+      "used": "1091566944256"
+    }
+  },
+  "memory": {
+    "total": "67071262720"
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing",
+      "uuid": "GPU-35001d68-8af0-b7a9-889a-31a454eb2c08"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing",
+      "uuid": "GPU-fe92eb9a-645b-7b76-949a-ec7f9a1bb8a8"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing",
+      "uuid": "GPU-4a3d3d9e-898c-d504-402a-b12563a97c7e"
+    },
+    {
+      "name": "NVIDIA GeForce RTX 2080 Ti",
+      "memoryTotal": "11811160064",
+      "cudaCores": 4352,
+      "architecture": "Turing",
+      "uuid": "GPU-e47f069d-24d1-f50e-beaa-a81536fcdcc1"
+    }
+  ],
+  "cudaVersion": "12.4",
+  "writerId": "j0ugbqubmjv86xjmrsajbycroa25roe4"
+}

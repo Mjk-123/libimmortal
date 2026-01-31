@@ -1,0 +1,24 @@
+2026-01-22 22:00:54,521 INFO    MainThread:221478 [wandb_setup.py:_flush():81] Current SDK version is 0.24.0
+2026-01-22 22:00:54,521 INFO    MainThread:221478 [wandb_setup.py:_flush():81] Configure stats pid to 221478
+2026-01-22 22:00:54,521 INFO    MainThread:221478 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-01-22 22:00:54,521 INFO    MainThread:221478 [wandb_init.py:setup_run_log_directory():717] Logging user logs to /root/libimmortal/wandb/run-20260122_220054-ils3xfg8/logs/debug.log
+2026-01-22 22:00:54,522 INFO    MainThread:221478 [wandb_init.py:setup_run_log_directory():718] Logging internal logs to /root/libimmortal/wandb/run-20260122_220054-ils3xfg8/logs/debug-internal.log
+2026-01-22 22:00:54,522 INFO    MainThread:221478 [wandb_init.py:init():844] calling init triggers
+2026-01-22 22:00:54,522 INFO    MainThread:221478 [wandb_init.py:init():849] wandb.init called with sweep_config: {}
+config: {'env_tag': 'ImmortalSufferingEnv', 'max_steps': 750000, 'max_ep_len': 1500, 'update_timestep': 6000, 'K_epochs': 10, 'eps_clip': 0.2, 'gamma': 0.99, 'lr_actor': 0.0001, 'lr_critic': 0.0002, 'action_std': 0.6, 'action_std_decay_rate': 0.05, 'min_action_std': 0.1, 'action_std_decay_freq': 250000, 'save_model_freq': 50000, 'mini_batch_size': 64, 'seed': 42, 'ddp_world_size': 4, 'base_step': 1050000, 'w_progress': 100.0, 'w_time': 0.02, 'w_damage': 0.05, 'w_not_actionable': 0.05, 'terminal_bonus': 4.0, 'reward_clip': 15.0, 'scaler_clip': 5.0, 'w_acc': 1.0, 'no_graphics': False, 'unity_timeout_wait': 120, 'max_env_restarts': 20, 'port_stride': 200, 'reward_scaling': False, '_wandb': {}}
+2026-01-22 22:00:54,522 INFO    MainThread:221478 [wandb_init.py:init():892] starting backend
+2026-01-22 22:00:54,828 INFO    MainThread:221478 [wandb_init.py:init():895] sending inform_init request
+2026-01-22 22:00:54,839 INFO    MainThread:221478 [wandb_init.py:init():903] backend started and connected
+2026-01-22 22:00:54,843 INFO    MainThread:221478 [wandb_init.py:init():973] updated telemetry
+2026-01-22 22:00:54,855 INFO    MainThread:221478 [wandb_init.py:init():997] communicating run to backend with 90.0 second timeout
+2026-01-22 22:00:55,660 INFO    MainThread:221478 [wandb_init.py:init():1044] starting run threads in backend
+2026-01-22 22:00:55,857 INFO    MainThread:221478 [wandb_run.py:_console_start():2529] atexit reg
+2026-01-22 22:00:55,857 INFO    MainThread:221478 [wandb_run.py:_redirect():2377] redirect: wrap_raw
+2026-01-22 22:00:55,857 INFO    MainThread:221478 [wandb_run.py:_redirect():2446] Wrapping output streams.
+2026-01-22 22:00:55,857 INFO    MainThread:221478 [wandb_run.py:_redirect():2469] Redirects installed.
+2026-01-22 22:00:55,864 INFO    MainThread:221478 [wandb_init.py:init():1084] run started, returning control to user process
+2026-01-23 12:31:26,410 INFO    MainThread:221478 [wandb_run.py:_finish():2295] finishing run mjkmszr0613-postech/ppo-immortal/ils3xfg8
+2026-01-23 12:31:26,413 INFO    MainThread:221478 [wandb_run.py:_atexit_cleanup():2494] got exitcode: 0
+2026-01-23 12:31:26,413 INFO    MainThread:221478 [wandb_run.py:_restore():2476] restore
+2026-01-23 12:31:26,413 INFO    MainThread:221478 [wandb_run.py:_restore():2482] restore done
+2026-01-23 12:31:30,306 INFO    MainThread:221478 [wandb_run.py:_footer_sync_info():3870] logging synced files
