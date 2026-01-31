@@ -3,10 +3,10 @@ How to run
 
 xvfb-run -a -s "-screen 0 1024x768x24" \
 python3 submission_runner.py \
-  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_seed_mix_42_2400000.pth \
+  --ckpt_path /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_randseed_2400000.pth \
   --seed 42 \
-  --max_ep_len 1500
-  --max_steps 15000 \
+  --max_ep_len 4500
+  --max_steps 45000 \
   --debug_dump_every 100 \
   --verbose
 

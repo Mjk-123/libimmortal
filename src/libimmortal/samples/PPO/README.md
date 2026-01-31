@@ -63,8 +63,8 @@ torchrun --standalone --nproc_per_node=3 ./src/libimmortal/samples/PPO/train.py 
 
 ```
 xvfb-run -a -s "-screen 0 1024x768x24" \
-torchrun --standalone --nproc_per_node=4 ./src/libimmortal/samples/PPO/train.py \
-  --port 17005 --port_stride 200 \
+torchrun --standalone --nproc_per_node=3 ./src/libimmortal/samples/PPO/train.py \
+  --port 12005 --port_stride 200 \
   --max_ep_len 1500 --update_timestep 6000 --max_steps 1000000\
   --save_model_freq 50000 --wandb \
   --resume --checkpoint /root/libimmortal/src/libimmortal/samples/PPO/checkpoints/Necto2_ImmortalSufferingEnv_randseed_2400000.pth \
