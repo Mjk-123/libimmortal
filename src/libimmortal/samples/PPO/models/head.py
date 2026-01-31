@@ -28,26 +28,28 @@ class MultiDiscreteActorHead(nn.Module):
             nn.LayerNorm(in_dim),
             nn.Linear(in_dim, hidden),
             nn.GELU(),
-        )
-
-        self.block2 = nn.Sequential(
-            nn.LayerNorm(hidden),
             nn.Linear(hidden, hidden),
             nn.GELU(),
+        )
+        self.block2 = nn.Sequential(
+            nn.LayerNorm(hidden),
             nn.Linear(hidden, hidden),
             nn.GELU(),
             nn.Linear(hidden, self.total),
         )
 
-        self._init_block2_weights()
+        self._init_all_weights()
 
-    def _init_block2_weights(self):
-        for m in self.block2.modules():
+    def _init_all_weights(self):
+        # self.modules()는 클래스 내 모든 서브모듈을 재귀적으로 탐색합니다.
+        for m in self.modules():
             if isinstance(m, nn.Linear):
+                # He 초기화: 깊은 모델에서 Gradient Flow를 돕습니다.
                 nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0.0)
             elif isinstance(m, nn.LayerNorm):
+                # LayerNorm은 초기 상태에서 입력을 그대로 유지하도록 설정합니다.
                 nn.init.constant_(m.weight, 1.0)
                 nn.init.constant_(m.bias, 0.0)
 

@@ -403,7 +403,7 @@ class RewardShaper:
                 r += prog
 
             # B) Bounded "magnet" shaping: delta of exp(-alpha*d)
-            alpha = 30.0
+            alpha = 8.0
             w_acc = float(getattr(self.cfg, "w_acceleration", 1.0))
 
             cur_phi = float(np.exp(-alpha * float(d_bfs)))
